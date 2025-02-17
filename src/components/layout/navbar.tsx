@@ -2,16 +2,32 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Link,
   IconButton,
   Drawer,
   List,
   ListItem,
 } from '@mui/material';
-import { Link as RouterLink, useLocation } from 'react-router-dom'; // Importe o Link do React Router
+import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom'; // Se estiver usando React Router
 import { styledNavLink, styleStyledAppBar, styleAppWrapper } from './styles';
+
+const StyledRouterLink = styled(Link)(({ theme }) => ({
+  color: '#4A5568',
+  textDecoration: 'none',
+  fontFamily: 'monospace',
+  fontSize: '0.9rem',
+  padding: '0.5rem 1rem',
+  '&:hover': {
+    color: '#fff',
+  },
+  '&.active': {
+    color: '#fff',
+    borderBottom: '2px solid #ED8936',
+  },
+}));
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -32,13 +48,13 @@ const Navbar = () => {
       <List>
         {navLinks.map((link) => (
           <ListItem key={link.title}>
-            <Link
-              href={link.href}
+            <StyledRouterLink
+              to={link.href}
               className={location.pathname === link.href ? 'active' : ''}
-              sx={{ ...styledNavLink, width: '100%' }}
+              // sx={{ ...styledNavLink, width: '100%' }}
             >
               {link.title}
-            </Link>
+            </StyledRouterLink>
           </ListItem>
         ))}
       </List>
@@ -53,17 +69,17 @@ const Navbar = () => {
           px: { xs: 2, sm: 4, md: 6 },
         }}
       >
-        <RouterLink
-          to="/home" // Use 'to' em vez de 'href'
-          style={{
-            // ...styledNavLink,
+        <StyledRouterLink
+          to="/home"
+          sx={{
+            ...styledNavLink,
             color: '#10B981',
             fontSize: '1rem',
-            textDecoration: 'none',
+            '&:hover': { color: '#9CA3AF' },
           }}
         >
           edison-tezolin
-        </RouterLink>
+        </StyledRouterLink>
 
         <Box
           sx={{
@@ -75,17 +91,14 @@ const Navbar = () => {
           }}
         >
           {navLinks.map((link) => (
-            <RouterLink
+            <StyledRouterLink
+              sx={styledNavLink}
               key={link.title}
-              to={link.href} // Use 'to' em vez de 'href'
-              style={{
-                // ...styledNavLink,
-                textDecoration: 'none',
-              }}
+              to={link.href}
               className={location.pathname === link.href ? 'active' : ''}
             >
               {link.title}
-            </RouterLink>
+            </StyledRouterLink>
           ))}
         </Box>
 

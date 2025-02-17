@@ -10,7 +10,6 @@ export default function Rotas() {
       <Route path="/home" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/projects" element={<Projects />} />
-      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }

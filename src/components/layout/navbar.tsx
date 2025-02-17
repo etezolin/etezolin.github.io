@@ -8,9 +8,9 @@ import {
   List,
   ListItem,
 } from '@mui/material';
+import { Link as RouterLink, useLocation } from 'react-router-dom'; // Importe o Link do React Router
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom'; // Se estiver usando React Router
 import { styledNavLink, styleStyledAppBar, styleAppWrapper } from './styles';
 
 const Navbar = () => {
@@ -53,17 +53,17 @@ const Navbar = () => {
           px: { xs: 2, sm: 4, md: 6 },
         }}
       >
-        <Link
-          href="/home"
-          sx={{
-            ...styledNavLink,
+        <RouterLink
+          to="/home" // Use 'to' em vez de 'href'
+          style={{
+            // ...styledNavLink,
             color: '#10B981',
             fontSize: '1rem',
-            '&:hover': { color: '#9CA3AF' },
+            textDecoration: 'none',
           }}
         >
           edison-tezolin
-        </Link>
+        </RouterLink>
 
         <Box
           sx={{
@@ -75,14 +75,17 @@ const Navbar = () => {
           }}
         >
           {navLinks.map((link) => (
-            <Link
-              sx={styledNavLink}
+            <RouterLink
               key={link.title}
-              href={link.href}
+              to={link.href} // Use 'to' em vez de 'href'
+              style={{
+                // ...styledNavLink,
+                textDecoration: 'none',
+              }}
               className={location.pathname === link.href ? 'active' : ''}
             >
               {link.title}
-            </Link>
+            </RouterLink>
           ))}
         </Box>
 

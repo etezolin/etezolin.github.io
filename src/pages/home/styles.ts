@@ -5,7 +5,7 @@ export const styledGradientBackground: SxProps<Theme> = {
   width: '100%',
   position: 'relative',
   overflow: 'hidden',
-  background: `linear-gradient(135deg, #0a192f 0%, #0f2942 50%, #0f1c2d 100%)`,
+  backgroundColor: '#0d1117',
 
   // Grade com linhas finas brancas
   '&::before': {
@@ -62,7 +62,11 @@ export const styledStarsOverlay: SxProps<Theme> = {
 export const styledCodeComment: SxProps<Theme> = {
   color: '#4A5568',
   fontFamily: 'monospace',
-  fontSize: '0.9rem',
+  fontSize: {
+    xs: '0.8rem',
+    sm: '0.8rem',
+    md: '0.9rem',
+  },
   '&::before': {
     content: '"// "',
     color: '#4A5568',
@@ -72,7 +76,11 @@ export const styledCodeComment: SxProps<Theme> = {
 export const styledCodeVariable: SxProps<Theme> = {
   color: '#81A1C1',
   fontFamily: 'monospace',
-  fontSize: '0.9rem',
+  fontSize: {
+    xs: '0.8rem',
+    sm: '0.8rem',
+    md: '0.9rem',
+  },
   '&::before': {
     content: '"const "',
     color: '#4A5568',
@@ -96,11 +104,12 @@ export const stylesBox = {
     maxWidth: '800px',
     width: '100%',
     ml: {
-      xs: 4, // margem em telas muito pequenas
-      sm: 8, // margem em telas pequenas
-      md: 16, // margem em telas médias
-      lg: 32, // margem em telas grandes
+      xs: 2, // margem em telas muito pequenas
+      sm: 4, // margem em telas pequenas
+      md: 8, // margem em telas médias
+      lg: 16, // margem em telas grandes
     },
+    display: { xs: '30%' },
   },
   boxThree: {
     display: 'flex',
@@ -129,9 +138,9 @@ export const stylesBox = {
     },
     color: '#A3BE8C',
     fontSize: {
-      xs: '0.8rem',
-      sm: '0.9rem',
-      md: '1rem',
+      xs: '0.7rem',
+      sm: '0.8em',
+      md: '0.9rem',
     },
   },
   boxSix: {
@@ -146,7 +155,7 @@ export const stylesTypography = {
     color: '#D8DEE9',
     fontFamily: 'monospace',
     fontSize: {
-      xs: '0.9rem',
+      xs: '1rem',
       sm: '1rem',
       md: '1.1rem',
     },
@@ -156,7 +165,7 @@ export const stylesTypography = {
     color: '#ECEFF4',
     fontFamily: 'monospace',
     fontSize: {
-      xs: '2rem',
+      xs: '1.5rem',
       sm: '2.3rem',
       md: '2.5rem',
     },

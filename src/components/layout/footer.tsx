@@ -12,7 +12,7 @@ const Footer = () => {
           alignItems: 'center',
           gap: 2,
           color: '#4A5568',
-          ml: 5,
+          ml: { xs: 2, sm: 5 },
         }}
       >
         <Box sx={styledCodeText}>find me in:</Box>
@@ -27,7 +27,7 @@ const Footer = () => {
             href="https://www.linkedin.com/in/edison-tezolin-7498b2284"
             target="_blank"
             sx={{
-              color: '#4A5568',
+              color: '#10B981',
               '&:hover': { color: '#fff' },
             }}
           >
@@ -38,7 +38,7 @@ const Footer = () => {
             href="https://github.com/etezolin"
             target="_blank"
             sx={{
-              color: '#4A5568',
+              color: '#10B981',
               '&:hover': { color: '#fff' },
             }}
           >
@@ -54,6 +54,7 @@ const Footer = () => {
           target="_blank"
           sx={{
             ...styledSocialLink,
+            color: '#10B981',
             display: { xs: 'none', sm: 'flex' },
           }}
         >
@@ -70,7 +71,10 @@ const Footer = () => {
             display: { xs: 'flex', sm: 'none' },
           }}
         >
-          <GitHub fontSize="small" />
+          <GitHub
+            fontSize="small"
+            sx={{ display: { xs: 'none', sm: 'flex' } }}
+          />
         </IconButton>
       </Box>
     </Box>

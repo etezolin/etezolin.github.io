@@ -33,7 +33,9 @@ const Home: React.FC = () => {
       <Box sx={stylesBox.boxOne}>
         <Box sx={stylesBox.boxTwo}>
           {/* Introdução */}
-          <Typography sx={stylesTypography.typoOne}>Hi all. I am</Typography>
+          <Typography sx={stylesTypography.typoOne}>
+            Hello everyone, I’m{' '}
+          </Typography>
 
           {/* Nome */}
           <Typography variant="h2" sx={stylesTypography.typoTwo}>
@@ -42,25 +44,24 @@ const Home: React.FC = () => {
 
           {/* Cargo */}
           <Typography sx={stylesTypography.typoThree}>
-            <span style={{ color: '#5E81AC' }}>{'>'}</span> Back and Front-end
-            developer
+            <span style={{ color: '#5E81AC' }}>{'>'}</span> Full-Stack Developer
           </Typography>
 
           {/* Informações de contato */}
           <Box sx={stylesBox.boxThree}>
-            <Typography sx={styledCodeComment}>my number:</Typography>
+            <Typography sx={styledCodeComment}>my phone number:</Typography>
             <Typography sx={styledCodeVariable}>
               telephoneNum = <CodeString>"41 99833 5860"</CodeString>;
             </Typography>
 
-            <Typography sx={styledCodeComment}>my e-mail:</Typography>
+            <Typography sx={styledCodeComment}>my email address:</Typography>
             <Typography sx={styledCodeVariable}>
               email = <CodeString>"tezolin.edison@gmail.com"</CodeString>;
             </Typography>
 
             <Typography sx={styledCodeComment}>
               {' '}
-              you can also see it on my Github page
+              you can also check it out on my GitHub page:
             </Typography>
             <Typography sx={styledCodeVariable}>
               githubLink ={' '}
@@ -75,7 +76,7 @@ const Home: React.FC = () => {
             </Typography>
 
             <Typography sx={styledCodeComment}>
-              you can check my LinkedIn Page
+              you can also visit my LinkedIn profile:
             </Typography>
             <Typography sx={styledCodeVariable}>
               linkedInPage ={' '}
@@ -89,7 +90,7 @@ const Home: React.FC = () => {
           <Box sx={stylesBox.boxFour}>
             <Typography sx={styledCodeComment}>
               {' '}
-              my development stack:
+              my technology stack:
             </Typography>
             <Box sx={stylesBox.boxFive}>
               <Box
@@ -102,7 +103,6 @@ const Home: React.FC = () => {
                 <TbBrandCSharp size={iconSize} />
                 <span>C#</span>
               </Box>
-
               <Box sx={stylesBox.boxSix}>
                 <DiDotnet size={iconSize} />
                 <span>.NET</span>

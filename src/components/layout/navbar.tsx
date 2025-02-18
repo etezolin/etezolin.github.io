@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom'; // Se estiver usando React Router
+import logo from '../../assets/img/logo.png';
 import { styledNavLink, styleStyledAppBar, styleAppWrapper } from './styles';
 
 const StyledRouterLink = styled(Link)(({ theme }) => ({
@@ -75,6 +76,7 @@ const Navbar = () => {
             ...styledNavLink,
             color: '#10B981',
             fontSize: '1rem',
+            visibility: { xs: 'hidden', sm: 'visible' },
             '&:hover': { color: '#9CA3AF' },
           }}
         >

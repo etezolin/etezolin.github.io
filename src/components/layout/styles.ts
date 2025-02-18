@@ -14,7 +14,7 @@ export const styledFooter: SxProps<Theme> = {
 };
 
 export const styledCodeText: SxProps<Theme> = {
-  color: '#4A5568',
+  color: '#10B981',
   fontFamily: 'monospace',
   fontSize: '0.9rem',
   display: 'flex',

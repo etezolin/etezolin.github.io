@@ -1,11 +1,20 @@
 import { SxProps, Theme } from '@mui/material/styles';
 
-export const styledGradientBackground: SxProps<Theme> = {
+export const styledBox: SxProps<Theme> = {
+  mt: 8,
+  width: '300px',
+
+  backgroundColor: '#0d1117',
+  padding: '1rem',
+  borderRight: '1px solid #21262d',
+};
+
+export const styledMainContainer: SxProps<Theme> = {
   minHeight: '100vh',
   width: '100%',
   position: 'relative',
   overflow: 'hidden',
-  background: `linear-gradient(135deg, #0a192f 0%, #0f2942 50%, #0f1c2d 100%)`,
+  backgroundColor: '#0d1117',
 
   // Grade com linhas finas brancas
   '&::before': {
@@ -45,5 +54,40 @@ export const styledGradientBackground: SxProps<Theme> = {
     '100%': {
       transform: 'perspective(1000px) rotateX(30deg) translateY(50px)',
     },
+  },
+};
+
+export const styledMainContent: SxProps<Theme> = {
+  flex: 1,
+  padding: '1rem',
+  marginTop: '1.9rem !important',
+  fontFamily: 'monospace',
+};
+
+export const styledSectionTitle: SxProps<Theme> = {
+  color: '#58a6ff',
+  fontSize: '2rem',
+  marginBottom: '1rem',
+  fontFamily: 'monospace',
+  fontWeight: 500,
+};
+
+export const styledSubSectionTitle: SxProps<Theme> = {
+  color: '#c9d1d9',
+  fontSize: '1.5rem',
+  fontFamily: 'monospace',
+  marginTop: '2rem',
+  marginBottom: '1rem',
+};
+
+export const styledEducationItem: SxProps<Theme> = {
+  display: 'flex',
+  fontFamily: 'monospace',
+  alignItems: 'center',
+  gap: '1rem',
+  marginBottom: '1rem',
+  color: '#c9d1d9',
+  '& .MuiSvgIcon-root': {
+    color: '#8b949e',
   },
 };

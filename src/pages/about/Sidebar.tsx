@@ -8,16 +8,16 @@ import {
   useMediaQuery,
   Box,
   Typography,
+  Divider,
 } from '@mui/material';
 import { Email, Phone } from '@mui/icons-material';
 import {
-  FcOpenedFolder,
-  FcReading,
+  FcBusinessContact,
+  FcSmartphoneTablet,
   FcGraduationCap,
-  FcServices,
 } from 'react-icons/fc';
 import { ReactNode, CSSProperties } from 'react';
-import img from '../../../public/logo512.png';
+import { styled } from '@mui/material/styles';
 
 interface MenuItem {
   id: string;
@@ -95,10 +95,84 @@ const STYLES: Styles = {
   },
 };
 
+const SectionTitle = styled(Typography)(({ theme }) => ({
+  color: '#64ffda',
+  fontFamily: 'monospace',
+  fontSize: '14px',
+  letterSpacing: '2px',
+  position: 'relative',
+  display: 'inline-block',
+  padding: '4px 0',
+  transition: 'all 0.3s ease',
+
+  '&:hover': {
+    color: '#fff',
+    textShadow: '0 0 8px #64ffda',
+    paddingLeft: '15px',
+  },
+
+  '&::after': {
+    content: '"_"',
+    opacity: 0.7,
+    animation: 'blink 1s steps(2, start) infinite',
+  },
+
+  '@keyframes blink': {
+    '50%': {
+      opacity: 0,
+    },
+  },
+}));
+
 const MENU_ITEMS: MenuItem[] = [
-  { id: 'bio', icon: <FcReading />, text: 'bio' },
-  { id: 'education', icon: <FcGraduationCap />, text: 'education' },
-  { id: 'experience', icon: <FcServices />, text: 'experience' },
+  {
+    id: 'bio',
+    icon: (
+      <Box
+        sx={{
+          fontSize: 20,
+          pr: { xs: 0, sm: 1 },
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <FcBusinessContact />
+      </Box>
+    ),
+    text: 'bio',
+  },
+  {
+    id: 'education',
+    icon: (
+      <Box
+        sx={{
+          fontSize: 20,
+          pr: { xs: 0, sm: 1 },
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <FcGraduationCap />
+      </Box>
+    ),
+    text: 'education',
+  },
+  {
+    id: 'experience',
+    icon: (
+      <Box
+        sx={{
+          fontSize: 20,
+          pr: { xs: 0, sm: 1 },
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <FcSmartphoneTablet />
+      </Box>
+    ),
+    text: 'experience',
+  },
 ];
 
 const CONTACT_ITEMS: MenuItem[] = [
@@ -190,20 +264,31 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
   return (
     <div style={STYLES.container}>
       <List component="nav" sx={STYLES.list}>
+        <SectionTitle sx={{ display: { xs: 'none', sm: 'inline-block' } }}>
+          ./whoami
+        </SectionTitle>
         <div>{MENU_ITEMS.map(renderMenuButton)}</div>
         <Box sx={{ mt: 0.5, display: { xs: 'none', sm: 'flow' } }}>
+          <Divider
+            sx={{
+              mt: 3,
+              backgroundColor: '#2E7D32', // cor verde
+              opacity: 0.25, // opacidade
+            }}
+          />
+          <SectionTitle>./avatar</SectionTitle>
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              mt: 6,
+              mt: 3,
             }}
           >
             <Box
               sx={{
-                width: '150px',
-                height: '150px',
+                width: '120px',
+                height: '120px',
                 borderRadius: '50%',
                 boxShadow: 3,
                 overflow: 'hidden',
@@ -221,15 +306,15 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
             </Box>
           </Box>
 
-          <Box sx={{ mt: 4, mb: 5, position: 'relative' }}>
+          <Box sx={{ mt: 4, position: 'relative' }}>
             <Typography
               sx={{
                 color: '#8b949e',
-                fontSize: '9.5pt', // Tamanho de fonte mais suave
+                fontSize: '8pt', // Tamanho de fonte mais suave
                 textAlign: 'center',
                 fontFamily: 'monospace',
-                pr: 3,
-                pl: 3,
+                pr: 1.5,
+                pl: 1.5,
                 lineHeight: 1.6,
                 fontWeight: 300, // Fonte mais leve
                 maxWidth: '650px',
@@ -249,7 +334,6 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
                   transform: 'translate(-50%, -50%)',
                   width: '30px',
                   height: '30px',
-                  // background: 'linear-gradient(45deg, #ff4081, #ff80ab)', // Adiciona um toque decorativo
                   borderRadius: '50%',
                   boxShadow: 3,
                 }}
@@ -259,11 +343,19 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
               sx={{
                 width: '50px',
                 height: '5px',
-                // background: 'linear-gradient(45deg, #ff4081, #ff80ab)', // Linha decorativa
                 margin: '10px auto',
               }}
             />
           </Box>
+          <Divider
+            sx={{
+              mb: 2,
+              mt: 1,
+              backgroundColor: '#2E7D32', // cor verde
+              opacity: 0.25, // opacidade
+            }}
+          />
+          <SectionTitle>./contacts</SectionTitle>
           {CONTACT_ITEMS.map(renderContactItem)}
         </Box>
       </List>

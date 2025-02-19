@@ -1,7 +1,21 @@
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  useTheme,
+  useMediaQuery,
+  Box,
+} from '@mui/material';
 import { Email, Phone } from '@mui/icons-material';
-import { FcOpenedFolder, FcReading, FcGraduationCap } from 'react-icons/fc';
-import { ReactNode } from 'react';
+import {
+  FcOpenedFolder,
+  FcReading,
+  FcGraduationCap,
+  FcServices,
+} from 'react-icons/fc';
+import { ReactNode, CSSProperties } from 'react';
 
 interface MenuItem {
   id: string;
@@ -15,6 +29,13 @@ interface SidebarProps {
 }
 
 interface Styles {
+  container: CSSProperties;
+  list: {
+    padding: number;
+    display: string;
+    flexDirection: string;
+    justifyContent: string;
+  };
   listItem: {
     pl: number;
     padding: string;
@@ -23,16 +44,6 @@ interface Styles {
       fontFamily: string;
     };
     cursor?: string;
-  };
-  activeListItem: {
-    pl: number;
-    padding: string;
-    backgroundColor: string;
-    '&:hover': {
-      backgroundColor: string;
-      fontFamily: string;
-    };
-    cursor: string;
   };
   icon: {
     minWidth: string;
@@ -50,20 +61,22 @@ interface Styles {
 }
 
 const STYLES: Styles = {
+  container: {
+    height: 'calc(100vh - 80px)',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  list: {
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   listItem: {
     pl: 4,
-    padding: '2px 8px',
+    padding: '8px',
     '&:hover': { backgroundColor: 'transparent', fontFamily: 'monospace' },
-  },
-  activeListItem: {
-    pl: 4,
-    padding: '2px 8px',
-    backgroundColor: 'rgba(139, 148, 158, 0.1)',
-    '&:hover': {
-      backgroundColor: 'rgba(139, 148, 158, 0.1)',
-      fontFamily: 'monospace',
-    },
-    cursor: 'pointer',
   },
   icon: {
     minWidth: '24px',
@@ -82,8 +95,8 @@ const STYLES: Styles = {
 
 const MENU_ITEMS: MenuItem[] = [
   { id: 'bio', icon: <FcReading />, text: 'bio' },
-  { id: 'interests', icon: <FcOpenedFolder />, text: 'interests' },
   { id: 'education', icon: <FcGraduationCap />, text: 'education' },
+  { id: 'experience', icon: <FcServices />, text: 'experience' },
 ];
 
 const CONTACT_ITEMS: MenuItem[] = [
@@ -100,14 +113,19 @@ const CONTACT_ITEMS: MenuItem[] = [
 ];
 
 const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const handleClick = (id: string) => {
-    setActiveButton(id === activeButton ? '' : id);
+    if (id !== activeButton) {
+      setActiveButton(id);
+    }
   };
 
   const renderMenuButton = ({ id, icon, text }: MenuItem, index: number) => {
     const isActive = id === activeButton;
 
-    return (
+    const menuItem = (
       <ListItem
         key={`menu-${index}`}
         sx={{
@@ -117,60 +135,65 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
             ? 'rgba(139, 148, 158, 0.1)'
             : 'transparent',
           '&:hover': { backgroundColor: 'rgba(139, 148, 158, 0.1)' },
+          justifyContent: isMobile ? 'center' : 'flex-start',
+          padding: isMobile ? '12px 0' : '8px 16px',
         }}
         onClick={() => handleClick(id)}
       >
         <ListItemIcon sx={STYLES.icon}>{icon}</ListItemIcon>
-        <ListItemText
-          primary={text}
-          primaryTypographyProps={isActive ? STYLES.activeText : STYLES.text}
-        />
+        {!isMobile && (
+          <ListItemText
+            primary={text}
+            primaryTypographyProps={isActive ? STYLES.activeText : STYLES.text}
+          />
+        )}
       </ListItem>
+    );
+
+    return isMobile ? (
+      <Tooltip title={text} placement="right">
+        {menuItem}
+      </Tooltip>
+    ) : (
+      menuItem
     );
   };
 
-  const renderContactItem = ({ icon, text }: MenuItem, index: number) => (
-    <ListItem key={`contact-${index}`} sx={STYLES.listItem}>
-      <ListItemIcon sx={STYLES.icon}>{icon}</ListItemIcon>
-      <ListItemText primary={text} primaryTypographyProps={STYLES.text} />
-    </ListItem>
-  );
-
-  const renderContactHeader = () => (
-    <ListItem
-      sx={{
-        ...STYLES.listItem,
-        color: '#c9d1d9',
-        mt: 1,
-      }}
-    >
-      <ListItemIcon sx={STYLES.icon}>
-        <span
-          style={{
-            fontSize: '12px',
-            color: '#8b949e',
-            fontFamily: 'monospace',
-          }}
-        >
-          ▼
-        </span>
-      </ListItemIcon>
-      <ListItemText
-        primary="contacts"
-        primaryTypographyProps={{
-          ...STYLES.text,
-          color: '#c9d1d9',
+  const renderContactItem = ({ icon, text }: MenuItem, index: number) => {
+    const contactItem = (
+      <ListItem
+        key={`contact-${index}`}
+        sx={{
+          ...STYLES.listItem,
+          justifyContent: isMobile ? 'center' : 'flex-start',
+          padding: isMobile ? '12px 0' : '8px 16px',
         }}
-      />
-    </ListItem>
-  );
+      >
+        <ListItemIcon sx={STYLES.icon}>{icon}</ListItemIcon>
+        {!isMobile && (
+          <ListItemText primary={text} primaryTypographyProps={STYLES.text} />
+        )}
+      </ListItem>
+    );
+
+    return isMobile ? (
+      <Tooltip title={text} placement="right">
+        {contactItem}
+      </Tooltip>
+    ) : (
+      contactItem
+    );
+  };
 
   return (
-    <List component="nav" sx={{ p: 0, mt: 4 }}>
-      {MENU_ITEMS.map(renderMenuButton)}
-      {renderContactHeader()}
-      {CONTACT_ITEMS.map(renderContactItem)}
-    </List>
+    <div style={STYLES.container}>
+      <List component="nav" sx={STYLES.list}>
+        <div>{MENU_ITEMS.map(renderMenuButton)}</div>
+        <Box sx={{ mt: 0.5, display: { xs: 'none', sm: 'flow' } }}>
+          {CONTACT_ITEMS.map(renderContactItem)}
+        </Box>
+      </List>
+    </div>
   );
 };
 

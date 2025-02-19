@@ -76,7 +76,7 @@ const Navbar = () => {
             ...styledNavLink,
             color: '#10B981',
             fontSize: '1rem',
-            visibility: { xs: 'hidden', sm: 'visible' },
+            // visibility: { xs: 'hidden', sm: 'visible' },
             '&:hover': { color: '#9CA3AF' },
           }}
         >

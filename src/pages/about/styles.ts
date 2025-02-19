@@ -1,16 +1,35 @@
 import { SxProps, Theme } from '@mui/material/styles';
 
 export const styledBox: SxProps<Theme> = {
+  top: 0,
+  left: 0,
   mt: 8,
-  width: '300px',
-
   backgroundColor: '#0d1117',
-  padding: '1rem',
   borderRight: '1px solid #21262d',
+  overflow: 'hidden',
+  boxSizing: 'border-box',
+  display: 'flex',
+  flexDirection: 'column',
+
+  // Responsividade
+  width: {
+    xs: '64px', // Em telas pequenas, mostra apenas os ícones
+    sm: '300px', // Em telas maiores, mostra a largura completa
+  },
+
+  height: {
+    xs: 'calc(100vh - 64px)',
+    sm: 'calc(100vh - 64px)',
+  },
+
+  p: {
+    xs: 1,
+    sm: 2,
+  },
 };
 
 export const styledMainContainer: SxProps<Theme> = {
-  minHeight: '100vh',
+  // minHeight: '100vh',
   width: '100%',
   position: 'relative',
   overflow: 'hidden',
@@ -62,6 +81,8 @@ export const styledMainContent: SxProps<Theme> = {
   padding: '1rem',
   marginTop: '1.9rem !important',
   fontFamily: 'monospace',
+  mt: 8,
+  ml: { xs: 'none', sm: 'none', md: 3 },
 };
 
 export const styledSectionTitle: SxProps<Theme> = {
@@ -76,7 +97,7 @@ export const styledSubSectionTitle: SxProps<Theme> = {
   color: '#c9d1d9',
   fontSize: '1.5rem',
   fontFamily: 'monospace',
-  marginTop: '2rem',
+  marginTop: '0.55rem',
   marginBottom: '1rem',
 };
 

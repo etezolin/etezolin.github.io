@@ -7,6 +7,7 @@ import {
   useTheme,
   useMediaQuery,
   Box,
+  Typography,
 } from '@mui/material';
 import { Email, Phone } from '@mui/icons-material';
 import {
@@ -16,6 +17,7 @@ import {
   FcServices,
 } from 'react-icons/fc';
 import { ReactNode, CSSProperties } from 'react';
+import img from '../../../public/logo512.png';
 
 interface MenuItem {
   id: string;
@@ -190,6 +192,78 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       <List component="nav" sx={STYLES.list}>
         <div>{MENU_ITEMS.map(renderMenuButton)}</div>
         <Box sx={{ mt: 0.5, display: { xs: 'none', sm: 'flow' } }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 6,
+            }}
+          >
+            <Box
+              sx={{
+                width: '150px',
+                height: '150px',
+                borderRadius: '50%',
+                boxShadow: 3,
+                overflow: 'hidden',
+              }}
+            >
+              <img
+                src="/img.jpg"
+                alt="alt"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </Box>
+          </Box>
+
+          <Box sx={{ mt: 4, mb: 5, position: 'relative' }}>
+            <Typography
+              sx={{
+                color: '#8b949e',
+                fontSize: '9.5pt', // Tamanho de fonte mais suave
+                textAlign: 'center',
+                fontFamily: 'monospace',
+                pr: 3,
+                pl: 3,
+                lineHeight: 1.6,
+                fontWeight: 300, // Fonte mais leve
+                maxWidth: '650px',
+                margin: '0 auto',
+                position: 'relative',
+              }}
+            >
+              I’m Edison Tezolin, a full-stack developer blending technology
+              with human-centered design. I create scalable, user-focused
+              solutions, always aiming to deliver meaningful results. Technology
+              is not just a tool—it’s a way to turn ideas into reality.
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '30px',
+                  height: '30px',
+                  // background: 'linear-gradient(45deg, #ff4081, #ff80ab)', // Adiciona um toque decorativo
+                  borderRadius: '50%',
+                  boxShadow: 3,
+                }}
+              />
+            </Typography>
+            <Box
+              sx={{
+                width: '50px',
+                height: '5px',
+                // background: 'linear-gradient(45deg, #ff4081, #ff80ab)', // Linha decorativa
+                margin: '10px auto',
+              }}
+            />
+          </Box>
           {CONTACT_ITEMS.map(renderContactItem)}
         </Box>
       </List>

@@ -16,8 +16,14 @@ import {
   FcSmartphoneTablet,
   FcGraduationCap,
 } from 'react-icons/fc';
-import { ReactNode, CSSProperties } from 'react';
-import { styled } from '@mui/material/styles';
+import { ReactNode } from 'react';
+import {
+  stylesBox,
+  styledSectionTitle,
+  stylesDivider,
+  stylesTypo,
+  STYLES,
+} from './styles.sidebar';
 
 interface MenuItem {
   id: string;
@@ -30,112 +36,11 @@ interface SidebarProps {
   setActiveButton: (id: string) => void;
 }
 
-interface Styles {
-  container: CSSProperties;
-  list: {
-    padding: number;
-    display: string;
-    flexDirection: string;
-    justifyContent: string;
-  };
-  listItem: {
-    pl: number;
-    padding: string;
-    '&:hover': {
-      backgroundColor: string;
-      fontFamily: string;
-    };
-    cursor?: string;
-  };
-  icon: {
-    minWidth: string;
-  };
-  text: {
-    fontSize: string;
-    color: string;
-    fontFamily: string;
-  };
-  activeText: {
-    fontSize: string;
-    color: string;
-    fontWeight: string;
-  };
-}
-
-const STYLES: Styles = {
-  container: {
-    height: 'calc(100vh - 80px)',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-  },
-  list: {
-    padding: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  listItem: {
-    pl: 4,
-    padding: '8px',
-    '&:hover': { backgroundColor: 'transparent', fontFamily: 'monospace' },
-  },
-  icon: {
-    minWidth: '24px',
-  },
-  text: {
-    fontFamily: 'monospace',
-    fontSize: '14px',
-    color: '#8b949e',
-  },
-  activeText: {
-    fontSize: '14px',
-    color: '#c9d1d9',
-    fontWeight: '600',
-  },
-};
-
-const SectionTitle = styled(Typography)(({ theme }) => ({
-  color: '#64ffda',
-  fontFamily: 'monospace',
-  fontSize: '14px',
-  letterSpacing: '2px',
-  position: 'relative',
-  display: 'inline-block',
-  padding: '4px 0',
-  transition: 'all 0.3s ease',
-
-  '&:hover': {
-    color: '#fff',
-    textShadow: '0 0 8px #64ffda',
-    paddingLeft: '15px',
-  },
-
-  '&::after': {
-    content: '"_"',
-    opacity: 0.7,
-    animation: 'blink 1s steps(2, start) infinite',
-  },
-
-  '@keyframes blink': {
-    '50%': {
-      opacity: 0,
-    },
-  },
-}));
-
 const MENU_ITEMS: MenuItem[] = [
   {
     id: 'bio',
     icon: (
-      <Box
-        sx={{
-          fontSize: 20,
-          pr: { xs: 0, sm: 1 },
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={stylesBox.boxOne}>
         <FcBusinessContact />
       </Box>
     ),
@@ -144,14 +49,7 @@ const MENU_ITEMS: MenuItem[] = [
   {
     id: 'education',
     icon: (
-      <Box
-        sx={{
-          fontSize: 20,
-          pr: { xs: 0, sm: 1 },
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={stylesBox.boxOne}>
         <FcGraduationCap />
       </Box>
     ),
@@ -160,14 +58,7 @@ const MENU_ITEMS: MenuItem[] = [
   {
     id: 'experience',
     icon: (
-      <Box
-        sx={{
-          fontSize: 20,
-          pr: { xs: 0, sm: 1 },
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={stylesBox.boxOne}>
         <FcSmartphoneTablet />
       </Box>
     ),
@@ -264,98 +155,40 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
   return (
     <div style={STYLES.container}>
       <List component="nav" sx={STYLES.list}>
-        <SectionTitle sx={{ display: { xs: 'none', sm: 'inline-block' } }}>
+        <Typography
+          sx={{
+            ...styledSectionTitle,
+            display: { xs: 'none', sm: 'inline-block' },
+          }}
+        >
           ./whoami
-        </SectionTitle>
+        </Typography>
         <div>{MENU_ITEMS.map(renderMenuButton)}</div>
         <Box sx={{ mt: 0.5, display: { xs: 'none', sm: 'flow' } }}>
-          <Divider
-            sx={{
-              mt: 3,
-              backgroundColor: '#2E7D32', // cor verde
-              opacity: 0.25, // opacidade
-            }}
-          />
-          <SectionTitle>./avatar</SectionTitle>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mt: 3,
-            }}
-          >
-            <Box
-              sx={{
-                width: '120px',
-                height: '120px',
-                borderRadius: '50%',
-                boxShadow: 3,
-                overflow: 'hidden',
-              }}
-            >
+          <Divider sx={stylesDivider.dividerTwo} />
+          <Typography sx={styledSectionTitle}>./avatar</Typography>
+          <Box sx={stylesBox.boxTwo}>
+            <Box sx={stylesBox.boxThree}>
               <img
                 src="/img.jpg"
                 alt="alt"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             </Box>
           </Box>
 
           <Box sx={{ mt: 4, position: 'relative' }}>
-            <Typography
-              sx={{
-                color: '#8b949e',
-                fontSize: '8pt', // Tamanho de fonte mais suave
-                textAlign: 'center',
-                fontFamily: 'monospace',
-                pr: 1.5,
-                pl: 1.5,
-                lineHeight: 1.6,
-                fontWeight: 300, // Fonte mais leve
-                maxWidth: '650px',
-                margin: '0 auto',
-                position: 'relative',
-              }}
-            >
+            <Typography sx={stylesTypo.typoOne}>
               I’m Edison Tezolin, a full-stack developer blending technology
               with human-centered design. I create scalable, user-focused
               solutions, always aiming to deliver meaningful results. Technology
               is not just a tool—it’s a way to turn ideas into reality.
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
-                  boxShadow: 3,
-                }}
-              />
+              <Box sx={stylesBox.boxFour} />
             </Typography>
-            <Box
-              sx={{
-                width: '50px',
-                height: '5px',
-                margin: '10px auto',
-              }}
-            />
+            <Box sx={stylesBox.boxFive} />
           </Box>
-          <Divider
-            sx={{
-              mb: 2,
-              mt: 1,
-              backgroundColor: '#2E7D32', // cor verde
-              opacity: 0.25, // opacidade
-            }}
-          />
-          <SectionTitle>./contacts</SectionTitle>
+          <Divider sx={stylesDivider.dividerOne} />
+          <Typography sx={styledSectionTitle}>./contacts</Typography>
           {CONTACT_ITEMS.map(renderContactItem)}
         </Box>
       </List>

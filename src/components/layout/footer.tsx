@@ -1,20 +1,17 @@
 import { Box, Link, IconButton } from '@mui/material';
 import { GitHub, LinkedIn } from '@mui/icons-material';
-import { styledFooter, styledCodeText, styledSocialLink } from './styles';
+import {
+  styledFooter,
+  styledCodeText,
+  styledSocialLink,
+  styledBox,
+} from './styles.footer';
 
 const Footer = () => {
   return (
     <Box sx={styledFooter}>
       {/* Lado esquerdo - find me in */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          color: '#4A5568',
-          ml: { xs: 2, sm: 5 },
-        }}
-      >
+      <Box sx={styledBox}>
         <Box sx={styledCodeText}>find me in:</Box>
         <Box
           sx={{

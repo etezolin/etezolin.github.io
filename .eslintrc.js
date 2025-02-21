@@ -53,6 +53,7 @@ module.exports = {
     'react/jsx-props-no-spreading': 0,
     'react/prop-types': 'off',
     'no-console': 'off',
+    'react/no-danger': 0,
     'no-plusplus': 0,
     'no-unused-vars': 0, // descomentar depois
     'empty-function': 0, // descomentar depois

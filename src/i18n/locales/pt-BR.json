@@ -1,0 +1,140 @@
+{
+  "navbar": {
+    "menu": {
+      "home": {
+        "label": "_olá"
+      },
+      "about": {
+        "label": "_sobre-mim"
+      },
+      "project": {
+        "label": "_projetos"
+      }
+    }
+  },
+  "footer": {
+    "text": "encontre-me em:"
+  },
+  "home": {
+    "intro": "Olá pessoal, eu sou",
+    "name": "Edison Tezolin",
+    "role": {
+      "prefix": ">",
+      "title": "Desenvolvedor Full-Stack"
+    },
+    "contact": {
+      "phone": {
+        "label": "meu número de telefone:",
+        "value": "41 99833 5860"
+      },
+      "email": {
+        "label": "meu endereço de email:",
+        "value": "tezolin.edison@gmail.com"
+      }
+    },
+    "social": {
+      "github": {
+        "label": "você também pode conferir na minha página do GitHub:",
+        "value": "https://github.com/etezolin"
+      },
+      "linkedin": {
+        "label": "você também pode visitar meu perfil do LinkedIn:",
+        "value": "https://www.linkedin.com/in/edison-tezolin-7498b2284"
+      }
+    },
+    "skills": {
+      "label": "minha stack de tecnologias:",
+      "technologies": {
+        "csharp": "C#",
+        "dotnet": ".NET",
+        "javascript": "JavaScript",
+        "react": "React",
+        "typescript": "TypeScript",
+        "materialui": "MaterialUI",
+        "docker": "Docker",
+        "sql": "SQL"
+      }
+    }
+  },
+  "sidebar": {
+    "navigation": {
+      "whoami": "quem-sou",
+      "avatar": "avatar",
+      "contacts": "contatos",
+      "bio": "bio",
+      "education": "formação",
+      "experience": "experiência"
+    },
+    "profile": {
+      "description": "Sou Edison Tezolin, um desenvolvedor full-stack que combina tecnologia com design centrado no usuário. Crio soluções escaláveis, sempre buscando entregar resultados significativos. A tecnologia não é apenas uma ferramenta - é uma maneira de transformar ideias em realidade.",
+      "email": "tezolin.edison@gmail.com",
+      "phone": "41 99833 5860"
+    }
+  },
+  "bio": {
+    "title": "Bio",
+    "mainContent": {
+      "firstParagraph": "Na intersecção entre a <strong>lógica computacional</strong> e a <strong>investigação filosófica</strong>, encontramos um desenvolvedor que navega entre algoritmos e questões do pensamento humano. Com formação em <strong>Análise e Desenvolvimento de Sistemas</strong> e <strong>Filosofia</strong>, minha jornada profissional explora como essas duas disciplinas se complementam de maneira única.",
+      "secondParagraph": "Como ex-professor e <strong>desenvolvedor full-stack</strong>, aplico o pensamento crítico filosófico para criar soluções que não apenas funcionam, mas também consideram profundamente a experiência humana. Acredito que cada linha de código é uma oportunidade de materializar ideias em soluções tangíveis.",
+      "anecdote": "Falando em combinar tecnologia e filosofia, uma vez eu estava explicando <strong>loops while</strong> usando o <strong>Mito de Sísifo</strong> de Camus como analogia, dizendo: \"Imagine Sísifo programando — ele incorporaria o loop infinito perfeito!\" Um aluno confuso perguntou: \"Professor, não seria mais fácil para ele usar um <strong>break statement</strong> em vez de empurrar a pedra eternamente?\" Às vezes, até dilemas existenciais podem ser resolvidos com um pouco de programação!"
+    }
+  },
+  "education": {
+    "title": "Formação",
+    "systemsAnalysis": {
+      "interfaceDeclaration": "interface AnaliseDeSistemas {",
+      "details": {
+        "degree": "Tecnologia em Análise e Desenvolvimento de Sistemas",
+        "institution": "Centro Universitário Opet",
+        "skills": "Desenvolvimento de Software, Design de Banco de Dados, Arquitetura de Sistemas",
+        "projects": "Plataformas Educacionais, Sistemas de Integração, Soluções RPA, Processamento de Dados, Serviços de Desenvolvimento de APIs, Design de Arquitetura de Sistemas"
+      },
+      "closingBrace": "}"
+    },
+    "philosophy": {
+      "classDeclaration": "class Filosofia {",
+      "details": {
+        "degree": "Bacharelado em Filosofia",
+        "institution": "Pontifícia Universidade Católica do Paraná",
+        "focus": "Lógica, Ética e Pensamento Crítico",
+        "thesis": "A Intersecção entre Tecnologia e Consciência Humana"
+      },
+      "closingBrace": "}"
+    },
+    "labels": {
+      "degree": "formação",
+      "institution": "instituição",
+      "skills": "habilidades",
+      "projects": "projetos",
+      "focus": "foco",
+      "thesis": "tese"
+    }
+  },
+  "experience": {
+    "title": "Experiência",
+    "summary": "Como <strong>desenvolvedor full-stack</strong> especializado em <strong>backend .NET/C#</strong> e <strong>frontend React/TypeScript</strong>, foco na criação de soluções de integração escaláveis e sistemas multiplataforma para o setor educacional, combinando expertise técnica com abordagens ponderadas de resolução de problemas.",
+    "sections": {
+      "backend": {
+        "title": "Desenvolvimento Backend",
+        "skills": [
+          "Construção de APIs RESTful robustas usando .NET Core e C#",
+          "Implementação de arquitetura em camadas com princípios DDD",
+          "Design e otimização de bancos de dados relacionais",
+          "Aplicação de padrões de projeto e princípios SOLID",
+          "Desenvolvimento de arquitetura de microsserviços",
+          "Implementação de Clean Architecture"
+        ]
+      },
+      "frontend": {
+        "title": "Desenvolvimento Frontend",
+        "skills": [
+          "Criação de SPAs modernas usando React e TypeScript",
+          "Construção de interfaces responsivas com componentes reutilizáveis",
+          "Implementação de gerenciamento de estado com Redux e Context API",
+          "Otimização de performance e experiência do usuário",
+          "Desenvolvimento de componentes UI com Material-UI"
+        ]
+      }
+    }
+  }
+}

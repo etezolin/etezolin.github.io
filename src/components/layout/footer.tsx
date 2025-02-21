@@ -1,5 +1,6 @@
 import { Box, Link, IconButton } from '@mui/material';
 import { GitHub, LinkedIn } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import {
   styledFooter,
   styledCodeText,
@@ -8,11 +9,13 @@ import {
 } from './styles.footer';
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={styledFooter}>
       {/* Lado esquerdo - find me in */}
       <Box sx={styledBox}>
-        <Box sx={styledCodeText}>find me in:</Box>
+        <Box sx={styledCodeText}>{t('footer.text')}</Box>
         <Box
           sx={{
             display: 'flex',

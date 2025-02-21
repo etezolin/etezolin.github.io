@@ -5,7 +5,7 @@ export const styledGradientBackground: SxProps<Theme> = {
   width: '100%',
   position: 'relative',
   overflow: 'hidden',
-  background: `linear-gradient(135deg, #0a192f 0%, #0f2942 50%, #0f1c2d 100%)`,
+  backgroundColor: '#0d1117',
 
   // Grade com linhas finas brancas
   '&::before': {

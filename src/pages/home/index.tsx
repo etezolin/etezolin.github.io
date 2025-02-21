@@ -7,6 +7,7 @@ import { BiLogoTypescript } from 'react-icons/bi';
 import { SiMui } from 'react-icons/si';
 import { useTheme, useMediaQuery, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import {
   styledGradientBackground,
   styledStarsOverlay,
@@ -24,6 +25,7 @@ const Home: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const { t } = useTranslation();
 
   // Determina o tamanho do ícone baseado no breakpoint
   const iconSize = isMobile ? 20 : isTablet ? 22 : 24;
@@ -34,7 +36,7 @@ const Home: React.FC = () => {
         <Box sx={stylesBox.boxTwo}>
           {/* Introdução */}
           <Typography sx={stylesTypography.typoOne}>
-            Hello everyone, I’m{' '}
+            {t('home.intro')}
           </Typography>
 
           {/* Nome */}
@@ -44,24 +46,28 @@ const Home: React.FC = () => {
 
           {/* Cargo */}
           <Typography sx={stylesTypography.typoThree}>
-            <span style={{ color: '#5E81AC' }}>{'>'}</span> Full-Stack Developer
+            <span style={{ color: '#5E81AC' }}>{'>'}</span>{' '}
+            {t('home.role.title')}
           </Typography>
 
           {/* Informações de contato */}
           <Box sx={stylesBox.boxThree}>
-            <Typography sx={styledCodeComment}>my phone number:</Typography>
+            <Typography sx={styledCodeComment}>
+              {t('home.contact.phone.label')}
+            </Typography>
             <Typography sx={styledCodeVariable}>
               telephoneNum = <CodeString>"41 99833 5860"</CodeString>;
             </Typography>
 
-            <Typography sx={styledCodeComment}>my email address:</Typography>
+            <Typography sx={styledCodeComment}>
+              {t('home.contact.email.label')}
+            </Typography>
             <Typography sx={styledCodeVariable}>
               email = <CodeString>"tezolin.edison@gmail.com"</CodeString>;
             </Typography>
 
             <Typography sx={styledCodeComment}>
-              {' '}
-              you can also check it out on my GitHub page:
+              {t('home.social.github.label')}
             </Typography>
             <Typography sx={styledCodeVariable}>
               githubLink ={' '}
@@ -76,7 +82,7 @@ const Home: React.FC = () => {
             </Typography>
 
             <Typography sx={styledCodeComment}>
-              you can also visit my LinkedIn profile:
+              {t('home.social.linkedin.label')}
             </Typography>
             <Typography sx={styledCodeVariable}>
               linkedInPage ={' '}
@@ -89,8 +95,7 @@ const Home: React.FC = () => {
 
           <Box sx={stylesBox.boxFour}>
             <Typography sx={styledCodeComment}>
-              {' '}
-              my technology stack:
+              {t('home.skills.label')}
             </Typography>
             <Box sx={stylesBox.boxFive}>
               <Box

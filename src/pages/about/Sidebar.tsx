@@ -17,6 +17,7 @@ import {
   FcGraduationCap,
 } from 'react-icons/fc';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   stylesBox,
   styledSectionTitle,
@@ -36,36 +37,6 @@ interface SidebarProps {
   setActiveButton: (id: string) => void;
 }
 
-const MENU_ITEMS: MenuItem[] = [
-  {
-    id: 'bio',
-    icon: (
-      <Box sx={stylesBox.boxOne}>
-        <FcBusinessContact />
-      </Box>
-    ),
-    text: 'bio',
-  },
-  {
-    id: 'education',
-    icon: (
-      <Box sx={stylesBox.boxOne}>
-        <FcGraduationCap />
-      </Box>
-    ),
-    text: 'education',
-  },
-  {
-    id: 'experience',
-    icon: (
-      <Box sx={stylesBox.boxOne}>
-        <FcSmartphoneTablet />
-      </Box>
-    ),
-    text: 'experience',
-  },
-];
-
 const CONTACT_ITEMS: MenuItem[] = [
   {
     id: 'email',
@@ -82,6 +53,37 @@ const CONTACT_ITEMS: MenuItem[] = [
 const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { t } = useTranslation();
+
+  const MENU_ITEMS: MenuItem[] = [
+    {
+      id: 'bio',
+      icon: (
+        <Box sx={stylesBox.boxOne}>
+          <FcBusinessContact />
+        </Box>
+      ),
+      text: t('sidebar.navigation.bio'),
+    },
+    {
+      id: 'education',
+      icon: (
+        <Box sx={stylesBox.boxOne}>
+          <FcGraduationCap />
+        </Box>
+      ),
+      text: t('sidebar.navigation.education'),
+    },
+    {
+      id: 'experience',
+      icon: (
+        <Box sx={stylesBox.boxOne}>
+          <FcSmartphoneTablet />
+        </Box>
+      ),
+      text: t('sidebar.navigation.experience'),
+    },
+  ];
 
   const handleClick = (id: string) => {
     if (id !== activeButton) {
@@ -161,12 +163,15 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
             display: { xs: 'none', sm: 'inline-block' },
           }}
         >
-          ./whoami
+          {t('sidebar.navigation.whoami')}
         </Typography>
         <div>{MENU_ITEMS.map(renderMenuButton)}</div>
         <Box sx={{ mt: 0.5, display: { xs: 'none', sm: 'flow' } }}>
           <Divider sx={stylesDivider.dividerTwo} />
-          <Typography sx={styledSectionTitle}>./avatar</Typography>
+          <Typography sx={styledSectionTitle}>
+            {' '}
+            {t('sidebar.navigation.avatar')}
+          </Typography>
           <Box sx={stylesBox.boxTwo}>
             <Box sx={stylesBox.boxThree}>
               <img
@@ -179,16 +184,16 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
 
           <Box sx={{ mt: 4, position: 'relative' }}>
             <Typography sx={stylesTypo.typoOne}>
-              I’m Edison Tezolin, a full-stack developer blending technology
-              with human-centered design. I create scalable, user-focused
-              solutions, always aiming to deliver meaningful results. Technology
-              is not just a tool—it’s a way to turn ideas into reality.
+              {t('sidebar.profile.description')}
               <Box sx={stylesBox.boxFour} />
             </Typography>
             <Box sx={stylesBox.boxFive} />
           </Box>
           <Divider sx={stylesDivider.dividerOne} />
-          <Typography sx={styledSectionTitle}>./contacts</Typography>
+          <Typography sx={styledSectionTitle}>
+            {' '}
+            {t('sidebar.navigation.contacts')}
+          </Typography>
           {CONTACT_ITEMS.map(renderContactItem)}
         </Box>
       </List>

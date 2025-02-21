@@ -87,6 +87,8 @@ export const styleDrawer: SxProps<Theme> = {
 
 export const styleBox: SxProps<Theme> = {
   display: { xs: 'none', md: 'flex' },
+  alignContent: 'center',
+  alignItems: 'center',
   gap: 2,
   mr: 15,
   flexGrow: 1,

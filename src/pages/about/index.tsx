@@ -1,5 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import {
   styledBox,
   styledMainContainer,
@@ -12,6 +14,7 @@ import Sidebar from './Sidebar';
 
 const PortfolioContent = () => {
   const [activeButton, setActiveButton] = React.useState<string>('bio');
+  const { t } = useTranslation();
 
   return (
     <Box sx={styledMainContainer}>
@@ -28,56 +31,62 @@ const PortfolioContent = () => {
           {activeButton === 'education' && (
             <>
               <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxOne}>Education</Box>
+                <Box sx={stylesBox.boxOne}>{t('education.title')}</Box>
               </Typography>
 
               <Box sx={stylesBox.boxTwo}>
-                {/* Formação em ADS */}
+                {/* Systems Analysis */}
                 <Box sx={stylesBox.boxThree}>
                   <Typography sx={stylesTypo.typoOne}>
-                    {`interface SystemsAnalysis {`}
+                    {t('education.systemsAnalysis.interfaceDeclaration')}
                   </Typography>
 
                   <Box sx={{ pl: 3 }}>
                     <Typography sx={stylesTypo.typotwo}>
-                      <strong>degree:</strong> Technology in Systems Analysis
-                      and Development
+                      <strong>{t('education.labels.degree')}:</strong>{' '}
+                      {t('education.systemsAnalysis.details.degree')}
                       <br />
-                      <strong>institution:</strong> Centro Universitário Opet
+                      <strong>{t('education.labels.institution')}:</strong>{' '}
+                      {t('education.systemsAnalysis.details.institution')}
                       <br />
-                      <strong>skills:</strong> Software Development, Database
-                      Design, System Architecture
+                      <strong>{t('education.labels.skills')}:</strong>{' '}
+                      {t('education.systemsAnalysis.details.skills')}
                       <br />
-                      <strong>projects:</strong> Educational Platforms,
-                      Integration Systems, RPA Solutions, Data Processing, APIs
-                      Development Services, System Architecture Design
+                      <strong>{t('education.labels.projects')}:</strong>{' '}
+                      {t('education.systemsAnalysis.details.projects')}
                     </Typography>
                   </Box>
 
-                  <Typography sx={stylesTypo.typoFour}>{`}`}</Typography>
+                  <Typography sx={stylesTypo.typoFour}>
+                    {t('education.systemsAnalysis.closingBrace')}
+                  </Typography>
                 </Box>
-                {/* Formação em Filosofia */}
+
+                {/* Philosophy */}
                 <Box sx={stylesBox.boxFour}>
                   <Typography sx={stylesTypo.stypoThree}>
-                    {`class Philosophy {`}
+                    {t('education.philosophy.classDeclaration')}
                   </Typography>
 
                   <Box sx={{ pl: 3 }}>
                     <Typography sx={stylesTypo.typoFive}>
-                      <strong>degree:</strong> Bachelor of Philosophy
+                      <strong>{t('education.labels.degree')}:</strong>{' '}
+                      {t('education.philosophy.details.degree')}
                       <br />
-                      <strong>institution:</strong> Pontifícia Universidade
-                      Católica do Paraná
+                      <strong>{t('education.labels.institution')}:</strong>{' '}
+                      {t('education.philosophy.details.institution')}
                       <br />
-                      <strong>focus:</strong> Logic, Ethics and Critical
-                      Thinking
+                      <strong>{t('education.labels.focus')}:</strong>{' '}
+                      {t('education.philosophy.details.focus')}
                       <br />
-                      <strong>thesis:</strong> The Intersection of Technology
-                      and Human Consciousness
+                      <strong>{t('education.labels.thesis')}:</strong>{' '}
+                      {t('education.philosophy.details.thesis')}
                     </Typography>
                   </Box>
 
-                  <Typography sx={stylesTypo.typoSix}>{`}`}</Typography>
+                  <Typography sx={stylesTypo.typoSix}>
+                    {t('education.philosophy.closingBrace')}
+                  </Typography>
                 </Box>
               </Box>
             </>
@@ -86,42 +95,29 @@ const PortfolioContent = () => {
           {activeButton === 'bio' && (
             <>
               <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxFive}>Bio</Box>
+                <Box sx={stylesBox.boxFive}>{t('bio.title')}</Box>
               </Typography>
 
               <Box sx={stylesBox.boxSeven}>
                 <Typography sx={stylesTypo.typoSeven}>
-                  <p>
-                    At the intersection of <strong>computational logic</strong>{' '}
-                    and <strong>philosophical inquiry</strong>, we find a
-                    developer who navigates between algorithms and questions of
-                    human thought. With a background in{' '}
-                    <strong>Systems Analysis and Development</strong> and{' '}
-                    <strong>Philosophy</strong>, my professional journey
-                    explores how these two disciplines complement each other in
-                    a unique way.
-                  </p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: t('bio.mainContent.firstParagraph'),
+                    }}
+                  />
 
-                  <p>
-                    As a former teacher and{' '}
-                    <strong>full-stack developer</strong>, I apply philosophical
-                    critical thinking to create solutions that not only work,
-                    but also deeply consider the human experience. I believe
-                    that each line of code is an opportunity to materialize
-                    ideas into tangible solutions.
-                  </p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: t('bio.mainContent.secondParagraph'),
+                    }}
+                  />
 
                   <Box sx={stylesBox.boxSix}>
-                    Speaking of combining technology and philosophy, once I was
-                    explaining
-                    <strong> while loops</strong> using Camus's{' '}
-                    <strong>Myth of Sisyphus</strong> as an analogy, saying:
-                    "Imagine Sisyphus programming — he would embody the perfect
-                    infinite loop!" A confused student asked: "Professor,
-                    wouldn't it be easier for him to use a{' '}
-                    <strong>break statement</strong> instead of pushing the rock
-                    eternally?" Sometimes, even existential dilemmas can be
-                    solved with a bit of programming!
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: t('bio.mainContent.anecdote'),
+                      }}
+                    />
                   </Box>
                 </Typography>
               </Box>
@@ -130,57 +126,46 @@ const PortfolioContent = () => {
           {activeButton === 'experience' && (
             <>
               <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxEight}>Experience</Box>
+                <Box sx={stylesBox.boxEight}>{t('experience.title')}</Box>
               </Typography>
               <Box sx={{ mb: 4 }}>
                 <Box sx={stylesBox.boxNine}>
-                  <Typography sx={stylesTypo.typoEight}>
-                    As a <strong>full-stack developer</strong> specialized in{' '}
-                    <strong>.NET/C# backend</strong> and
-                    <strong> React/TypeScript frontend</strong>, I focus on
-                    creating scalable integration solutions and multi-platform
-                    systems for the education sector, combining technical
-                    expertise with thoughtful problem-solving approaches.
-                  </Typography>
+                  <Typography
+                    sx={stylesTypo.typoEight}
+                    dangerouslySetInnerHTML={{
+                      __html: t('experience.summary'),
+                    }}
+                  />
                 </Box>
                 <Box sx={stylesBox.boxTen}>
                   <div style={{ marginTop: '40px' }}>
-                    <div className="section-title"> Backend Development</div>
-                    <div className="list-item">
-                      Building robust RESTful APIs using .NET Core and C#
+                    {/* Backend Section */}
+                    <div className="section-title">
+                      {t('experience.sections.backend.title')}
                     </div>
-                    <div className="list-item">
-                      Implementing layered architecture with DDD principles
-                    </div>
-                    <div className="list-item">
-                      Designing and optimizing relational databases
-                    </div>
-                    <div className="list-item">
-                      Applying design patterns and SOLID principles
-                    </div>
-                    <div className="list-item">
-                      Developing microservices architecture
-                    </div>
-                    <div className="list-item">
-                      Clean Architecture implementation
-                    </div>
+                    {(
+                      t('experience.sections.backend.skills', {
+                        returnObjects: true,
+                      }) as string[]
+                    ).map((skill: string) => (
+                      <div key={uuidv4()} className="list-item">
+                        {skill}
+                      </div>
+                    ))}
 
-                    <div className="section-title"> Frontend Development</div>
-                    <div className="list-item">
-                      Creating modern SPAs using React and TypeScript
+                    {/* Frontend Section */}
+                    <div className="section-title">
+                      {t('experience.sections.frontend.title')}
                     </div>
-                    <div className="list-item">
-                      Building responsive interfaces with reusable components
-                    </div>
-                    <div className="list-item">
-                      Implementing Redux and Context API state management
-                    </div>
-                    <div className="list-item">
-                      Optimizing application performance and UX
-                    </div>
-                    <div className="list-item">
-                      Developing UI components with Material-UI
-                    </div>
+                    {(
+                      t('experience.sections.frontend.skills', {
+                        returnObjects: true,
+                      }) as string[]
+                    ).map((skill: string) => (
+                      <div key={uuidv4()} className="list-item">
+                        {skill}
+                      </div>
+                    ))}
                   </div>
                 </Box>
               </Box>

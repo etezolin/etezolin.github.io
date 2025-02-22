@@ -49,6 +49,7 @@ const PortfolioContent = () => {
               borderTop: '1px solid #21262d',
               display: { xs: 'flex', sm: 'none' },
               justifyContent: 'space-around',
+              width: '100%',
             }}
             elevation={3}
           >
@@ -57,14 +58,17 @@ const PortfolioContent = () => {
               onChange={(_, newValue) => setActiveButton(newValue)}
               sx={{
                 backgroundColor: 'transparent',
+                width: '100%',
                 '& .MuiBottomNavigationAction-root': {
                   color: '#fff',
                   transition: 'all 0.5s ease',
+                  flex: 1,
+                  maxWidth: 'none',
+                  padding: 0,
                   '&.Mui-selected': {
                     color: '#A3BE8C',
                     backgroundColor: 'rgba(163, 190, 140, 0.1)',
                     borderTop: '2px solid #A3BE8C',
-                    // Opcional: adicionar um efeito de brilho suave
                     boxShadow: '0 -4px 10px rgba(163, 190, 140, 0.1)',
                   },
                 },

@@ -17,7 +17,7 @@ import {
   styledNavLink,
   styleStyledAppBar,
   styleAppWrapper,
-  styleNameTitle,
+  // styleNameTitle,
   styleDrawer,
   styleBox,
   StyledRouterLink,

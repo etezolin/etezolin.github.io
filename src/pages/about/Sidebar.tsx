@@ -11,11 +11,6 @@ import {
   Divider,
 } from '@mui/material';
 import { Email, Phone } from '@mui/icons-material';
-import {
-  FcBusinessContact,
-  FcSmartphoneTablet,
-  FcGraduationCap,
-} from 'react-icons/fc';
 import { GoMortarBoard } from 'react-icons/go';
 import { GoBriefcase } from 'react-icons/go';
 import { GoPerson } from 'react-icons/go';

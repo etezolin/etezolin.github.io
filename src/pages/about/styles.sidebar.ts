@@ -135,6 +135,7 @@ export const STYLES: Styles = {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    paddingTop: '2rem',
   },
   list: {
     padding: 0,

@@ -164,6 +164,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
           sx={{
             ...styledSectionTitle,
             display: { xs: 'none', sm: 'inline-block' },
+            mb: 1,
           }}
         >
           {t('sidebar.navigation.whoami')}

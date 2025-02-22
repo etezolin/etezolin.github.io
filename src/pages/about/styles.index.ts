@@ -98,7 +98,7 @@ export const styledSubSectionTitle: SxProps<Theme> = {
   color: '#c9d1d9',
   fontSize: '1.5rem',
   fontFamily: 'monospace',
-  marginTop: '0.55rem',
+  marginTop: '2rem',
   marginBottom: '1rem',
 };
 

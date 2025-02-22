@@ -58,6 +58,7 @@ const PortfolioContent = () => {
               onChange={(_, newValue) => setActiveButton(newValue)}
               sx={{
                 backgroundColor: 'transparent',
+                mt: 2,
                 width: '100%',
                 '& .MuiBottomNavigationAction-root': {
                   color: '#fff',
@@ -79,7 +80,7 @@ const PortfolioContent = () => {
                 icon={
                   <Tooltip title="bio">
                     <div>
-                      <GoPerson style={{ fontSize: '18px' }} />
+                      <GoPerson style={{ fontSize: '15px' }} />
                     </div>
                   </Tooltip>
                 }
@@ -89,7 +90,7 @@ const PortfolioContent = () => {
                 icon={
                   <Tooltip title="education">
                     <div>
-                      <GoBriefcase style={{ fontSize: '18px' }} />
+                      <GoBriefcase style={{ fontSize: '15px' }} />
                     </div>
                   </Tooltip>
                 }
@@ -99,7 +100,7 @@ const PortfolioContent = () => {
                 icon={
                   <Tooltip title="experience">
                     <div>
-                      <GoMortarBoard style={{ fontSize: '18px' }} />
+                      <GoMortarBoard style={{ fontSize: '15px' }} />
                     </div>
                   </Tooltip>
                 }
@@ -107,7 +108,7 @@ const PortfolioContent = () => {
             </BottomNavigation>
           </Paper>
           {activeButton === 'education' && (
-            <Fade in={activeButton === 'education'} timeout={1500}>
+            <Fade in={activeButton === 'education'} timeout={750}>
               <Box>
                 <Typography sx={styledSubSectionTitle}>
                   <Box sx={stylesBox.boxOne}>{t('education.title')}</Box>
@@ -177,7 +178,7 @@ const PortfolioContent = () => {
           )}
 
           {activeButton === 'bio' && (
-            <Fade in={activeButton === 'bio'} timeout={1500}>
+            <Fade in={activeButton === 'bio'} timeout={750}>
               <Box>
                 <Typography sx={styledSubSectionTitle}>
                   <Box sx={stylesBox.boxFive}>{t('bio.title')}</Box>
@@ -210,7 +211,7 @@ const PortfolioContent = () => {
             </Fade>
           )}
           {activeButton === 'experience' && (
-            <Fade in={activeButton === 'experience'} timeout={1500}>
+            <Fade in={activeButton === 'experience'} timeout={750}>
               <Box>
                 <Typography sx={styledSubSectionTitle}>
                   <Box sx={stylesBox.boxEight}>{t('experience.title')}</Box>

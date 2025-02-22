@@ -63,7 +63,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'bio',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <GoPerson style={{ fontSize: '18px', color: '#fff' }} />
+          <GoPerson style={{ fontSize: '18px', color: '#c9d1d9' }} />
         </Box>
       ),
       text: t('sidebar.navigation.bio'),
@@ -72,7 +72,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'education',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <GoMortarBoard style={{ fontSize: '18px', color: '#fff' }} />
+          <GoMortarBoard style={{ fontSize: '18px', color: '#c9d1d9' }} />
         </Box>
       ),
       text: t('sidebar.navigation.education'),
@@ -81,7 +81,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'experience',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <GoBriefcase style={{ fontSize: '18px', color: '#fff' }} />
+          <GoBriefcase style={{ fontSize: '18px', color: '#c9d1d9' }} />
         </Box>
       ),
       text: t('sidebar.navigation.experience'),

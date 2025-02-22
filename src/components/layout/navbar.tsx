@@ -23,6 +23,7 @@ import {
   StyledRouterLink,
   StyledRouterLinkv2,
 } from './styles.navbar';
+import logo from '../../assets/image/logo.png';
 
 // Componentes estilizados para o seletor de idiomas
 const LanguageButton = styled(Box)(() => ({
@@ -106,7 +107,17 @@ const Navbar = () => {
   ];
 
   const drawer = (
-    <Box sx={{ width: 250, bgcolor: '#0a192f', height: '100%', mt: 7 }}>
+    <Box sx={{ width: 250, bgcolor: '#0a192f', height: '100%', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Box
+          component="img"
+          src={logo}
+          alt=""
+          sx={{
+            width: { xs: '230px', sm: '250px' },
+          }}
+        />
+      </Box>
       <List>
         {navLinks.map((link) => (
           <ListItem key={link.title}>
@@ -140,7 +151,23 @@ const Navbar = () => {
             ...styledNavLink,
           }}
         >
-          <Typography sx={styleNameTitle}>etezolin</Typography>
+          {/* <Typography sx={styleNameTitle}>etezolin</Typography> */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              // ...styleNameTitle, // mantendo os estilos anteriores caso necessário
+            }}
+          >
+            <Box
+              component="img"
+              src={logo}
+              alt=""
+              sx={{
+                width: { xs: '230px', sm: '250px' },
+              }}
+            />
+          </Box>
         </StyledRouterLink>
 
         <Box

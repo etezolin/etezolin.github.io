@@ -120,7 +120,7 @@ const Navbar = () => {
         ))}
       </List>
       {/* Language Switcher no drawer */}
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
         <LanguageSwitcher />
       </Box>
     </Box>

@@ -16,6 +16,9 @@ import {
   FcSmartphoneTablet,
   FcGraduationCap,
 } from 'react-icons/fc';
+import { GoMortarBoard } from 'react-icons/go';
+import { GoBriefcase } from 'react-icons/go';
+import { GoPerson } from 'react-icons/go';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -60,7 +63,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'bio',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <FcBusinessContact />
+          <GoPerson style={{ fontSize: '18px', color: '#fff' }} />
         </Box>
       ),
       text: t('sidebar.navigation.bio'),
@@ -69,7 +72,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'education',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <FcGraduationCap />
+          <GoMortarBoard style={{ fontSize: '18px', color: '#fff' }} />
         </Box>
       ),
       text: t('sidebar.navigation.education'),
@@ -78,7 +81,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
       id: 'experience',
       icon: (
         <Box sx={stylesBox.boxOne}>
-          <FcSmartphoneTablet />
+          <GoBriefcase style={{ fontSize: '18px', color: '#fff' }} />
         </Box>
       ),
       text: t('sidebar.navigation.experience'),
@@ -109,12 +112,17 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
         }}
         onClick={() => handleClick(id)}
       >
-        <ListItemIcon sx={STYLES.icon}>{icon}</ListItemIcon>
         {!isMobile && (
-          <ListItemText
-            primary={text}
-            primaryTypographyProps={isActive ? STYLES.activeText : STYLES.text}
-          />
+          <>
+            <ListItemIcon sx={STYLES.icon}>{icon}</ListItemIcon>
+
+            <ListItemText
+              primary={text}
+              primaryTypographyProps={
+                isActive ? STYLES.activeText : STYLES.text
+              }
+            />
+          </>
         )}
       </ListItem>
     );

@@ -78,6 +78,7 @@ export const styledMainContainer: SxProps<Theme> = {
 
 export const styledMainContent: SxProps<Theme> = {
   flex: 1,
+  minWidth: '350px',
   padding: '1rem',
   marginTop: '1.9rem !important',
   fontFamily: 'monospace',

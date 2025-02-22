@@ -86,10 +86,7 @@ const Home: React.FC = () => {
             </Typography>
             <Typography sx={styledCodeVariable}>
               linkedInPage ={' '}
-              <CodeString>
-                "https://www.linkedin.com/in/edison-tezolin-7498b2284"
-              </CodeString>
-              ;
+              <CodeString>"https://www.linkedin.com/in/etezolin"</CodeString>;
             </Typography>
           </Box>
 

@@ -1,7 +1,18 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import {
+  Box,
+  Typography,
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper,
+  Fade,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
+import { GoMortarBoard } from 'react-icons/go';
+import { GoBriefcase } from 'react-icons/go';
+import { GoPerson } from 'react-icons/go';
+import Tooltip from '@mui/material/Tooltip';
 import {
   styledBox,
   styledMainContainer,
@@ -19,8 +30,9 @@ const PortfolioContent = () => {
   return (
     <Box sx={styledMainContainer}>
       {/* Sidebar */}
+
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <Box sx={styledBox}>
+        <Box sx={{ ...styledBox, display: { xs: 'none', sm: 'flex' } }}>
           <Sidebar
             activeButton={activeButton}
             setActiveButton={setActiveButton}
@@ -28,148 +40,220 @@ const PortfolioContent = () => {
         </Box>
 
         <Box sx={styledMainContent}>
+          <Paper
+            sx={{
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: '#0d1117',
+              borderTop: '1px solid #21262d',
+              display: { xs: 'flex', sm: 'none' },
+              justifyContent: 'space-around',
+            }}
+            elevation={3}
+          >
+            <BottomNavigation
+              value={activeButton}
+              onChange={(_, newValue) => setActiveButton(newValue)}
+              sx={{
+                backgroundColor: 'transparent',
+                '& .MuiBottomNavigationAction-root': {
+                  color: '#fff',
+                  transition: 'all 0.5s ease',
+                  '&.Mui-selected': {
+                    color: '#A3BE8C',
+                    backgroundColor: 'rgba(163, 190, 140, 0.1)',
+                    borderTop: '2px solid #A3BE8C',
+                    // Opcional: adicionar um efeito de brilho suave
+                    boxShadow: '0 -4px 10px rgba(163, 190, 140, 0.1)',
+                  },
+                },
+              }}
+            >
+              <BottomNavigationAction
+                value="bio"
+                icon={
+                  <Tooltip title="bio">
+                    <div>
+                      <GoPerson style={{ fontSize: '18px' }} />
+                    </div>
+                  </Tooltip>
+                }
+              />
+              <BottomNavigationAction
+                value="education"
+                icon={
+                  <Tooltip title="education">
+                    <div>
+                      <GoBriefcase style={{ fontSize: '18px' }} />
+                    </div>
+                  </Tooltip>
+                }
+              />
+              <BottomNavigationAction
+                value="experience"
+                icon={
+                  <Tooltip title="experience">
+                    <div>
+                      <GoMortarBoard style={{ fontSize: '18px' }} />
+                    </div>
+                  </Tooltip>
+                }
+              />
+            </BottomNavigation>
+          </Paper>
           {activeButton === 'education' && (
-            <>
-              <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxOne}>{t('education.title')}</Box>
-              </Typography>
+            <Fade in={activeButton === 'education'} timeout={1500}>
+              <Box>
+                <Typography sx={styledSubSectionTitle}>
+                  <Box sx={stylesBox.boxOne}>{t('education.title')}</Box>
+                </Typography>
 
-              <Box sx={stylesBox.boxTwo}>
-                {/* Systems Analysis */}
-                <Box sx={stylesBox.boxThree}>
-                  <Typography sx={stylesTypo.typoOne}>
-                    {t('education.systemsAnalysis.interfaceDeclaration')}
-                  </Typography>
+                <Box sx={stylesBox.boxTwo}>
+                  {/* Systems Analysis */}
+                  <Box sx={stylesBox.boxThree}>
+                    <Typography sx={stylesTypo.typoOne}>
+                      {t('education.systemsAnalysis.interfaceDeclaration')}
+                    </Typography>
 
-                  <Box sx={{ pl: 3 }}>
-                    <Typography sx={stylesTypo.typotwo}>
-                      <strong>{t('education.labels.degree')}:</strong>{' '}
-                      {t('education.systemsAnalysis.details.degree')}
-                      <br />
-                      <strong>{t('education.labels.institution')}:</strong>{' '}
-                      {t('education.systemsAnalysis.details.institution')}
-                      <br />
-                      <strong>{t('education.labels.skills')}:</strong>{' '}
-                      {t('education.systemsAnalysis.details.skills')}
-                      <br />
-                      <strong>{t('education.labels.projects')}:</strong>{' '}
-                      {t('education.systemsAnalysis.details.projects')}
+                    <Box sx={{ pl: 3 }}>
+                      <Typography sx={stylesTypo.typotwo}>
+                        <strong>{t('education.labels.degree')}:</strong>{' '}
+                        {t('education.systemsAnalysis.details.degree')}
+                        <br />
+                        <strong>
+                          {t('education.labels.institution')}:
+                        </strong>{' '}
+                        {t('education.systemsAnalysis.details.institution')}
+                        <br />
+                        <strong>{t('education.labels.skills')}:</strong>{' '}
+                        {t('education.systemsAnalysis.details.skills')}
+                        <br />
+                        <strong>{t('education.labels.projects')}:</strong>{' '}
+                        {t('education.systemsAnalysis.details.projects')}
+                      </Typography>
+                    </Box>
+
+                    <Typography sx={stylesTypo.typoFour}>
+                      {t('education.systemsAnalysis.closingBrace')}
                     </Typography>
                   </Box>
 
-                  <Typography sx={stylesTypo.typoFour}>
-                    {t('education.systemsAnalysis.closingBrace')}
-                  </Typography>
-                </Box>
+                  {/* Philosophy */}
+                  <Box sx={stylesBox.boxFour}>
+                    <Typography sx={stylesTypo.stypoThree}>
+                      {t('education.philosophy.classDeclaration')}
+                    </Typography>
 
-                {/* Philosophy */}
-                <Box sx={stylesBox.boxFour}>
-                  <Typography sx={stylesTypo.stypoThree}>
-                    {t('education.philosophy.classDeclaration')}
-                  </Typography>
+                    <Box sx={{ pl: 3 }}>
+                      <Typography sx={stylesTypo.typoFive}>
+                        <strong>{t('education.labels.degree')}:</strong>{' '}
+                        {t('education.philosophy.details.degree')}
+                        <br />
+                        <strong>
+                          {t('education.labels.institution')}:
+                        </strong>{' '}
+                        {t('education.philosophy.details.institution')}
+                        <br />
+                        <strong>{t('education.labels.focus')}:</strong>{' '}
+                        {t('education.philosophy.details.focus')}
+                        <br />
+                        <strong>{t('education.labels.thesis')}:</strong>{' '}
+                        {t('education.philosophy.details.thesis')}
+                      </Typography>
+                    </Box>
 
-                  <Box sx={{ pl: 3 }}>
-                    <Typography sx={stylesTypo.typoFive}>
-                      <strong>{t('education.labels.degree')}:</strong>{' '}
-                      {t('education.philosophy.details.degree')}
-                      <br />
-                      <strong>{t('education.labels.institution')}:</strong>{' '}
-                      {t('education.philosophy.details.institution')}
-                      <br />
-                      <strong>{t('education.labels.focus')}:</strong>{' '}
-                      {t('education.philosophy.details.focus')}
-                      <br />
-                      <strong>{t('education.labels.thesis')}:</strong>{' '}
-                      {t('education.philosophy.details.thesis')}
+                    <Typography sx={stylesTypo.typoSix}>
+                      {t('education.philosophy.closingBrace')}
                     </Typography>
                   </Box>
-
-                  <Typography sx={stylesTypo.typoSix}>
-                    {t('education.philosophy.closingBrace')}
-                  </Typography>
                 </Box>
               </Box>
-            </>
+            </Fade>
           )}
 
           {activeButton === 'bio' && (
-            <>
-              <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxFive}>{t('bio.title')}</Box>
-              </Typography>
+            <Fade in={activeButton === 'bio'} timeout={1500}>
+              <Box>
+                <Typography sx={styledSubSectionTitle}>
+                  <Box sx={stylesBox.boxFive}>{t('bio.title')}</Box>
+                </Typography>
 
-              <Box sx={stylesBox.boxSeven}>
-                <Typography sx={stylesTypo.typoSeven}>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: t('bio.mainContent.firstParagraph'),
-                    }}
-                  />
-
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: t('bio.mainContent.secondParagraph'),
-                    }}
-                  />
-
-                  <Box sx={stylesBox.boxSix}>
-                    <div
+                <Box sx={stylesBox.boxSeven}>
+                  <Typography sx={stylesTypo.typoSeven}>
+                    <p
                       dangerouslySetInnerHTML={{
-                        __html: t('bio.mainContent.anecdote'),
+                        __html: t('bio.mainContent.firstParagraph'),
+                      }}
+                    />
+
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: t('bio.mainContent.secondParagraph'),
+                      }}
+                    />
+
+                    <Box sx={stylesBox.boxSix}>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: t('bio.mainContent.anecdote'),
+                        }}
+                      />
+                    </Box>
+                  </Typography>
+                </Box>
+              </Box>
+            </Fade>
+          )}
+          {activeButton === 'experience' && (
+            <Fade in={activeButton === 'experience'} timeout={1500}>
+              <Box>
+                <Typography sx={styledSubSectionTitle}>
+                  <Box sx={stylesBox.boxEight}>{t('experience.title')}</Box>
+                </Typography>
+                <Box sx={{ mb: 4 }}>
+                  <Box sx={stylesBox.boxNine}>
+                    <Typography
+                      sx={stylesTypo.typoEight}
+                      dangerouslySetInnerHTML={{
+                        __html: t('experience.summary'),
                       }}
                     />
                   </Box>
-                </Typography>
-              </Box>
-            </>
-          )}
-          {activeButton === 'experience' && (
-            <>
-              <Typography sx={styledSubSectionTitle}>
-                <Box sx={stylesBox.boxEight}>{t('experience.title')}</Box>
-              </Typography>
-              <Box sx={{ mb: 4 }}>
-                <Box sx={stylesBox.boxNine}>
-                  <Typography
-                    sx={stylesTypo.typoEight}
-                    dangerouslySetInnerHTML={{
-                      __html: t('experience.summary'),
-                    }}
-                  />
-                </Box>
-                <Box sx={stylesBox.boxTen}>
-                  <div style={{ marginTop: '40px' }}>
-                    {/* Backend Section */}
-                    <div className="section-title">
-                      {t('experience.sections.backend.title')}
-                    </div>
-                    {(
-                      t('experience.sections.backend.skills', {
-                        returnObjects: true,
-                      }) as string[]
-                    ).map((skill: string) => (
-                      <div key={uuidv4()} className="list-item">
-                        {skill}
+                  <Box sx={stylesBox.boxTen}>
+                    <div style={{ marginTop: '40px' }}>
+                      {/* Backend Section */}
+                      <div className="section-title">
+                        {t('experience.sections.backend.title')}
                       </div>
-                    ))}
+                      {(
+                        t('experience.sections.backend.skills', {
+                          returnObjects: true,
+                        }) as string[]
+                      ).map((skill: string) => (
+                        <div key={uuidv4()} className="list-item">
+                          {skill}
+                        </div>
+                      ))}
 
-                    {/* Frontend Section */}
-                    <div className="section-title">
-                      {t('experience.sections.frontend.title')}
-                    </div>
-                    {(
-                      t('experience.sections.frontend.skills', {
-                        returnObjects: true,
-                      }) as string[]
-                    ).map((skill: string) => (
-                      <div key={uuidv4()} className="list-item">
-                        {skill}
+                      {/* Frontend Section */}
+                      <div className="section-title">
+                        {t('experience.sections.frontend.title')}
                       </div>
-                    ))}
-                  </div>
+                      {(
+                        t('experience.sections.frontend.skills', {
+                          returnObjects: true,
+                        }) as string[]
+                      ).map((skill: string) => (
+                        <div key={uuidv4()} className="list-item">
+                          {skill}
+                        </div>
+                      ))}
+                    </div>
+                  </Box>
                 </Box>
               </Box>
-            </>
+            </Fade>
           )}
         </Box>
       </Box>

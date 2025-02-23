@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -50,26 +51,27 @@ const LanguageDot = styled(Box)({
   margin: '0 6px',
 });
 
-const LanguageTexts = styled(Typography)<{ isActive?: boolean }>(
-  ({ isActive }) => ({
-    fontSize: '14px',
-    fontWeight: 500,
-    color: isActive ? '#ED8936' : '#8FA6BC',
-    marginRight: '4px',
-    transition: 'color 0.3s ease',
-    '&:hover': {
-      color: isActive ? '#ED8936' : '#A3BE8C',
-    },
-  })
-);
-
+const LanguageTexts = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== 'isActive',
+})<{ isActive?: boolean }>(({ isActive }) => ({
+  fontSize: '14px',
+  fontWeight: 500,
+  color: isActive ? '#ED8936' : '#8FA6BC',
+  marginRight: '4px',
+  transition: 'color 0.3s ease',
+  '&:hover': {
+    color: isActive ? '#ED8936' : '#A3BE8C',
+  },
+}));
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(() => {
-    localStorage.setItem('language', 'pt-BR');
-    i18n.changeLanguage('pt-BR');
-    return 'pt-BR';
-  });
+  const [currentLang, setCurrentLang] = useState(
+    () => localStorage.getItem('language') || 'pt-BR'
+  );
+
+  useEffect(() => {
+    i18n.changeLanguage(currentLang);
+  }, []);
 
   const toggleLanguage = () => {
     const newLang = currentLang === 'pt-BR' ? 'en-US' : 'pt-BR';

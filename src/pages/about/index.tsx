@@ -146,7 +146,7 @@ const PortfolioContent = () => {
 
                   {/* Philosophy */}
                   <Box sx={stylesBox.boxFour}>
-                    <Typography sx={stylesTypo.stypoThree}>
+                    <Typography sx={stylesTypo.typoThree}>
                       {t('education.philosophy.classDeclaration')}
                     </Typography>
 
@@ -180,32 +180,33 @@ const PortfolioContent = () => {
           {activeButton === 'bio' && (
             <Fade in={activeButton === 'bio'} timeout={750}>
               <Box>
-                <Typography sx={styledSubSectionTitle}>
+                <Typography component="div" sx={styledSubSectionTitle}>
                   <Box sx={stylesBox.boxFive}>{t('bio.title')}</Box>
                 </Typography>
 
                 <Box sx={stylesBox.boxSeven}>
-                  <Typography sx={stylesTypo.typoSeven}>
-                    <p
+                  <>
+                    <Typography
+                      sx={stylesTypo.typoSeven}
                       dangerouslySetInnerHTML={{
                         __html: t('bio.mainContent.firstParagraph'),
                       }}
                     />
-
-                    <p
+                    <Typography
+                      sx={stylesTypo.typoSeven}
                       dangerouslySetInnerHTML={{
                         __html: t('bio.mainContent.secondParagraph'),
                       }}
                     />
-
                     <Box sx={stylesBox.boxSix}>
-                      <div
+                      <Typography
+                        sx={stylesTypo.typoSeven}
                         dangerouslySetInnerHTML={{
                           __html: t('bio.mainContent.anecdote'),
                         }}
                       />
                     </Box>
-                  </Typography>
+                  </>
                 </Box>
               </Box>
             </Fade>

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   List,
   ListItem,
@@ -123,11 +124,11 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
     );
 
     return isMobile ? (
-      <Tooltip title={text} placement="right">
+      <Tooltip key={`menu-tooltip-${id}`} title={text} placement="right">
         {menuItem}
       </Tooltip>
     ) : (
-      menuItem
+      <React.Fragment key={`menu-item-${id}`}>{menuItem}</React.Fragment>
     );
   };
 
@@ -187,7 +188,7 @@ const Sidebar = ({ activeButton, setActiveButton }: SidebarProps) => {
           </Box>
 
           <Box sx={{ mt: 4, position: 'relative' }}>
-            <Typography sx={stylesTypo.typoOne}>
+            <Typography component="div" sx={stylesTypo.typoOne}>
               {t('sidebar.profile.description')}
               <Box sx={stylesBox.boxFour} />
             </Typography>

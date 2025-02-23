@@ -17,7 +17,7 @@ export const styledGradientBackground: SxProps<Theme> = {
     bottom: '-50%',
     background: `
       repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 50px),
-      repeating-linear-gradient(-45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 50px)
+      repeating-linear-gradient(-45deg, rgba(231, 39, 39, 0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 50px)
     `,
     transform: 'perspective(1000px) rotateX(30deg)',
     animation: 'move 15s linear infinite',

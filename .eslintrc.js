@@ -27,7 +27,7 @@ module.exports = {
       node: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
-      typescript: {}, // Adicione esta linha
+      typescript: {},
     },
   },
   rules: {
@@ -55,8 +55,8 @@ module.exports = {
     'no-console': 'off',
     'react/no-danger': 0,
     'no-plusplus': 0,
-    'no-unused-vars': 0, // descomentar depois
-    'empty-function': 0, // descomentar depois
+    'no-unused-vars': 0,
+    'empty-function': 0,
     'consistent-return': 0,
     'react/no-unescaped-entities': 0,
     'no-promise-executor-return': 0,
@@ -67,7 +67,7 @@ module.exports = {
     'import/no-unresolved': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
     camelcase: 0,
-    'react/function-component-definition': 0, // deletar depois
+    'react/function-component-definition': 0,
     'jsx-a11y/label-has-associated-control': [
       2,
       {

@@ -94,10 +94,10 @@
     "philosophy": {
       "classDeclaration": "class Filosofia {",
       "details": {
-        "degree": "Bacharelado em Filosofia",
+        "degree": "Licenciatura em Filosofia",
         "institution": "Pontifícia Universidade Católica do Paraná",
         "focus": "Lógica, Ética e Pensamento Crítico",
-        "thesis": "A Intersecção entre Tecnologia e Consciência Humana"
+        "thesis": "O prazer, a felicidade e a morte em Epicuro de Samos"
       },
       "closingBrace": "}"
     },
@@ -107,7 +107,7 @@
       "skills": "habilidades",
       "projects": "projetos",
       "focus": "foco",
-      "thesis": "tese"
+      "thesis": "pesquisa"
     }
   },
   "experience": {

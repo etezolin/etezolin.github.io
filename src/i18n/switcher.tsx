@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 
-const LanguageButton = styled(Box)(({ theme }) => ({
+const LanguageButton = styled(Box)(() => ({
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
@@ -41,17 +41,11 @@ const LanguageDot = styled(Box)({
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(() => {
-    return localStorage.getItem('language') || 'pt-BR';
-  });
+  const [currentLang, setCurrentLang] = useState(i18n.language);
 
   const toggleLanguage = () => {
     const newLang = currentLang === 'pt-BR' ? 'en-US' : 'pt-BR';
-
-    // Salva no localStorage
     localStorage.setItem('language', newLang);
-
-    // Atualiza o i18n e o estado
     i18n.changeLanguage(newLang);
     setCurrentLang(newLang);
   };
@@ -64,5 +58,4 @@ const LanguageSwitcher = () => {
     </LanguageButton>
   );
 };
-
 export default LanguageSwitcher;

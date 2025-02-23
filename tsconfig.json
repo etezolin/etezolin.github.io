@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
     "target": "ES2019",
     "module": "ESNext",
     "lib": ["ESNext", "DOM"],
@@ -25,8 +26,8 @@
     "./src/**/*.tsx",
     "./src/**/*.d.ts",
     "src/routes/styled.ts",
-    "src/index.js",
-    "src/App.js",
+    "src/index.tsx",
+    "src/App.tsx",
     "src/store/modules/auth/actions.js",
     "src/pages/Page404v2/index.tsx"
   ]

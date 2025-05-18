@@ -198,7 +198,7 @@ const Home: FC = () => {
                   mb: 2,
                 }}
               >
-                Edison Tezolin
+                * Edison Tezolin *
               </GradientText>
             </motion.div>
 

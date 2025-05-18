@@ -232,9 +232,7 @@ const Experience: FC = () => {
               </Box>
             </Box>
 
-            <CommandLine>
-              $ echo "desenvolvimento_profissional.json" | jq
-            </CommandLine>
+            <CommandLine>$ echo "dev_profissional.json" | jq</CommandLine>
 
             <Box sx={{ mb: 3, pl: 2 }}>
               <SectionTitle variant="h6">
@@ -251,16 +249,6 @@ const Experience: FC = () => {
                 }`}
               </OutputText>
             </Box>
-
-            <CommandLine>$ cat mensagem_recrutadores.txt</CommandLine>
-
-            <OutputText>
-              Comprometido com a excelência técnica e a entrega de valor, busco
-              constantemente expandir meus conhecimentos em tecnologias
-              emergentes para criar soluções que façam a diferença. Se você
-              busca um profissional que combina expertise técnica com visão
-              estratégica, vamos conversar! 💡💻
-            </OutputText>
           </TerminalCard>
         </motion.div>
       </motion.div>

@@ -1,19 +1,15 @@
 // etezolin-portfolio/src/components/Layout/MainLayout.tsx
-import type { FC, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   AppBar,
   Toolbar,
   Container,
   IconButton,
-  // Button,
   Typography,
   useMediaQuery,
   Drawer,
-  List,
-  ListItem,
   useTheme,
-  // Fade,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -21,13 +17,18 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+import SchoolIcon from "@mui/icons-material/School";
+import WorkIcon from "@mui/icons-material/Work";
+import TerminalIcon from "@mui/icons-material/Terminal";
 import { ScrollToTop } from "../shared/ScrollToTop";
 import { useActiveSection } from "../../hooks/useActiveSection";
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+// Definição explícita de props
 interface MainLayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -67,7 +68,11 @@ const NavLinks = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
-const NavLink = styled(motion.a)<{ active?: boolean }>(({ theme, active }) => ({
+interface NavLinkProps {
+  active?: boolean;
+}
+
+const NavLink = styled(motion.a)<NavLinkProps>(({ theme, active }) => ({
   color: active ? theme.palette.primary.main : theme.palette.text.primary,
   textDecoration: "none",
   fontSize: "0.95rem",
@@ -91,64 +96,200 @@ const NavLink = styled(motion.a)<{ active?: boolean }>(({ theme, active }) => ({
   },
 }));
 
-const SocialLink = styled("a")(({ theme }) => ({
+// Componente para a linha decorativa de código
+const CodeLine = styled(Box)(({ theme }) => ({
+  fontFamily: '"Roboto Mono", monospace',
+  fontSize: "0.75rem",
   color: theme.palette.text.secondary,
-  padding: theme.spacing(1),
+  opacity: 0.5,
+  marginBottom: theme.spacing(0.5),
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
-  transition: "all 0.2s ease",
-  borderRadius: "50%",
-  "&:hover": {
-    color: theme.palette.primary.main,
-    transform: "translateY(-3px)",
+}));
+
+const MenuSection = styled(Box)(({ theme }) => ({
+  position: "relative",
+  // marginBottom: theme.spacing(3),
+  padding: theme.spacing(2),
+  backgroundColor: "rgba(30, 45, 70, 0.25)",
+  borderRadius: theme.spacing(1),
+  border: "1px solid rgba(80, 160, 255, 0.1)",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "1px",
+    background:
+      "linear-gradient(90deg, transparent, rgba(80, 160, 255, 0.2), transparent)",
   },
 }));
 
 const MobileDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
     width: "100%",
-    maxWidth: "300px",
-    background: "rgba(10, 25, 41, 0.95)",
+    maxWidth: "320px",
+    background: "rgba(10, 25, 41, 0.97)",
     backdropFilter: "blur(12px)",
     padding: theme.spacing(4, 2),
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
+    borderLeft: "1px solid rgba(80, 160, 255, 0.1)",
+    backgroundImage: `linear-gradient(to bottom, 
+      rgba(10, 25, 41, 0.97), 
+      rgba(15, 30, 50, 0.97)),
+      radial-gradient(circle at 20% 30%, rgba(51, 153, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(100, 100, 255, 0.08) 0%, transparent 50%)`,
   },
 }));
 
-const DrawerNavLink = styled(motion.a)<{ active?: boolean }>(
+interface DrawerNavLinkProps {
+  active?: boolean;
+}
+
+const DrawerNavLink = styled(motion.a)<DrawerNavLinkProps>(
   ({ theme, active }) => ({
     color: active ? theme.palette.primary.main : theme.palette.text.primary,
     textDecoration: "none",
-    fontSize: "1.1rem",
+    fontSize: "1rem",
     fontFamily: '"Roboto Mono", monospace',
-    padding: theme.spacing(1.5, 1),
+    padding: theme.spacing(1.2, 1.5),
     borderLeft: active
       ? `3px solid ${theme.palette.primary.main}`
       : "3px solid transparent",
     transition: "all 0.3s ease",
-    display: "block",
+    display: "flex",
+    alignItems: "center",
     width: "100%",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1.5),
     borderRadius: "0 6px 6px 0",
+    position: "relative",
+    backgroundColor: active ? "rgba(51, 153, 255, 0.1)" : "transparent",
     "&:hover": {
-      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      backgroundColor: "rgba(51, 153, 255, 0.05)",
       color: theme.palette.primary.main,
+      "&::after": {
+        width: "30px",
+      },
+    },
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      width: active ? "30px" : "0px",
+      height: "1px",
+      background: `linear-gradient(90deg, ${theme.palette.primary.main}, transparent)`,
+      transition: "width 0.3s ease",
     },
   })
 );
 
-// const LanguageButton = styled(Button)(({ theme }) => ({
-//   minWidth: "auto",
-//   padding: theme.spacing(0.5, 1),
-//   fontFamily: '"Roboto Mono", monospace',
-//   fontWeight: 500,
-//   fontSize: "0.85rem",
-//   borderRadius: "4px",
-//   transition: "all 0.2s ease",
-// }));
+const DrawerNavIcon = styled(Box)(({ theme }) => ({
+  marginRight: theme.spacing(1.5),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "22px",
+  height: "22px",
+  color: theme.palette.primary.main,
+  opacity: 0.8,
+}));
 
-export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+// Componente para os números de linha
+const LineNumber = styled(Box)(({ theme }) => ({
+  fontFamily: '"Roboto Mono", monospace',
+  fontSize: "0.75rem",
+  color: theme.palette.text.secondary,
+  width: "20px",
+  textAlign: "right",
+  marginRight: theme.spacing(1.5),
+  opacity: 0.4,
+}));
+
+// Componente para o rodapé do menu
+const MenuFooter = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  padding: theme.spacing(2),
+  borderTop: "1px solid rgba(80, 160, 255, 0.1)",
+  position: "relative",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: "20%",
+    right: "20%",
+    height: "1px",
+    background:
+      "linear-gradient(90deg, transparent, rgba(80, 160, 255, 0.2), transparent)",
+  },
+}));
+
+const SocialSection = styled(Box)(({ theme }) => ({
+  display: "flex",
+  marginTop: "15px !important",
+  justifyContent: "center",
+  gap: theme.spacing(3),
+  position: "relative",
+  padding: theme.spacing(2),
+  "&::before": {
+    content: '"// Minhas redes"',
+    position: "absolute",
+    top: "-8px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    fontFamily: '"Roboto Mono", monospace',
+    fontSize: "0.75rem",
+    color: theme.palette.primary.main,
+    backgroundColor: "rgba(10, 25, 41, 0.97)",
+    padding: "0 8px",
+  },
+}));
+
+const SocialLink = styled("a")(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  padding: theme.spacing(1),
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  transition: "all 0.3s ease",
+  borderRadius: "50%",
+  background: "rgba(30, 45, 70, 0.3)",
+  border: "1px solid rgba(80, 160, 255, 0.1)",
+  width: "42px",
+  height: "42px",
+  "&:hover": {
+    color: theme.palette.primary.main,
+    transform: "translateY(-3px) scale(1.05)",
+    boxShadow: "0 5px 15px rgba(0, 120, 255, 0.2)",
+    background: "rgba(30, 45, 70, 0.5)",
+  },
+}));
+
+interface StatusBadgeProps {
+  online?: boolean;
+}
+
+const StatusBadge = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "online",
+})<StatusBadgeProps>(({ theme, online = true }) => ({
+  display: "flex",
+  alignItems: "center",
+  fontSize: "0.75rem",
+  color: online ? "#4caf50" : theme.palette.text.secondary,
+  fontFamily: '"Roboto Mono", monospace',
+  "& .dot": {
+    width: 8,
+    height: 8,
+    borderRadius: "50%",
+    backgroundColor: online ? "#4caf50" : "#f44336",
+    marginRight: theme.spacing(0.75),
+    boxShadow: online ? "0 0 10px rgba(76, 175, 80, 0.5)" : "none",
+  },
+}));
+
+// Definição do componente principal
+export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const activeSection = useActiveSection();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -232,29 +373,6 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
               </NavLinks>
 
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                {/* <Fade in={true} style={{ transitionDelay: '200ms' }}>
-                  <Box sx={{ display: 'flex', gap: 0.5 }}>
-                    <LanguageButton
-                      variant={activeSection ? 'contained' : 'text'}
-                      size="small"
-                      color="primary"
-                      sx={{
-                        bgcolor: activeSection ? 'rgba(51, 153, 255, 0.15)' : 'transparent',
-                      }}
-                    >
-                      PT
-                    </LanguageButton>
-                    <LanguageButton
-                      size="small"
-                      sx={{
-                        color: 'text.secondary',
-                      }}
-                    >
-                      EN
-                    </LanguageButton>
-                  </Box>
-                </Fade> */}
-
                 <Box sx={{ display: "flex", gap: 1 }}>
                   <SocialLink
                     href="https://github.com/etezolin"
@@ -287,7 +405,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 4,
+            mb: 3,
           }}
         >
           <LogoText
@@ -300,69 +418,82 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
             <CodeIcon sx={{ fontSize: 24 }} />
             etezolin
           </LogoText>
-          <IconButton
-            onClick={() => setDrawerOpen(false)}
-            sx={{ color: "text.secondary" }}
-          >
-            <CloseIcon />
-          </IconButton>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <StatusBadge sx={{ mr: 2 }}>
+              <span className="dot" />
+              online
+            </StatusBadge>
+            <IconButton
+              onClick={() => setDrawerOpen(false)}
+              sx={{
+                color: "text.secondary",
+                border: "1px solid rgba(80, 160, 255, 0.1)",
+                background: "rgba(30, 45, 70, 0.3)",
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
         </Box>
 
-        <List>
-          {menuLinks.map((link) => (
-            <ListItem key={link.id} sx={{ px: 0 }}>
-              <DrawerNavLink
-                href={`#${link.id}`}
-                active={activeSection === link.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.id);
-                }}
-                whileTap={{ x: 5 }}
-              >
-                {link.label}
-              </DrawerNavLink>
-            </ListItem>
+        <MenuSection>
+          {menuLinks.map((link, index) => (
+            <DrawerNavLink
+              key={link.id}
+              href={`#${link.id}`}
+              active={activeSection === link.id}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(link.id);
+              }}
+              whileTap={{ x: 5 }}
+              whileHover={{ x: 5 }}
+            >
+              <LineNumber>{index + 1}</LineNumber>
+              <DrawerNavIcon>
+                {link.id === "home" && <HomeIcon fontSize="small" />}
+                {link.id === "about" && <PersonIcon fontSize="small" />}
+                {link.id === "formation" && <SchoolIcon fontSize="small" />}
+                {link.id === "experience" && <WorkIcon fontSize="small" />}
+              </DrawerNavIcon>
+              {link.label}
+            </DrawerNavLink>
           ))}
-        </List>
+        </MenuSection>
 
-        {/* <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 1 }}>
-          <LanguageButton
-            variant="contained"
-            size="small"
-            color="primary"
-            sx={{
-              bgcolor: "rgba(51, 153, 255, 0.15)",
-            }}
-          >
-            PT
-          </LanguageButton>
-          <LanguageButton
-            size="small"
-            sx={{
-              color: "text.secondary",
-            }}
-          >
-            EN
-          </LanguageButton>
-        </Box> */}
+        <MenuFooter>
+          <SocialSection>
+            <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+              <Box sx={{ paddingBottom: "15px !important" }} />
+              <SocialLink
+                href="https://github.com/etezolin"
+                target="_blank"
+                aria-label="GitHub"
+              >
+                <GitHubIcon />
+              </SocialLink>
+            </motion.div>
+            <motion.div whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
+              <Box sx={{ paddingBottom: "15px !important" }} />
+              <SocialLink
+                href="https://www.linkedin.com/in/etezolin"
+                target="_blank"
+                aria-label="LinkedIn"
+              >
+                <LinkedInIcon />
+              </SocialLink>
+            </motion.div>
+          </SocialSection>
 
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 2 }}>
-          <SocialLink
-            href="https://github.com/etezolin"
-            target="_blank"
-            aria-label="GitHub"
-          >
-            <GitHubIcon />
-          </SocialLink>
-          <SocialLink
-            href="https://www.linkedin.com/in/etezolin"
-            target="_blank"
-            aria-label="LinkedIn"
-          >
-            <LinkedInIcon />
-          </SocialLink>
-        </Box>
+          <Box sx={{ mt: 2, textAlign: "center" }}>
+            <CodeLine sx={{ justifyContent: "center" }}>
+              <TerminalIcon sx={{ fontSize: 14, mr: 0.5, opacity: 0.5 }} />
+              <Typography variant="caption" sx={{ opacity: 0.6 }}>
+                v1.0.2 | {new Date().getFullYear()} © etezolin
+              </Typography>
+            </CodeLine>
+          </Box>
+        </MenuFooter>
       </MobileDrawer>
 
       <Container maxWidth="lg" sx={{ pt: { xs: 10, md: 12 } }}>
@@ -373,3 +504,5 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     </Box>
   );
 };
+
+export default MainLayout;

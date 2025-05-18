@@ -3,6 +3,7 @@ import { Box, Container, Card, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { styled } from "@mui/material/styles";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import SchoolIcon from "@mui/icons-material/School";
 import CodeIcon from "@mui/icons-material/Code";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 
@@ -47,16 +48,18 @@ const About: FC = () => {
                 cloud-native no Google Cloud.
               </Typography>
             </Box>
-
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Minha formação multidisciplinar em Análise e Desenvolvimento de
-              Sistemas e Filosofia me permite abordar desafios técnicos com
-              pensamento crítico e visão holística. Atualmente, estou ampliando
-              minhas competências com estudos em Ciência de Dados na UTFPR,
-              explorando análise avançada de dados e machine learning. Sou
-              apaixonado por encontrar o equilíbrio perfeito entre código
-              eficiente e experiências de usuário intuitivas.
-            </Typography>
+            <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+              <SchoolIcon sx={{ color: "secondary.main" }} />
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Minha formação multidisciplinar em Análise e Desenvolvimento de
+                Sistemas e Filosofia me permite abordar desafios técnicos com
+                pensamento crítico e visão holística. Atualmente, estou
+                ampliando minhas competências com estudos em Ciência de Dados na
+                UTFPR, explorando análise avançada de dados e machine learning.
+                Sou apaixonado por encontrar o equilíbrio perfeito entre código
+                eficiente e experiências de usuário intuitivas.
+              </Typography>
+            </Box>
           </StyledCard>
         </motion.div>
 

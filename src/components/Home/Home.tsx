@@ -18,10 +18,14 @@ import {
   SiDocker,
   SiMui,
   SiApachesuperset,
+  SiFirebase,
+  SiTailwindcss,
+  SiApachekafka,
 } from "react-icons/si";
-import { TbSql } from "react-icons/tb";
-import { FaNode, FaGithub } from "react-icons/fa";
+import { TbSql, TbBrandReactNative } from "react-icons/tb";
+import { FaNode, FaGithub, FaGitAlt } from "react-icons/fa";
 import { BiCloud } from "react-icons/bi";
+import { LuMailCheck } from "react-icons/lu";
 
 const CodeText = styled(Typography)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
@@ -97,6 +101,13 @@ const TechStackHeader = styled(Typography)({
   color: "#e0e0e0",
 });
 
+const OutputText = styled(Typography)(({ theme }) => ({
+  fontFamily: '"Roboto Mono", monospace',
+  color: theme.palette.text.primary,
+  marginBottom: theme.spacing(3),
+  lineHeight: 1.6,
+}));
+
 // Animações
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -138,13 +149,19 @@ const Home: FC = () => {
     { name: "JavaScript", color: "#F7DF1E", icon: SiJavascript },
     { name: "React", color: "#61DAFB", icon: SiReact },
     { name: "TypeScript", color: "#007ACC", icon: SiTypescript },
-    { name: "MaterialUI", color: "#0081CB", icon: SiMui },
-    { name: "Docker", color: "#2496ED", icon: SiDocker },
     { name: "SQL", color: "#4479A1", icon: TbSql },
-    { name: "Node", color: "#44a18a", icon: FaNode },
-    { name: "Google Cloud", color: "#a14744", icon: BiCloud },
-    { name: "CI/CD", color: "#a17144", icon: SiApachesuperset },
     { name: "Github", color: "#44a149", icon: FaGithub },
+    { name: "Git Actions", color: "#31c493", icon: FaGitAlt },
+    { name: "CI/CD", color: "#a17144", icon: SiApachesuperset },
+    { name: "Node", color: "#44a18a", icon: FaNode },
+    { name: "MaterialUI", color: "#0081CB", icon: SiMui },
+    { name: "Tailwind CSS", color: "#6668e9", icon: SiTailwindcss },
+    { name: "Google Cloud", color: "#a14744", icon: BiCloud },
+    { name: "Mensageria", color: "#c431bc", icon: LuMailCheck },
+    { name: "Docker", color: "#2496ED", icon: SiDocker },
+    { name: "Firebase", color: "#c49d31", icon: SiFirebase },
+    { name: "React Native", color: "#e96666", icon: TbBrandReactNative },
+    { name: "Kafka", color: "#66e5e9", icon: SiApachekafka },
   ];
 
   return (
@@ -322,7 +339,18 @@ const Home: FC = () => {
             </motion.div>
           ))}
         </motion.div>
-
+        <Box sx={{ mt: 3 }}>
+          <motion.div variants={itemVariants}>
+            <TechStackHeader>// mensagem aos recrutadores:</TechStackHeader>
+          </motion.div>
+          <OutputText>
+            Sou comprometido com a excelência técnica e a entrega de valor,
+            busco constantemente expandir meus conhecimentos em tecnologias
+            emergentes para criar soluções que façam a diferença. Se você busca
+            um profissional que combina expertise técnica com visão estratégica,
+            vamos conversar! 💡💻
+          </OutputText>
+        </Box>
         {/* Background decoration */}
         <Box
           component={motion.div}

@@ -7,7 +7,6 @@ import CodeIcon from "@mui/icons-material/Code";
 import StorageIcon from "@mui/icons-material/Storage";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import CloudIcon from "@mui/icons-material/Cloud";
-import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
 
 const TerminalCard = styled(Card)(({ theme }) => ({
@@ -39,11 +38,13 @@ const OutputText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
   marginBottom: theme.spacing(3),
   lineHeight: 1.6,
+  marginLeft: "25px !important",
+  marginRight: "5px !important",
 }));
 
 const SkillItem = styled(Typography)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
-  color: theme.palette.text.secondary,
+  color: "#f0f0f0",
   marginBottom: theme.spacing(1),
   display: "flex",
   alignItems: "center",
@@ -54,6 +55,10 @@ const SkillItem = styled(Typography)(({ theme }) => ({
 }));
 
 const HighlightText = styled("span")(({ theme }) => ({
+  color: theme.palette.secondary.main,
+}));
+
+const HighlightTextV2 = styled("span")(({ theme }) => ({
   color: theme.palette.secondary.main,
 }));
 
@@ -97,16 +102,22 @@ const Experience: FC = () => {
             <OutputText>
               Desenvolvedor Full-Stack especializado em{" "}
               <HighlightText>.NET/C#</HighlightText> e{" "}
-              <HighlightText>React/TypeScript</HighlightText> com mais de{" "}
-              <HighlightText>4 anos</HighlightText> de experiência na criação de
-              soluções tecnológicas de alto impacto. Apaixonado por transformar
-              requisitos complexos em arquiteturas elegantes e escaláveis que
-              entregam valor real. Combinando expertise técnica com visão
-              estratégica para desenvolver aplicações modernas que unem robustez
-              de backend e experiências de usuário intuitivas.
+              <HighlightText>React/TypeScript</HighlightText> com experiência na
+              criação de soluções tecnológicas de alto impacto. Formado em
+              <HighlightText>
+                {" "}
+                Análise e Desenvolvimento de Sistemas
+              </HighlightText>{" "}
+              e cursando pós-graduação em{" "}
+              <HighlightText>Ciência de Dados na UTFPR</HighlightText>.
+              Apaixonado por transformar requisitos complexos em arquiteturas
+              elegantes e escaláveis que entregam valor real. Combinando
+              expertise técnica com visão estratégica para desenvolver
+              aplicações modernas que unem robustez de backend e experiências de
+              usuário intuitivas.
             </OutputText>
 
-            <CommandLine>$ cat experiencia_secretaria_educacao.txt</CommandLine>
+            <CommandLine>$ cat experiencia_seed.txt</CommandLine>
 
             <Box sx={{ mb: 3 }}>
               <SectionTitle variant="h6">
@@ -115,27 +126,38 @@ const Experience: FC = () => {
               </SectionTitle>
 
               <OutputText>
-                Atuo há mais de <HighlightText>4 anos</HighlightText> como
-                desenvolvedor na Secretaria de Educação do Estado do Paraná,
-                participando do desenvolvimento de soluções educacionais
-                integradas que transformaram processos críticos e impactaram
-                positivamente a gestão educacional em todo o estado. Implementei
-                arquiteturas de microsserviços e hubs de integração que
-                possibilitaram a unificação de sistemas legados e novas
-                plataformas, resultando em maior eficiência operacional e melhor
-                experiência para professores, alunos e gestores.
+                Atuo como desenvolvedor na Secretaria de Educação do Estado do
+                Paraná, participando do desenvolvimento de{" "}
+                <HighlightTextV2>
+                  soluções educacionais integradas
+                </HighlightTextV2>{" "}
+                que transformaram processos críticos e impactaram positivamente
+                a <HighlightTextV2>gestão educacional</HighlightTextV2> em todo
+                o estado. Implementei arquiteturas de microsserviços e hubs de
+                integração que possibilitaram a unificação de sistemas legados e
+                novas plataformas, resultando em maior eficiência operacional e
+                melhor experiência para professores, alunos e gestores.
               </OutputText>
 
               <OutputText>
                 Principais conquistas:
-                <br />• Desenvolvimento de plataformas de integração que
-                conectam mais de 2.000 escolas estaduais;
-                <br />• Implementação de soluções de automação que reduziram em
-                60% o tempo de processamento de dados administrativos;
-                <br />• Arquitetura e implementação de sistemas cloud-native que
-                suportam picos de acesso de mais de 30.000 usuários simultâneos;
-                <br />• Participar da equipe técnica em projetos que
-                modernizaram a infraestrutura tecnológica educacional do estado.
+                <br />• Desenvolvimento de plataformas de{" "}
+                <HighlightTextV2>integração que conectam</HighlightTextV2> mais
+                de 2.000 escolas estaduais;
+                <br />• Implementação de soluções de automação que{" "}
+                <HighlightTextV2>
+                  {" "}
+                  reduziram em 60% o tempo de processamento
+                </HighlightTextV2>{" "}
+                de dados administrativos;
+                <br />• <HighlightTextV2>Arquitetura</HighlightTextV2> e
+                <HighlightTextV2>implementação</HighlightTextV2> de sistemas{" "}
+                <HighlightTextV2>cloud-native</HighlightTextV2> que suportam
+                picos de acesso de mais de 30.000 usuários simultâneos;
+                <br />• Participar da equipe técnica em projetos que{" "}
+                <HighlightTextV2>modernizaram</HighlightTextV2> a{" "}
+                <HighlightTextV2>infraestrutura tecnológica</HighlightTextV2>{" "}
+                educacional do estado.
               </OutputText>
             </Box>
 
@@ -230,24 +252,6 @@ const Experience: FC = () => {
                   ✓ Cloud-native applications e infraestrutura escalável.
                 </SkillItem>
               </Box>
-            </Box>
-
-            <CommandLine>$ echo "dev_profissional.json" | jq</CommandLine>
-
-            <Box sx={{ mb: 3, pl: 2 }}>
-              <SectionTitle variant="h6">
-                <SchoolIcon sx={{ color: "secondary.main" }} />
-                Desenvolvimento Contínuo
-              </SectionTitle>
-
-              <OutputText>
-                {`{
-                  "formacao_atual": "Ciência de Dados na UTFPR (2025-2027)",
-                  "certificacoes": ["Google Cloud Platform"],
-                  "areas_de_estudo": ["CI/CD", "Infraestrutura como código", "Machine Learning", "Data Engineering"],
-                  "compromisso": "Excelência técnica e entrega de valor através de tecnologias emergentes e inovação."
-                }`}
-              </OutputText>
             </Box>
           </TerminalCard>
         </motion.div>

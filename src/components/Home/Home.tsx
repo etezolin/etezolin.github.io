@@ -27,15 +27,19 @@ import { FaNode, FaGithub, FaGitAlt } from "react-icons/fa";
 import { BiCloud } from "react-icons/bi";
 import { LuMailCheck } from "react-icons/lu";
 
-const CodeText = styled(Typography)(({ theme }) => ({
+const CodeText = styled(Typography)(() => ({
   fontFamily: '"Roboto Mono", monospace',
-  color: theme.palette.text.secondary,
+  color: "#f5f5f5",
   opacity: 0.8,
 }));
 
 const HighlightText = styled("span")(({ theme }) => ({
   color: theme.palette.primary.main,
   fontWeight: 500,
+}));
+
+const HighlightTextV2 = styled("span")(({ theme }) => ({
+  color: theme.palette.secondary.main,
 }));
 
 const GradientText = styled(Typography)(({ theme }) => ({
@@ -98,7 +102,7 @@ const TechStackHeader = styled(Typography)({
   borderLeft: "3px solid #00E5FF", // Cor secundária fixa
   paddingLeft: 8,
   display: "inline-block",
-  color: "#e0e0e0",
+  color: "#f5f5f5",
 });
 
 const OutputText = styled(Typography)(({ theme }) => ({
@@ -268,12 +272,32 @@ const Home: FC = () => {
                 ;<br />
                 <HighlightText>const</HighlightText> github ={" "}
                 <span style={{ color: theme.palette.secondary.main }}>
-                  "https://github.com/etezolin"
+                  <a
+                    href="https://github.com/etezolin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: theme.palette.secondary.main,
+                      textDecoration: "none",
+                    }}
+                  >
+                    "github.com/etezolin"
+                  </a>
                 </span>
                 ;<br />
                 <HighlightText>const</HighlightText> linkedIn ={" "}
                 <span style={{ color: theme.palette.secondary.main }}>
-                  "https://www.linkedin.com/in/etezolin"
+                  <a
+                    href="https://www.linkedin.com/in/etezolin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: theme.palette.secondary.main,
+                      textDecoration: "none",
+                    }}
+                  >
+                    "linkedin.com/in/etezolin"
+                  </a>
                 </span>
                 ;
               </CodeText>
@@ -344,10 +368,12 @@ const Home: FC = () => {
             <TechStackHeader>// mensagem aos recrutadores:</TechStackHeader>
           </motion.div>
           <OutputText>
-            Sou comprometido com a excelência técnica e a entrega de valor,
-            busco constantemente expandir meus conhecimentos em tecnologias
-            emergentes para criar soluções que façam a diferença. Se você busca
-            um profissional que combina expertise técnica com visão estratégica,
+            Sou comprometido com a{" "}
+            <HighlightTextV2>excelência técnica</HighlightTextV2> e a{" "}
+            <HighlightTextV2>entrega de valor</HighlightTextV2>, busco
+            constantemente expandir meus conhecimentos em tecnologias emergentes
+            para criar soluções que façam a diferença. Se você busca um
+            profissional que combina expertise técnica com visão estratégica,
             vamos conversar! 💡💻
           </OutputText>
         </Box>

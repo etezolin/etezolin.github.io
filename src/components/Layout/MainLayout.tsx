@@ -17,6 +17,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
@@ -318,6 +319,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     { id: "about", label: "_sobre-mim" },
     { id: "formation", label: "_formação" },
     { id: "experience", label: "_experiência" },
+    { id: "contact", label: "_contato" },
   ];
 
   return (
@@ -455,6 +457,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 {link.id === "about" && <PersonIcon fontSize="small" />}
                 {link.id === "formation" && <SchoolIcon fontSize="small" />}
                 {link.id === "experience" && <WorkIcon fontSize="small" />}
+                {link.id === "contact" && <ContactPageIcon fontSize="small" />}
               </DrawerNavIcon>
               {link.label}
             </DrawerNavLink>

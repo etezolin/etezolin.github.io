@@ -71,7 +71,8 @@ const Formation: FC = () => {
                 <CodeKeyword>habilidades:</CodeKeyword>{" "}
                 <CodeString>
                   Machine Learning, Análise Estatística, Big Data, Python, R,
-                  Visualização de Dados, Processamento de Linguagem Natural
+                  Visualização de Dados, Processamento de Linguagem Natural,
+                  Data Engineering
                 </CodeString>
               </Typography>
               <Typography
@@ -79,8 +80,9 @@ const Formation: FC = () => {
               >
                 <CodeKeyword>aplicações:</CodeKeyword>{" "}
                 <CodeString>
-                  Modelos Preditivos, Automação de Insights, Processamento de
-                  Dados Não-Estruturados, Business Intelligence
+                  Modelos Preditivos, Modelos Prescritivos, Automação de
+                  Insights, Processamento de Dados Não-Estruturados, Business
+                  Intelligence, Data Engineering
                 </CodeString>
               </Typography>
               <Typography

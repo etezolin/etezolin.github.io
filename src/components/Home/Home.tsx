@@ -22,7 +22,7 @@ import {
   SiTailwindcss,
   SiApachekafka,
 } from "react-icons/si";
-import { TbSql, TbBrandReactNative } from "react-icons/tb";
+import { TbSql, TbBrandReactNative, TbBrandCSharp } from "react-icons/tb";
 import { FaNode, FaGithub, FaGitAlt } from "react-icons/fa";
 import { BiCloud } from "react-icons/bi";
 import { LuMailCheck } from "react-icons/lu";
@@ -148,7 +148,7 @@ const Home: FC = () => {
   const theme = useTheme();
 
   const tech = [
-    { name: "C#", color: "#9B4F96", icon: SiJavascript },
+    { name: "C#", color: "#9B4F96", icon: TbBrandCSharp },
     { name: ".NET", color: "#7e6dbb", icon: SiDotnet },
     { name: "JavaScript", color: "#F7DF1E", icon: SiJavascript },
     { name: "React", color: "#61DAFB", icon: SiReact },

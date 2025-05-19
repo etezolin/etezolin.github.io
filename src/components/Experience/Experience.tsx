@@ -150,7 +150,7 @@ const Experience: FC = () => {
                   reduziram em 60% o tempo de processamento
                 </HighlightTextV2>{" "}
                 de dados administrativos;
-                <br />• <HighlightTextV2>Arquitetura</HighlightTextV2> e
+                <br />• <HighlightTextV2>Arquitetura</HighlightTextV2> e{" "}
                 <HighlightTextV2>implementação</HighlightTextV2> de sistemas{" "}
                 <HighlightTextV2>cloud-native</HighlightTextV2> que suportam
                 picos de acesso de mais de 30.000 usuários simultâneos;

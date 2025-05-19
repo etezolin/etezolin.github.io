@@ -230,9 +230,6 @@ const About: FC = () => {
                     Trabalhar com integração de sistemas e microsserviços;
                   </Box>
                   <Box component="li">
-                    Melhorar a performance em sistemas legados;
-                  </Box>
-                  <Box component="li">
                     Otimizar performance e modernizar sistemas legados;
                   </Box>
                   <Box component="li">

@@ -14,6 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import ArchitectureIcon from "@mui/icons-material/Architecture";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
@@ -319,6 +320,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     { id: "about", label: "_sobre-mim" },
     { id: "formation", label: "_formação" },
     { id: "experience", label: "_experiência" },
+    { id: "projects", label: "_projetos" },
     { id: "contact", label: "_contato" },
   ];
 
@@ -457,6 +459,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 {link.id === "about" && <PersonIcon fontSize="small" />}
                 {link.id === "formation" && <SchoolIcon fontSize="small" />}
                 {link.id === "experience" && <WorkIcon fontSize="small" />}
+                {link.id === "projects" && (
+                  <ArchitectureIcon fontSize="small" />
+                )}
                 {link.id === "contact" && <ContactPageIcon fontSize="small" />}
               </DrawerNavIcon>
               {link.label}

@@ -161,6 +161,70 @@ const Experience: FC = () => {
               </OutputText>
             </Box>
 
+            <Box sx={{ mb: 3 }}>
+              <SectionTitle variant="h6">
+                <WorkIcon sx={{ color: "secondary.main" }} />
+                Professor de Ensino Médio | 2015 - 2020
+              </SectionTitle>
+
+              <OutputText>
+                Atuei como professor do ensino médio, desenvolvendo e aplicando
+                metodologias pedagógicas inovadoras que{" "}
+                <HighlightTextV2>
+                  estimulavam o pensamento crítico
+                </HighlightTextV2>{" "}
+                e a{" "}
+                <HighlightTextV2>
+                  resolução criativa de problemas
+                </HighlightTextV2>
+                . Esta experiência me proporcionou habilidades excepcionais de
+                comunicação e a capacidade de traduzir conceitos complexos em
+                explicações claras e acessíveis - competências que transportei
+                com sucesso para minha carreira em tecnologia.
+              </OutputText>
+
+              <OutputText>
+                Principais conquistas:
+                <br />• Desenvolvimento de{" "}
+                <HighlightTextV2>
+                  projetos interdisciplinares
+                </HighlightTextV2>{" "}
+                que integravam filosofia e tecnologia, introduzindo alunos ao
+                pensamento lógico e computacional;
+                <br />• Implementação de{" "}
+                <HighlightTextV2>
+                  metodologias ativas de aprendizagem
+                </HighlightTextV2>{" "}
+                que aumentaram o engajamento e aproveitamento dos estudantes em
+                mais de 40%;
+                <br />• Criação de{" "}
+                <HighlightTextV2>
+                  soluções digitais improvisadas
+                </HighlightTextV2>{" "}
+                para superar limitações de infraestrutura, despertando meu
+                interesse pela programação;
+                <br />• Mentoria de projetos estudantis que{" "}
+                <HighlightTextV2>
+                  conquistaram reconhecimento
+                </HighlightTextV2>{" "}
+                em feiras de ciências regionais.
+              </OutputText>
+            </Box>
+
+            <OutputText>
+              <HighlightTextV2>Transição para Tecnologia:</HighlightTextV2>{" "}
+              Minha formação em Filosofia e experiência docente me
+              proporcionaram uma perspectiva única na abordagem de desafios
+              tecnológicos. Ao perceber como a tecnologia poderia transformar a
+              educação, comecei a aprofundar meus estudos em desenvolvimento de
+              software, inicialmente como autodidata e posteriormente através da
+              formação formal em Análise e Desenvolvimento de Sistemas. Esta
+              trajetória me permitiu combinar o pensamento crítico filosófico,
+              habilidades didáticas e conhecimento técnico para criar soluções
+              tecnológicas mais humanas, intuitivas e focadas nas reais
+              necessidades dos usuários finais.
+            </OutputText>
+
             <Divider sx={{ my: 3, borderColor: "rgba(255, 255, 255, 0.1)" }} />
 
             <CommandLine>$ ls --tree stack_tecnologica/</CommandLine>

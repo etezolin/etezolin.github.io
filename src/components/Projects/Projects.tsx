@@ -104,23 +104,27 @@ const TechStackTitle = styled(Typography)(({ theme }) => ({
 const ConfidentialBadge = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  gap: theme.spacing(0.5),
+  gap: theme.spacing(1),
   fontSize: "0.75rem",
   color: theme.palette.text.secondary,
   backgroundColor: "rgba(0, 0, 0, 0.2)",
-  padding: theme.spacing(0.5, 1),
+  padding: theme.spacing(1, 1),
   borderRadius: theme.spacing(1),
-  marginLeft: theme.spacing(1),
+  // marginLeft: theme.spacing(1),
+  paddingLeft: "20px",
+  marginTop: "10px",
+  width: "205px",
 }));
 
 const ProjectsSection: FC = () => {
   // Lista de projetos anonimizados mas com detalhes técnicos relevantes
   const projects = [
     {
-      title: "Hub de Integração Educacional",
+      title:
+        "Hub de Integração Educacional - Plataforma Unificada para Gestão Escolar",
       icon: <IntegrationInstructionsIcon fontSize="large" />,
       description:
-        "Construção de arquitetura e desenvolvimento de uma plataforma de integração que conecta mais de 2.000 escolas estaduais. O sistema unifica informações de diversas fontes, permitindo análises avançadas e automação de processos administrativos.",
+        "Trabalhei no desenvolvimento de uma plataforma enterprise de integração que interconecta mais de 2.000 instituições de ensino da rede estadual. Esta solução consolidou múltiplos sistemas legados em uma única interface centralizada, implementando APIs robustas para sincronização de dados em tempo real.",
       confidential: true,
       results: [
         "Redução de 60% no tempo de processamento de dados administrativos;",
@@ -141,10 +145,11 @@ const ProjectsSection: FC = () => {
       ],
     },
     {
-      title: "Sistema Inteligente de Escrita e Avaliação de Redações",
+      title:
+        "Sistema Inteligente de Escrita e Avaliação de Redações com IA Generativa",
       icon: <EditNoteIcon fontSize="large" />,
       description:
-        "Desenvolvimento de plataforma educacional inovadora que integra criação de temas personalizados, ambiente de escrita para estudantes e sistema de avaliação assistido por IA Generativa. A solução automatiza o processo de feedback pedagógico, permitindo correções mais consistentes e detalhadas, além de análises de progresso individualizado.",
+        "Participei do desenvolvimento da plataforma educacional inovadora que integra criação de temas personalizados, ambiente de escrita para estudantes e sistema de avaliação assistido por IA Generativa. A solução automatiza o processo de feedback pedagógico, permitindo correções mais consistentes e detalhadas, além de análises de progresso individualizado.",
       confidential: true,
       results: [
         "Redução no tempo médio de correção de redações pelos professores;",
@@ -167,10 +172,11 @@ const ProjectsSection: FC = () => {
       ],
     },
     {
-      title: "Administração de domínio Google por meio de RPAs",
+      title:
+        "Sistema Avançado de Gestão Automatizada para Google Workspace por meio de RPAs",
       icon: <ArchitectureIcon fontSize="large" />,
       description:
-        "Desenvolvimento e implementação de sistema automatizado de gerenciamento para domínio Google Workspace utilizando Robotic Process Automation (RPA). Esta solução substituiu processos administrativos manuais e demorados por fluxos de trabalho automatizados, permitindo o gerenciamento eficiente de contas, grupos, permissões e recursos compartilhados em larga escala.",
+        "Atuei projetando e implementando um sistema automatizado de gerenciamento para domínio Google Workspace utilizando Robotic Process Automation (RPA). Esta solução substituiu processos administrativos manuais e demorados por fluxos de trabalho automatizados, permitindo o gerenciamento eficiente de contas, grupos, permissões e recursos compartilhados em larga escala.",
       confidential: true,
       results: [
         "Redução no tempo necessário para provisionamento e configuração de novas contas;",
@@ -192,56 +198,30 @@ const ProjectsSection: FC = () => {
         "Event Sourcing",
       ],
     },
-    // {
-    //   title: "Plataforma de Automação de Processos Administrativos",
-    //   icon: <StorageIcon fontSize="large" />,
-    //   description:
-    //     "Desenvolveu uma solução de automação que digitalizou processos burocráticos manuais, incluindo aprovações, alocações de recursos e matrículas. A plataforma integra-se com sistemas legados e implementa fluxos de trabalho personalizáveis.",
-    //   confidential: true,
-    //   results: [
-    //     "Eliminação de mais de 200.000 formulários em papel por ano",
-    //     "Redução do tempo de processamento de aprovações de 5 dias para 4 horas em média",
-    //     "Economia estimada de R$ 1,2 milhão por ano em custos operacionais",
-    //     "Transparência aprimorada com trilhas de auditoria completas",
-    //   ],
-    //   techStack: [
-    //     ".NET",
-    //     "C#",
-    //     "React",
-    //     "SQL Server",
-    //     "Azure Functions",
-    //     "Power Automate",
-    //     "API RESTful",
-    //     "JWT Auth",
-    //     "Entity Framework",
-    //     "SOLID",
-    //   ],
-    // },
-    // {
-    //   title: "Ambiente Virtual de Aprendizagem Personalizado",
-    //   icon: <SchoolIcon fontSize="large" />,
-    //   description:
-    //     "Contribuiu no desenvolvimento de um LMS (Learning Management System) personalizado que suporta o ensino híbrido. A plataforma oferece conteúdo adaptativo baseado no progresso e perfil de aprendizagem de cada estudante.",
-    //   confidential: true,
-    //   results: [
-    //     "Engajamento 35% maior em comparação com a plataforma anterior",
-    //     "Possibilidade de aprendizado offline com sincronização posterior",
-    //     "Adaptação dinâmica de conteúdo baseada em análise de dados",
-    //     "Escalabilidade para atender mais de 500.000 alunos simultaneamente",
-    //   ],
-    //   techStack: [
-    //     "React",
-    //     "Node.js",
-    //     "MongoDB",
-    //     "Redis",
-    //     "WebSockets",
-    //     "PWA",
-    //     "Material UI",
-    //     "Docker",
-    //     "Jenkins",
-    //     "AWS S3",
-    //   ],
-    // },
+    {
+      title:
+        "Plataforma Escalável de Processamento e Correção de Avaliações Educacionais",
+      icon: <IntegrationInstructionsIcon fontSize="large" />,
+      description:
+        "Trabalhei na implementação de solução de alta performance para processamento, digitalização e correção automática de mais de 2 milhões de avaliações por edição. Esta plataforma on premise utiliza processamento distribuído e tecnologias de reconhecimento ótico para digitalizar e validar avaliações em escala, juntamente com um sistema especialista para correção automatizada baseada em regras de negócio complexas. A arquitetura resiliente garante processamento contínuo mesmo durante picos de submissão, mantendo integridade dos dados e rastreabilidade completa.",
+      confidential: true,
+      results: [
+        "Redução de 85% no tempo de processamento, convertendo um ciclo de 3 semanas em apenas 5 dias para correção completa de toda uma edição;",
+        "Diminuição comprovada de 93% em erros de sincronização entre sistemas de digitalização e correção, garantindo integridade dos resultado;",
+        "Implementação de sistema centralizado com dados de 1.2 milhão de alunos, permitindo análises comparativas de desempenho por região, escola e disciplina;",
+        "Otimização de processos operacionais com redução de 78% em intervenções manuais e aumento de 95% na precisão das correções.",
+      ],
+      techStack: [
+        ".NET",
+        "C#",
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Microsserviços",
+        "API RESTful",
+        "SQL Server",
+      ],
+    },
   ];
 
   const SkillItem = styled(Typography)(({ theme }) => ({
@@ -301,13 +281,17 @@ const ProjectsSection: FC = () => {
               <ProjectHeader>
                 <ProjectIcon>{project.icon}</ProjectIcon>
                 <ProjectTitle variant="h5">
-                  {project.title}
-                  {project.confidential && (
-                    <ConfidentialBadge>
-                      <LockIcon fontSize="small" />
-                      Projeto confidencial
-                    </ConfidentialBadge>
-                  )}
+                  <Box>
+                    <Box>{project.title}</Box>
+                    <Box>
+                      {project.confidential && (
+                        <ConfidentialBadge>
+                          <LockIcon fontSize="small" />
+                          Projeto confidencial
+                        </ConfidentialBadge>
+                      )}
+                    </Box>
+                  </Box>
                 </ProjectTitle>
               </ProjectHeader>
 

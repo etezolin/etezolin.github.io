@@ -20,7 +20,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import CodeIcon from "@mui/icons-material/Code";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import HomeIcon from "@mui/icons-material/Home";
-import PersonIcon from "@mui/icons-material/Person";
+import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+// import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkIcon from "@mui/icons-material/Work";
 import TerminalIcon from "@mui/icons-material/Terminal";
@@ -317,10 +318,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   const menuLinks = [
     { id: "home", label: "_início" },
-    { id: "about", label: "_sobre-mim" },
+    // { id: "about", label: "_sobre-mim" },
     { id: "formation", label: "_formação" },
     { id: "experience", label: "_experiência" },
     { id: "projects", label: "_projetos" },
+    { id: "competence", label: "_competências" },
     { id: "contact", label: "_contato" },
   ];
 
@@ -450,17 +452,19 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 e.preventDefault();
                 scrollToSection(link.id);
               }}
-              whileTap={{ x: 5 }}
-              whileHover={{ x: 5 }}
+              whileTap={{ x: 6 }}
+              whileHover={{ x: 6 }}
             >
               <LineNumber>{index + 1}</LineNumber>
               <DrawerNavIcon>
                 {link.id === "home" && <HomeIcon fontSize="small" />}
-                {link.id === "about" && <PersonIcon fontSize="small" />}
                 {link.id === "formation" && <SchoolIcon fontSize="small" />}
                 {link.id === "experience" && <WorkIcon fontSize="small" />}
                 {link.id === "projects" && (
                   <ArchitectureIcon fontSize="small" />
+                )}
+                {link.id === "competence" && (
+                  <TipsAndUpdatesIcon fontSize="small" />
                 )}
                 {link.id === "contact" && <ContactPageIcon fontSize="small" />}
               </DrawerNavIcon>

@@ -7,10 +7,10 @@ export const useActiveSection = () => {
     const handleScroll = () => {
       const sections = [
         "home",
-        "about",
-        "formation",
-        "experience",
         "projects",
+        "experience",
+        "formation",
+        "competence",
         "contact",
       ];
 

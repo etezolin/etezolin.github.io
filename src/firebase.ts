@@ -91,13 +91,13 @@ export const trackProfileTabView = (
   }, 5000);
 
   // 🐛 DEBUG: Log para testar
-  console.log("🔥 Firebase Analytics - Tab View:", {
-    event: "profile_tab_view",
-    data: eventData,
-  });
+  // console.log("🔥 Firebase Analytics - Tab View:", {
+  //   event: "profile_tab_view",
+  //   data: eventData,
+  // });
 
   // ✅ Verificar se chegou até aqui
-  console.log("📍 trackProfileTabView chamada para:", tabName);
+  // console.log("📍 trackProfileTabView chamada para:", tabName);
 
   logEvent(analytics, "profile_tab_view", eventData);
 };
@@ -109,7 +109,7 @@ export const trackProfileTabTimeSpent = (
 ) => {
   // Ignorar tempo muito baixo (provavelmente StrictMode)
   if (timeSpent < 1) {
-    console.log("⏭️ Tempo muito baixo ignorado:", timeSpent, "segundos");
+    // console.log("⏭️ Tempo muito baixo ignorado:", timeSpent, "segundos");
     return;
   }
 
@@ -120,10 +120,10 @@ export const trackProfileTabTimeSpent = (
   };
 
   // 🐛 DEBUG: Log para testar
-  console.log("⏱️ Firebase Analytics - Time Spent:", {
-    event: "profile_tab_time_spent",
-    data: eventData,
-  });
+  // console.log("⏱️ Firebase Analytics - Time Spent:", {
+  //   event: "profile_tab_time_spent",
+  //   data: eventData,
+  // });
 
   logEvent(analytics, "profile_tab_time_spent", eventData);
 };
@@ -142,10 +142,10 @@ export const trackProfileTabInteraction = (
   };
 
   // 🐛 DEBUG: Log para testar
-  console.log("👆 Firebase Analytics - Interaction:", {
-    event: "profile_tab_interaction",
-    data: eventData,
-  });
+  // console.log("👆 Firebase Analytics - Interaction:", {
+  //   event: "profile_tab_interaction",
+  //   data: eventData,
+  // });
 
   logEvent(analytics, "profile_tab_interaction", eventData);
 };
@@ -159,10 +159,10 @@ export const trackVisitorProfile = (source?: string, device?: string) => {
   };
 
   // 🐛 DEBUG: Log para testar
-  console.log("👤 Firebase Analytics - Visitor:", {
-    event: "profile_visitor",
-    data: eventData,
-  });
+  // console.log("👤 Firebase Analytics - Visitor:", {
+  //   event: "profile_visitor",
+  //   data: eventData,
+  // });
 
   logEvent(analytics, "profile_visitor", eventData);
 };
@@ -179,10 +179,10 @@ export const trackProfileConversion = (
   };
 
   // 🐛 DEBUG: Log para testar
-  console.log("💰 Firebase Analytics - Conversion:", {
-    event: "profile_conversion",
-    data: eventData,
-  });
+  // console.log("💰 Firebase Analytics - Conversion:", {
+  //   event: "profile_conversion",
+  //   data: eventData,
+  // });
 
   logEvent(analytics, "profile_conversion", eventData);
 };

@@ -1,3 +1,697 @@
+import type { FC, ReactElement, MouseEvent } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  Chip,
+  Divider,
+  Card,
+  Button,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import { styled } from "@mui/material/styles";
+import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
+import SpeedIcon from "@mui/icons-material/Speed";
+import ArchitectureIcon from "@mui/icons-material/Architecture";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import LockIcon from "@mui/icons-material/Lock";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LaunchIcon from "@mui/icons-material/Launch";
+import CodeIcon from "@mui/icons-material/Code";
+import WarningIcon from "@mui/icons-material/Warning";
+
+// ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
+import {
+  trackProfileTabInteraction,
+  trackProfileConversion,
+} from "../../firebase";
+
+// Tipos TypeScript
+interface ProjectData {
+  title: string;
+  icon: ReactElement;
+  description: string;
+  confidential: boolean;
+  metrics: string[];
+  results: string[];
+  techStack: string[];
+  type: string;
+}
+
+// Componentes estilizados otimizados
+const ProjectCard = styled(motion.div)(({ theme }) => ({
+  padding: theme.spacing(2.5),
+  marginBottom: theme.spacing(3),
+  background: "rgba(13, 33, 55, 0.7)",
+  backdropFilter: "blur(10px)",
+  border: "1px solid rgba(255, 255, 255, 0.1)",
+  borderRadius: 8,
+  position: "relative",
+  transition: "all 0.3s ease",
+  cursor: "pointer",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "2px",
+    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    opacity: 0.7,
+  },
+  "&:hover": {
+    transform: "translateY(-5px)",
+    borderColor: theme.palette.secondary.main,
+  },
+}));
+
+const StyledChip = styled(Chip)<{ chiptype: "metric" | "tech" }>(
+  ({ theme, chiptype }) => ({
+    margin: theme.spacing(0.25),
+    fontFamily: '"Roboto Mono", monospace',
+    fontSize: "0.7rem",
+    height: chiptype === "metric" ? 20 : 22,
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    ...(chiptype === "metric"
+      ? {
+          backgroundColor: "rgba(0, 229, 255, 0.1)",
+          color: theme.palette.secondary.main,
+          border: "1px solid rgba(0, 229, 255, 0.3)",
+          "&:hover": {
+            backgroundColor: "rgba(0, 229, 255, 0.2)",
+            transform: "scale(1.05)",
+          },
+        }
+      : {
+          backgroundColor: "rgba(20, 40, 80, 0.6)",
+          color: theme.palette.text.primary,
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          "&:hover": {
+            backgroundColor: "rgba(20, 40, 80, 0.8)",
+            transform: "scale(1.05)",
+          },
+        }),
+  })
+);
+
+const ProjectsSection: FC = () => {
+  // ✅ CORREÇÃO: Removido o hook useTabAnalytics e useEffect
+  // O tracking de visualização da aba agora é automático via App.tsx
+
+  // ✅ Funções de analytics otimizadas
+  const handleClick = (type: string, data: string) => {
+    trackProfileTabInteraction("projects", type, data);
+  };
+
+  const handleConversion = (type: string) => {
+    trackProfileConversion(type, "projects");
+  };
+
+  const handleProjectClick = (title: string, type: string) => {
+    handleClick("project_card_click", `${type}_${title}`);
+    handleConversion("project_interest");
+  };
+
+  const handleMetricClick = (metric: string, title: string) => {
+    handleClick("metric_chip_click", `${metric}_${title}`);
+    if (
+      metric.includes("↓") ||
+      metric.includes("M+") ||
+      metric.includes("k+")
+    ) {
+      handleConversion("results_focused_interest");
+    }
+  };
+
+  const handleTechClick = (tech: string, title: string) => {
+    handleClick("tech_stack_click", `${tech}_${title}`);
+    if (
+      [
+        ".NET",
+        "React",
+        "TypeScript",
+        "Microsserviços",
+        "IA Generativa",
+      ].includes(tech)
+    ) {
+      handleConversion("tech_stack_match");
+    }
+  };
+
+  // ✅ Dados dos projetos otimizados
+  const projects: ProjectData[] = [
+    {
+      title: "Hub de Integração Educacional Enterprise",
+      icon: <IntegrationInstructionsIcon fontSize="large" />,
+      description:
+        "Plataforma conectando 2.000+ instituições via APIs robustas e sincronização em tempo real.",
+      confidential: true,
+      metrics: ["2k+ escolas", "1M+ alunos", "60% ↓ tempo", "70% ↓ erros"],
+      results: [
+        "Redução de 60% no tempo de processamento administrativo",
+        "Diminuição de 70% em erros de sincronização",
+        "Centralização de dados de 1+ milhão de alunos",
+        "Economia de 200+ horas mensais",
+      ],
+      techStack: [
+        ".NET",
+        "React",
+        "TypeScript",
+        "Microsserviços",
+        "PostgreSQL",
+        "API RESTful",
+      ],
+      type: "integration_hub",
+    },
+    {
+      title: "Sistema de Avaliação com IA Generativa",
+      icon: <EditNoteIcon fontSize="large" />,
+      description:
+        "Plataforma educacional com IA para criação, escrita e correção automatizada de redações.",
+      confidential: true,
+      metrics: [
+        "IA Generativa",
+        "Milhares/dia",
+        "Feedback detalhado",
+        "Análise NLP",
+      ],
+      results: [
+        "Redução significativa no tempo de correção",
+        "Aumento na qualidade do feedback pedagógico",
+        "Análise avançada de padrões de escrita",
+        "Processamento de milhares de redações diárias",
+      ],
+      techStack: [
+        "C#",
+        ".NET",
+        "React",
+        "PostgreSQL",
+        "Docker",
+        "IA Generativa",
+        "CI/CD",
+        "GCP",
+      ],
+      type: "ai_evaluation",
+    },
+    {
+      title: "Automação Google Workspace (RPA)",
+      icon: <ArchitectureIcon fontSize="large" />,
+      description:
+        "Sistema automatizado para gerenciamento de domínio Google Workspace usando RPA.",
+      confidential: true,
+      metrics: [
+        "25+ tarefas",
+        "90% ↓ erros",
+        "Auditoria diária",
+        "Provisionamento automático",
+      ],
+      results: [
+        "Automação de 25+ tarefas administrativas recorrentes",
+        "Diminuição de erros humanos",
+        "Auditorias automáticas de segurança diárias",
+        "Redução drástica em tempo de provisionamento",
+      ],
+      techStack: [
+        "C#",
+        "CQRS",
+        "Google Admin SDK",
+        "OAuth 2.0",
+        "DDD",
+        "Event Sourcing",
+      ],
+      type: "rpa_automation",
+    },
+    {
+      title: "Plataforma de Avaliações (2M+ registros)",
+      icon: <IntegrationInstructionsIcon fontSize="large" />,
+      description:
+        "Solução de alta performance para processamento e correção automática em escala.",
+      confidential: true,
+      metrics: [
+        "2M+ avaliações",
+        "85% ↓ tempo",
+        "95% precisão",
+        "5 dias ciclo",
+      ],
+      results: [
+        "Redução de 85% no tempo: 3 semanas → 5 dias",
+        "Diminuição de 93% em erros de sincronização",
+        "Sistema centralizado com 1.2M+ alunos",
+        "Redução de 78% em intervenções manuais",
+      ],
+      techStack: [
+        ".NET",
+        "React",
+        "TypeScript",
+        "Microsserviços",
+        "SQL Server",
+        "OCR",
+      ],
+      type: "evaluation_platform",
+    },
+  ];
+
+  const futureProjects = [
+    {
+      name: "Sistema de Gestão Full-Stack",
+      icon: <CodeIcon />,
+      key: "sistema_gestao_fullstack",
+    },
+    {
+      name: "Microsserviços + Docker",
+      icon: <ArchitectureIcon />,
+      key: "microservicos_docker",
+    },
+    {
+      name: "Dashboard com Data Science",
+      icon: <LaunchIcon />,
+      key: "dashboard_data_science",
+    },
+  ];
+
+  const interviewTopics = [
+    {
+      text: "Desafios técnicos e estratégias de solução",
+      key: "technical_challenges_solutions",
+    },
+    {
+      text: "Decisões de arquitetura e trade-offs",
+      key: "architecture_decisions_tradeoffs",
+    },
+    {
+      text: "Metodologias e práticas de engenharia",
+      key: "methodologies_engineering_practices",
+    },
+    {
+      text: "Lições aprendidas e evolução técnica",
+      key: "lessons_learned_technical_evolution",
+    },
+  ];
+
+  return (
+    <Container sx={{ py: 8 }} id="projects" component="section">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <Typography variant="h2" sx={{ mb: 4, color: "primary.main" }}>
+          // Projetos
+        </Typography>
+
+        {/* Alerta sobre Confidencialidade */}
+        <Box
+          sx={{
+            background: "rgba(255, 193, 7, 0.1)",
+            border: "1px solid rgba(255, 193, 7, 0.3)",
+            borderRadius: 1,
+            p: 2,
+            mb: 3,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 2,
+            cursor: "pointer",
+          }}
+          onClick={() =>
+            handleClick(
+              "confidentiality_alert_click",
+              "understanding_constraints"
+            )
+          }
+        >
+          <WarningIcon sx={{ color: "#ffc107", mt: 0.2 }} />
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
+              Projetos Confidenciais
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: "0.85rem", lineHeight: 1.5 }}
+            >
+              Desenvolvidos em ambiente corporativo com acordos de
+              confidencialidade. Detalhes técnicos apresentados de forma
+              anonimizada, priorizando soluções e impacto.
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* Lista de Projetos */}
+        {projects.map((project, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ scale: 1.01 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
+          >
+            <ProjectCard
+              onClick={() => handleProjectClick(project.title, project.type)}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  mb: 2,
+                  flexWrap: "wrap",
+                  gap: 1,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 2,
+                    flex: 1,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      color: "secondary.main",
+                      display: "flex",
+                      alignItems: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {project.icon}
+                  </Box>
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: "1.1rem",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {project.title}
+                    </Typography>
+                    {project.confidential && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          fontSize: "0.75rem",
+                          color: "text.secondary",
+                          backgroundColor: "rgba(255, 193, 7, 0.1)",
+                          border: "1px solid rgba(255, 193, 7, 0.3)",
+                          p: "4px 8px",
+                          borderRadius: 3,
+                          mt: 1,
+                          width: "fit-content",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e: MouseEvent) => {
+                          e.stopPropagation();
+                          handleClick(
+                            "confidential_badge_click",
+                            project.title
+                          );
+                        }}
+                      >
+                        <LockIcon sx={{ fontSize: 14 }} />
+                        Confidencial
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </Box>
+
+              <Typography
+                variant="body2"
+                sx={{ mb: 2, fontSize: "0.9rem", lineHeight: 1.5 }}
+              >
+                {project.description}
+              </Typography>
+
+              {/* Métricas */}
+              <Box sx={{ mb: 2 }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    color: "text.secondary",
+                    mb: 1,
+                    display: "block",
+                  }}
+                >
+                  // Métricas principais:
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {project.metrics.map((metric, idx) => (
+                    <StyledChip
+                      key={idx}
+                      label={metric}
+                      size="small"
+                      chiptype="metric"
+                      onClick={(e: MouseEvent) => {
+                        e.stopPropagation();
+                        handleMetricClick(metric, project.title);
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+
+              {/* Resultados */}
+              <Box sx={{ mb: 2, pl: 1 }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    color: "secondary.main",
+                    fontWeight: 500,
+                    mb: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0.5,
+                  }}
+                >
+                  <SpeedIcon sx={{ fontSize: 16 }} />
+                  Resultados:
+                </Typography>
+                {project.results.slice(0, 4).map((result, idx) => (
+                  <Typography
+                    key={idx}
+                    sx={{
+                      fontSize: "0.85rem",
+                      mb: 0.5,
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 1,
+                      cursor: "pointer",
+                      transition: "color 0.3s ease",
+                      "&:hover": { color: "secondary.main" },
+                      "&::before": {
+                        content: '"▸"',
+                        color: "secondary.main",
+                        fontWeight: "bold",
+                        flexShrink: 0,
+                      },
+                    }}
+                    onClick={(e: MouseEvent) => {
+                      e.stopPropagation();
+                      handleClick(
+                        "result_item_click",
+                        `result_${idx}_${project.title}`
+                      );
+                    }}
+                  >
+                    {result}
+                  </Typography>
+                ))}
+              </Box>
+
+              {/* Stack Tecnológica */}
+              <Box>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    color: "text.secondary",
+                    mb: 1,
+                    display: "block",
+                  }}
+                >
+                  // Stack:
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {project.techStack.map((tech, idx) => (
+                    <StyledChip
+                      key={idx}
+                      label={tech}
+                      size="small"
+                      chiptype="tech"
+                      onClick={(e: MouseEvent) => {
+                        e.stopPropagation();
+                        handleTechClick(tech, project.title);
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+            </ProjectCard>
+          </motion.div>
+        ))}
+
+        <Divider sx={{ my: 4, borderColor: "rgba(255, 255, 255, 0.1)" }} />
+
+        {/* Projetos Open Source */}
+        <Card
+          sx={{
+            p: 2.5,
+            background: "rgba(13, 33, 55, 0.7)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            mb: 2,
+            transition: "all 0.3s ease",
+            cursor: "pointer",
+            "&:hover": {
+              transform: "translateY(-2px)",
+              borderColor: "secondary.main",
+            },
+          }}
+          onClick={() =>
+            handleClick("open_source_section_click", "future_projects")
+          }
+        >
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <GitHubIcon sx={{ color: "secondary.main", mr: 1 }} />
+            <Typography
+              variant="h6"
+              sx={{
+                color: "secondary.main",
+                fontFamily: '"Roboto Mono", monospace',
+              }}
+            >
+              // Projetos Open Source (Em Desenvolvimento)
+            </Typography>
+          </Box>
+
+          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+            Estou desenvolvendo projetos demonstráveis que complementarão este
+            portfólio:
+          </Typography>
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 3 }}>
+            {futureProjects.map((project, idx) => (
+              <Button
+                key={idx}
+                variant="outlined"
+                startIcon={project.icon}
+                disabled
+                sx={{
+                  fontFamily: '"Roboto Mono", monospace',
+                  fontSize: "0.75rem",
+                  textTransform: "none",
+                  borderRadius: 3,
+                  p: "4px 12px",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  "&:hover": {
+                    borderColor: "secondary.main",
+                    backgroundColor: "rgba(0, 229, 255, 0.1)",
+                  },
+                }}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  handleClick("future_project_interest", project.key);
+                  handleConversion("future_collaboration_interest");
+                }}
+              >
+                {project.name}
+              </Button>
+            ))}
+          </Box>
+
+          <Typography
+            variant="caption"
+            sx={{
+              color: "text.secondary",
+              fontStyle: "italic",
+              fontSize: "0.8rem",
+            }}
+          >
+            * Projetos em desenvolvimento para demonstração sem restrições de
+            confidencialidade. Previsão: próximas semanas.
+          </Typography>
+        </Card>
+
+        {/* Discussão Técnica */}
+        <Card
+          sx={{
+            p: 2.5,
+            background: "rgba(13, 33, 55, 0.7)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            transition: "all 0.3s ease",
+            cursor: "pointer",
+            "&:hover": {
+              transform: "translateY(-2px)",
+              borderColor: "secondary.main",
+            },
+          }}
+          onClick={() => {
+            handleClick("interview_discussion_click", "technical_details");
+            handleConversion("interview_preparation");
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              color: "secondary.main",
+              mb: 2,
+              fontFamily: '"Roboto Mono", monospace',
+            }}
+          >
+            // Discussão Técnica em Entrevistas
+          </Typography>
+
+          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+            Posso detalhar em entrevistas (respeitando confidencialidade):
+          </Typography>
+
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)" },
+              gap: 0.5,
+            }}
+          >
+            {interviewTopics.map((topic, idx) => (
+              <Typography
+                key={idx}
+                sx={{
+                  fontFamily: '"Roboto Mono", monospace',
+                  color: "#f0f0f0",
+                  mb: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  transition: "color 0.3s ease",
+                  "&:hover": { color: "secondary.main" },
+                }}
+                onClick={(e: MouseEvent) => {
+                  e.stopPropagation();
+                  handleClick("interview_topic_click", topic.key);
+                }}
+              >
+                ▸ {topic.text}
+              </Typography>
+            ))}
+          </Box>
+        </Card>
+      </motion.div>
+    </Container>
+  );
+};
+
+export default ProjectsSection;
+
 // import type { FC } from "react";
 // import { Box, Container, Typography, Chip, Divider, Card } from "@mui/material";
 // import { motion } from "framer-motion";
@@ -365,786 +1059,786 @@
 
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-import type { FC } from "react";
-import { useEffect } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Chip,
-  Divider,
-  Card,
-  Button,
-} from "@mui/material";
-import { motion } from "framer-motion";
-import { styled } from "@mui/material/styles";
-import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
-import SpeedIcon from "@mui/icons-material/Speed";
-import ArchitectureIcon from "@mui/icons-material/Architecture";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import LockIcon from "@mui/icons-material/Lock";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LaunchIcon from "@mui/icons-material/Launch";
-import CodeIcon from "@mui/icons-material/Code";
-import WarningIcon from "@mui/icons-material/Warning";
-import { useTabAnalytics } from "../../hooks/useTabAnalytics";
+// // import type { FC } from "react";
+// // import { useEffect } from "react";
+// // import {
+// //   Box,
+// //   Container,
+// //   Typography,
+// //   Chip,
+// //   Divider,
+// //   Card,
+// //   Button,
+// // } from "@mui/material";
+// // import { motion } from "framer-motion";
+// // import { styled } from "@mui/material/styles";
+// // import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
+// // import SpeedIcon from "@mui/icons-material/Speed";
+// // import ArchitectureIcon from "@mui/icons-material/Architecture";
+// // import EditNoteIcon from "@mui/icons-material/EditNote";
+// // import LockIcon from "@mui/icons-material/Lock";
+// // import GitHubIcon from "@mui/icons-material/GitHub";
+// // import LaunchIcon from "@mui/icons-material/Launch";
+// // import CodeIcon from "@mui/icons-material/Code";
+// // import WarningIcon from "@mui/icons-material/Warning";
+// // import { useTabAnalytics } from "../../hooks/useTabAnalytics";
 
-// Import das funções de analytics
-import {
-  trackProfileTabView,
-  trackProfileTabInteraction,
-  trackProfileTabTimeSpent,
-  trackProfileConversion,
-} from "../../firebase";
+// // // Import das funções de analytics
+// // import {
+// //   trackProfileTabView,
+// //   trackProfileTabInteraction,
+// //   trackProfileTabTimeSpent,
+// //   trackProfileConversion,
+// // } from "../../firebase";
 
-const ProjectCard = styled(motion.div)(({ theme }) => ({
-  padding: theme.spacing(2.5),
-  marginBottom: theme.spacing(3),
-  background: "rgba(13, 33, 55, 0.7)",
-  backdropFilter: "blur(10px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-  borderRadius: 8,
-  position: "relative",
-  transition: "all 0.3s ease",
-  cursor: "pointer", // Adicionado para analytics
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height: "2px",
-    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    opacity: 0.7,
-  },
-  "&:hover": {
-    transform: "translateY(-5px)",
-    borderColor: theme.palette.secondary.main,
-  },
-}));
+// // const ProjectCard = styled(motion.div)(({ theme }) => ({
+// //   padding: theme.spacing(2.5),
+// //   marginBottom: theme.spacing(3),
+// //   background: "rgba(13, 33, 55, 0.7)",
+// //   backdropFilter: "blur(10px)",
+// //   border: "1px solid rgba(255, 255, 255, 0.1)",
+// //   boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+// //   borderRadius: 8,
+// //   position: "relative",
+// //   transition: "all 0.3s ease",
+// //   cursor: "pointer", // Adicionado para analytics
+// //   "&::before": {
+// //     content: '""',
+// //     position: "absolute",
+// //     top: 0,
+// //     left: 0,
+// //     right: 0,
+// //     height: "2px",
+// //     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+// //     opacity: 0.7,
+// //   },
+// //   "&:hover": {
+// //     transform: "translateY(-5px)",
+// //     borderColor: theme.palette.secondary.main,
+// //   },
+// // }));
 
-const CompactCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(2.5),
-  background: "rgba(13, 33, 55, 0.7)",
-  backdropFilter: "blur(10px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  marginBottom: theme.spacing(2),
-  transition: "all 0.3s ease",
-  cursor: "pointer", // Adicionado para analytics
-  "&:hover": {
-    transform: "translateY(-2px)",
-    borderColor: theme.palette.secondary.main,
-  },
-}));
+// // const CompactCard = styled(Card)(({ theme }) => ({
+// //   padding: theme.spacing(2.5),
+// //   background: "rgba(13, 33, 55, 0.7)",
+// //   backdropFilter: "blur(10px)",
+// //   border: "1px solid rgba(255, 255, 255, 0.1)",
+// //   marginBottom: theme.spacing(2),
+// //   transition: "all 0.3s ease",
+// //   cursor: "pointer", // Adicionado para analytics
+// //   "&:hover": {
+// //     transform: "translateY(-2px)",
+// //     borderColor: theme.palette.secondary.main,
+// //   },
+// // }));
 
-const ProjectHeader = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "flex-start",
-  marginBottom: theme.spacing(2),
-  flexWrap: "wrap",
-  gap: theme.spacing(1),
-}));
+// // const ProjectHeader = styled(Box)(({ theme }) => ({
+// //   display: "flex",
+// //   justifyContent: "space-between",
+// //   alignItems: "flex-start",
+// //   marginBottom: theme.spacing(2),
+// //   flexWrap: "wrap",
+// //   gap: theme.spacing(1),
+// // }));
 
-const ProjectTitleBox = styled(Box)(() => ({
-  display: "flex",
-  alignItems: "flex-start",
-  gap: 16,
-  flex: 1,
-}));
+// // const ProjectTitleBox = styled(Box)(() => ({
+// //   display: "flex",
+// //   alignItems: "flex-start",
+// //   gap: 16,
+// //   flex: 1,
+// // }));
 
-const ProjectIcon = styled(Box)(({ theme }) => ({
-  color: theme.palette.secondary.main,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexShrink: 0,
-}));
+// // const ProjectIcon = styled(Box)(({ theme }) => ({
+// //   color: theme.palette.secondary.main,
+// //   display: "flex",
+// //   alignItems: "center",
+// //   justifyContent: "center",
+// //   flexShrink: 0,
+// // }));
 
-const ProjectTitle = styled(Typography)(({ theme }) => ({
-  fontWeight: 600,
-  color: theme.palette.text.primary,
-  fontSize: "1.1rem",
-  lineHeight: 1.3,
-}));
+// // const ProjectTitle = styled(Typography)(({ theme }) => ({
+// //   fontWeight: 600,
+// //   color: theme.palette.text.primary,
+// //   fontSize: "1.1rem",
+// //   lineHeight: 1.3,
+// // }));
 
-const ConfidentialBadge = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(0.5),
-  fontSize: "0.75rem",
-  color: theme.palette.text.secondary,
-  backgroundColor: "rgba(255, 193, 7, 0.1)",
-  border: "1px solid rgba(255, 193, 7, 0.3)",
-  padding: theme.spacing(0.5, 1),
-  borderRadius: theme.spacing(3),
-  marginTop: theme.spacing(1),
-  width: "fit-content",
-  cursor: "pointer", // Adicionado para analytics
-}));
+// // const ConfidentialBadge = styled(Box)(({ theme }) => ({
+// //   display: "flex",
+// //   alignItems: "center",
+// //   gap: theme.spacing(0.5),
+// //   fontSize: "0.75rem",
+// //   color: theme.palette.text.secondary,
+// //   backgroundColor: "rgba(255, 193, 7, 0.1)",
+// //   border: "1px solid rgba(255, 193, 7, 0.3)",
+// //   padding: theme.spacing(0.5, 1),
+// //   borderRadius: theme.spacing(3),
+// //   marginTop: theme.spacing(1),
+// //   width: "fit-content",
+// //   cursor: "pointer", // Adicionado para analytics
+// // }));
 
-const MetricChip = styled(Chip)(({ theme }) => ({
-  margin: theme.spacing(0.25),
-  backgroundColor: "rgba(0, 229, 255, 0.1)",
-  color: theme.palette.secondary.main,
-  border: "1px solid rgba(0, 229, 255, 0.3)",
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: "0.7rem",
-  height: 20,
-  cursor: "pointer", // Adicionado para analytics
-  transition: "all 0.3s ease",
-  "&:hover": {
-    backgroundColor: "rgba(0, 229, 255, 0.2)",
-    transform: "scale(1.05)",
-  },
-  "& .MuiChip-label": {
-    padding: "0 6px",
-  },
-}));
+// // const MetricChip = styled(Chip)(({ theme }) => ({
+// //   margin: theme.spacing(0.25),
+// //   backgroundColor: "rgba(0, 229, 255, 0.1)",
+// //   color: theme.palette.secondary.main,
+// //   border: "1px solid rgba(0, 229, 255, 0.3)",
+// //   fontFamily: '"Roboto Mono", monospace',
+// //   fontSize: "0.7rem",
+// //   height: 20,
+// //   cursor: "pointer", // Adicionado para analytics
+// //   transition: "all 0.3s ease",
+// //   "&:hover": {
+// //     backgroundColor: "rgba(0, 229, 255, 0.2)",
+// //     transform: "scale(1.05)",
+// //   },
+// //   "& .MuiChip-label": {
+// //     padding: "0 6px",
+// //   },
+// // }));
 
-const TechChip = styled(Chip)(({ theme }) => ({
-  margin: theme.spacing(0.25),
-  backgroundColor: "rgba(20, 40, 80, 0.6)",
-  color: theme.palette.text.primary,
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: "0.7rem",
-  height: 22,
-  cursor: "pointer", // Adicionado para analytics
-  transition: "all 0.3s ease",
-  "&:hover": {
-    backgroundColor: "rgba(20, 40, 80, 0.8)",
-    transform: "scale(1.05)",
-  },
-}));
+// // const TechChip = styled(Chip)(({ theme }) => ({
+// //   margin: theme.spacing(0.25),
+// //   backgroundColor: "rgba(20, 40, 80, 0.6)",
+// //   color: theme.palette.text.primary,
+// //   border: "1px solid rgba(255, 255, 255, 0.1)",
+// //   fontFamily: '"Roboto Mono", monospace',
+// //   fontSize: "0.7rem",
+// //   height: 22,
+// //   cursor: "pointer", // Adicionado para analytics
+// //   transition: "all 0.3s ease",
+// //   "&:hover": {
+// //     backgroundColor: "rgba(20, 40, 80, 0.8)",
+// //     transform: "scale(1.05)",
+// //   },
+// // }));
 
-const ResultItem = styled(Typography)(({ theme }) => ({
-  fontSize: "0.85rem",
-  marginBottom: theme.spacing(0.5),
-  color: theme.palette.text.primary,
-  display: "flex",
-  alignItems: "flex-start",
-  gap: theme.spacing(1),
-  cursor: "pointer", // Adicionado para analytics
-  transition: "color 0.3s ease",
-  "&:hover": {
-    color: theme.palette.secondary.main,
-  },
-  "&::before": {
-    content: '"▸"',
-    color: theme.palette.secondary.main,
-    fontWeight: "bold",
-    flexShrink: 0,
-  },
-}));
+// // const ResultItem = styled(Typography)(({ theme }) => ({
+// //   fontSize: "0.85rem",
+// //   marginBottom: theme.spacing(0.5),
+// //   color: theme.palette.text.primary,
+// //   display: "flex",
+// //   alignItems: "flex-start",
+// //   gap: theme.spacing(1),
+// //   cursor: "pointer", // Adicionado para analytics
+// //   transition: "color 0.3s ease",
+// //   "&:hover": {
+// //     color: theme.palette.secondary.main,
+// //   },
+// //   "&::before": {
+// //     content: '"▸"',
+// //     color: theme.palette.secondary.main,
+// //     fontWeight: "bold",
+// //     flexShrink: 0,
+// //   },
+// // }));
 
-const ActionButton = styled(Button)(({ theme }) => ({
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: "0.75rem",
-  textTransform: "none",
-  borderRadius: theme.spacing(3),
-  padding: theme.spacing(0.5, 1.5),
-  margin: theme.spacing(0.25),
-  border: "1px solid rgba(255, 255, 255, 0.2)",
-  cursor: "pointer", // Adicionado para analytics
-  "&:hover": {
-    borderColor: theme.palette.secondary.main,
-    backgroundColor: "rgba(0, 229, 255, 0.1)",
-  },
-}));
+// // const ActionButton = styled(Button)(({ theme }) => ({
+// //   fontFamily: '"Roboto Mono", monospace',
+// //   fontSize: "0.75rem",
+// //   textTransform: "none",
+// //   borderRadius: theme.spacing(3),
+// //   padding: theme.spacing(0.5, 1.5),
+// //   margin: theme.spacing(0.25),
+// //   border: "1px solid rgba(255, 255, 255, 0.2)",
+// //   cursor: "pointer", // Adicionado para analytics
+// //   "&:hover": {
+// //     borderColor: theme.palette.secondary.main,
+// //     backgroundColor: "rgba(0, 229, 255, 0.1)",
+// //   },
+// // }));
 
-const AlertBox = styled(Box)(({ theme }) => ({
-  background: "rgba(255, 193, 7, 0.1)",
-  border: "1px solid rgba(255, 193, 7, 0.3)",
-  borderRadius: theme.spacing(1),
-  padding: theme.spacing(2),
-  marginBottom: theme.spacing(3),
-  display: "flex",
-  alignItems: "flex-start",
-  gap: theme.spacing(2),
-  cursor: "pointer", // Adicionado para analytics
-}));
+// // const AlertBox = styled(Box)(({ theme }) => ({
+// //   background: "rgba(255, 193, 7, 0.1)",
+// //   border: "1px solid rgba(255, 193, 7, 0.3)",
+// //   borderRadius: theme.spacing(1),
+// //   padding: theme.spacing(2),
+// //   marginBottom: theme.spacing(3),
+// //   display: "flex",
+// //   alignItems: "flex-start",
+// //   gap: theme.spacing(2),
+// //   cursor: "pointer", // Adicionado para analytics
+// // }));
 
-const SkillItem = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Roboto Mono", monospace',
-  color: "#f0f0f0",
-  marginBottom: theme.spacing(1),
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(1),
-  cursor: "pointer", // Adicionado para analytics
-  transition: "color 0.3s ease",
-  "&:hover": {
-    color: theme.palette.secondary.main,
-  },
-}));
+// // const SkillItem = styled(Typography)(({ theme }) => ({
+// //   fontFamily: '"Roboto Mono", monospace',
+// //   color: "#f0f0f0",
+// //   marginBottom: theme.spacing(1),
+// //   display: "flex",
+// //   alignItems: "center",
+// //   gap: theme.spacing(1),
+// //   cursor: "pointer", // Adicionado para analytics
+// //   transition: "color 0.3s ease",
+// //   "&:hover": {
+// //     color: theme.palette.secondary.main,
+// //   },
+// // }));
 
-const ProjectsSection: FC = () => {
-  const { sectionRef } = useTabAnalytics("projects");
+// // const ProjectsSection: FC = () => {
+// //   const { sectionRef } = useTabAnalytics("projects");
 
-  // Analytics: Rastrear visualização da página de projetos e tempo gasto
-  useEffect(() => {
-    // Rastreia quando a página de projetos é carregada
-    trackProfileTabView("projects", {
-      user_agent: navigator.userAgent,
-      referrer: document.referrer,
-      screen_resolution: `${window.screen.width}x${window.screen.height}`,
-      device_type: window.innerWidth < 768 ? "mobile" : "desktop",
-    });
+// //   // Analytics: Rastrear visualização da página de projetos e tempo gasto
+// //   useEffect(() => {
+// //     // Rastreia quando a página de projetos é carregada
+// //     trackProfileTabView("projects", {
+// //       user_agent: navigator.userAgent,
+// //       referrer: document.referrer,
+// //       screen_resolution: `${window.screen.width}x${window.screen.height}`,
+// //       device_type: window.innerWidth < 768 ? "mobile" : "desktop",
+// //     });
 
-    // Marca o tempo de início para calcular tempo gasto
-    const currentStartTime = Date.now();
+// //     // Marca o tempo de início para calcular tempo gasto
+// //     const currentStartTime = Date.now();
 
-    // Cleanup: rastreia tempo gasto quando o usuário sair da página
-    return () => {
-      const timeSpent = Math.floor((Date.now() - currentStartTime) / 1000);
-      trackProfileTabTimeSpent("projects", timeSpent);
-    };
-  }, []);
+// //     // Cleanup: rastreia tempo gasto quando o usuário sair da página
+// //     return () => {
+// //       const timeSpent = Math.floor((Date.now() - currentStartTime) / 1000);
+// //       trackProfileTabTimeSpent("projects", timeSpent);
+// //     };
+// //   }, []);
 
-  // Funções de analytics para diferentes interações
-  const handleProjectCardClick = (
-    projectTitle: string,
-    projectType: string
-  ) => {
-    trackProfileTabInteraction(
-      "projects",
-      "project_card_click",
-      `${projectType}_${projectTitle}`
-    );
-    // Interesse profundo em projeto específico pode indicar interesse real
-    trackProfileConversion("project_interest", "projects");
-  };
+// //   // Funções de analytics para diferentes interações
+// //   const handleProjectCardClick = (
+// //     projectTitle: string,
+// //     projectType: string
+// //   ) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "project_card_click",
+// //       `${projectType}_${projectTitle}`
+// //     );
+// //     // Interesse profundo em projeto específico pode indicar interesse real
+// //     trackProfileConversion("project_interest", "projects");
+// //   };
 
-  const handleConfidentialBadgeClick = (projectTitle: string) => {
-    trackProfileTabInteraction(
-      "projects",
-      "confidential_badge_click",
-      projectTitle
-    );
-  };
+// //   const handleConfidentialBadgeClick = (projectTitle: string) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "confidential_badge_click",
+// //       projectTitle
+// //     );
+// //   };
 
-  const handleMetricChipClick = (metric: string, projectTitle: string) => {
-    trackProfileTabInteraction(
-      "projects",
-      "metric_chip_click",
-      `${metric}_${projectTitle}`
-    );
-    // Interesse em métricas específicas indica foco em resultados
-    if (
-      metric.includes("↓") ||
-      metric.includes("M+") ||
-      metric.includes("k+")
-    ) {
-      trackProfileConversion("results_focused_interest", "projects");
-    }
-  };
+// //   const handleMetricChipClick = (metric: string, projectTitle: string) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "metric_chip_click",
+// //       `${metric}_${projectTitle}`
+// //     );
+// //     // Interesse em métricas específicas indica foco em resultados
+// //     if (
+// //       metric.includes("↓") ||
+// //       metric.includes("M+") ||
+// //       metric.includes("k+")
+// //     ) {
+// //       trackProfileConversion("results_focused_interest", "projects");
+// //     }
+// //   };
 
-  const handleTechChipClick = (tech: string, projectTitle: string) => {
-    trackProfileTabInteraction(
-      "projects",
-      "tech_stack_click",
-      `${tech}_${projectTitle}`
-    );
-    // Interesse em tecnologias específicas indica fit técnico
-    if (
-      [
-        "IA Generativa",
-        ".NET",
-        "React",
-        "TypeScript",
-        "Microsserviços",
-      ].includes(tech)
-    ) {
-      trackProfileConversion("tech_stack_match", "projects");
-    }
-  };
+// //   const handleTechChipClick = (tech: string, projectTitle: string) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "tech_stack_click",
+// //       `${tech}_${projectTitle}`
+// //     );
+// //     // Interesse em tecnologias específicas indica fit técnico
+// //     if (
+// //       [
+// //         "IA Generativa",
+// //         ".NET",
+// //         "React",
+// //         "TypeScript",
+// //         "Microsserviços",
+// //       ].includes(tech)
+// //     ) {
+// //       trackProfileConversion("tech_stack_match", "projects");
+// //     }
+// //   };
 
-  const handleResultItemClick = (resultIndex: number, projectTitle: string) => {
-    trackProfileTabInteraction(
-      "projects",
-      "result_item_click",
-      `result_${resultIndex}_${projectTitle}`
-    );
-  };
+// //   const handleResultItemClick = (resultIndex: number, projectTitle: string) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "result_item_click",
+// //       `result_${resultIndex}_${projectTitle}`
+// //     );
+// //   };
 
-  const handleAlertBoxClick = () => {
-    trackProfileTabInteraction(
-      "projects",
-      "confidentiality_alert_click",
-      "understanding_constraints"
-    );
-  };
+// //   const handleAlertBoxClick = () => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "confidentiality_alert_click",
+// //       "understanding_constraints"
+// //     );
+// //   };
 
-  const handleOpenSourceSectionClick = () => {
-    trackProfileTabInteraction(
-      "projects",
-      "open_source_section_click",
-      "future_projects"
-    );
-  };
+// //   const handleOpenSourceSectionClick = () => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "open_source_section_click",
+// //       "future_projects"
+// //     );
+// //   };
 
-  const handleFutureProjectClick = (projectName: string) => {
-    trackProfileTabInteraction(
-      "projects",
-      "future_project_interest",
-      projectName
-    );
-    // Interesse em projetos futuros indica engajamento de longo prazo
-    trackProfileConversion("future_collaboration_interest", "projects");
-  };
+// //   const handleFutureProjectClick = (projectName: string) => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "future_project_interest",
+// //       projectName
+// //     );
+// //     // Interesse em projetos futuros indica engajamento de longo prazo
+// //     trackProfileConversion("future_collaboration_interest", "projects");
+// //   };
 
-  const handleInterviewDiscussionClick = () => {
-    trackProfileTabInteraction(
-      "projects",
-      "interview_discussion_click",
-      "technical_details"
-    );
-    // Interesse em discussão técnica indica intenção de entrevista
-    trackProfileConversion("interview_preparation", "projects");
-  };
+// //   const handleInterviewDiscussionClick = () => {
+// //     trackProfileTabInteraction(
+// //       "projects",
+// //       "interview_discussion_click",
+// //       "technical_details"
+// //     );
+// //     // Interesse em discussão técnica indica intenção de entrevista
+// //     trackProfileConversion("interview_preparation", "projects");
+// //   };
 
-  const handleInterviewTopicClick = (topic: string) => {
-    trackProfileTabInteraction("projects", "interview_topic_click", topic);
-  };
+// //   const handleInterviewTopicClick = (topic: string) => {
+// //     trackProfileTabInteraction("projects", "interview_topic_click", topic);
+// //   };
 
-  const projects = [
-    {
-      title: "Hub de Integração Educacional Enterprise",
-      icon: <IntegrationInstructionsIcon fontSize="large" />,
-      description:
-        "Plataforma de integração conectando 2.000+ instituições de ensino via APIs robustas e sincronização em tempo real.",
-      confidential: true,
-      metrics: ["2k+ escolas", "1M+ alunos", "60% ↓ tempo", "70% ↓ erros"],
-      results: [
-        "Redução de 60% no tempo de processamento administrativo;",
-        "Diminuição de 70% em erros de sincronização;",
-        "Centralização de dados de 1+ milhão de alunos;",
-        "Economia de 200+ horas mensais de trabalho manual.",
-      ],
-      techStack: [
-        ".NET",
-        "React",
-        "TypeScript",
-        "Microsserviços",
-        "PostgreSQL",
-        "API RESTful",
-      ],
-      type: "integration_hub",
-    },
-    {
-      title: "Sistema de Avaliação com IA Generativa",
-      icon: <EditNoteIcon fontSize="large" />,
-      description:
-        "Plataforma educacional com IA para criação de temas, ambiente de escrita e correção automatizada de redações.",
-      confidential: true,
-      metrics: [
-        "IA Generativa",
-        "Milhares/dia",
-        "Feedback detalhado",
-        "Análise NLP",
-      ],
-      results: [
-        "Redução significativa no tempo de correção;",
-        "Aumento na qualidade do feedback pedagógico;",
-        "Análise avançada de padrões de escrita;",
-        "Processamento de milhares de redações diárias.",
-      ],
-      techStack: [
-        "C#",
-        ".NET",
-        "React",
-        "PostgreSQL",
-        "Docker",
-        "IA Generativa",
-        "CI/CD",
-        "GCP",
-      ],
-      type: "ai_evaluation",
-    },
-    {
-      title: "Automação Google Workspace (RPA)",
-      icon: <ArchitectureIcon fontSize="large" />,
-      description:
-        "Sistema automatizado para gerenciamento de domínio Google Workspace usando RPA para administração em larga escala.",
-      confidential: true,
-      metrics: [
-        "25+ tarefas",
-        "90% ↓ erros",
-        "Auditoria diária",
-        "Provisionamento automático",
-      ],
-      results: [
-        "Automação de 25+ tarefas administrativas recorrentes;",
-        "Diminuição de erros humanos;",
-        "Auditorias automáticas de segurança diárias;",
-        "Redução drástica em tempo de provisionamento.",
-      ],
-      techStack: [
-        "C#",
-        "CQRS",
-        "Google Admin SDK",
-        "Google Classroom API",
-        "Google Drive API",
-        "OAuth 2.0",
-        "DDD",
-        "Event Sourcing",
-      ],
-      type: "rpa_automation",
-    },
-    {
-      title: "Plataforma de Avaliações Educacionais (2M+ registros)",
-      icon: <IntegrationInstructionsIcon fontSize="large" />,
-      description:
-        "Solução de alta performance para processamento e correção automática de avaliações em escala, com arquitetura resiliente.",
-      confidential: true,
-      metrics: [
-        "2M+ avaliações",
-        "85% ↓ tempo",
-        "95% precisão",
-        "5 dias ciclo",
-      ],
-      results: [
-        "Redução de 85% no tempo: 3 semanas → 5 dias;",
-        "Diminuição de 93% em erros de sincronização;",
-        "Sistema centralizado com 1.2M+ alunos;",
-        "Redução de 78% em intervenções manuais.",
-      ],
-      techStack: [
-        ".NET",
-        "React",
-        "TypeScript",
-        "Microsserviços",
-        "SQL Server",
-        "OCR",
-      ],
-      type: "evaluation_platform",
-    },
-  ];
+// //   const projects = [
+// //     {
+// //       title: "Hub de Integração Educacional Enterprise",
+// //       icon: <IntegrationInstructionsIcon fontSize="large" />,
+// //       description:
+// //         "Plataforma de integração conectando 2.000+ instituições de ensino via APIs robustas e sincronização em tempo real.",
+// //       confidential: true,
+// //       metrics: ["2k+ escolas", "1M+ alunos", "60% ↓ tempo", "70% ↓ erros"],
+// //       results: [
+// //         "Redução de 60% no tempo de processamento administrativo;",
+// //         "Diminuição de 70% em erros de sincronização;",
+// //         "Centralização de dados de 1+ milhão de alunos;",
+// //         "Economia de 200+ horas mensais de trabalho manual.",
+// //       ],
+// //       techStack: [
+// //         ".NET",
+// //         "React",
+// //         "TypeScript",
+// //         "Microsserviços",
+// //         "PostgreSQL",
+// //         "API RESTful",
+// //       ],
+// //       type: "integration_hub",
+// //     },
+// //     {
+// //       title: "Sistema de Avaliação com IA Generativa",
+// //       icon: <EditNoteIcon fontSize="large" />,
+// //       description:
+// //         "Plataforma educacional com IA para criação de temas, ambiente de escrita e correção automatizada de redações.",
+// //       confidential: true,
+// //       metrics: [
+// //         "IA Generativa",
+// //         "Milhares/dia",
+// //         "Feedback detalhado",
+// //         "Análise NLP",
+// //       ],
+// //       results: [
+// //         "Redução significativa no tempo de correção;",
+// //         "Aumento na qualidade do feedback pedagógico;",
+// //         "Análise avançada de padrões de escrita;",
+// //         "Processamento de milhares de redações diárias.",
+// //       ],
+// //       techStack: [
+// //         "C#",
+// //         ".NET",
+// //         "React",
+// //         "PostgreSQL",
+// //         "Docker",
+// //         "IA Generativa",
+// //         "CI/CD",
+// //         "GCP",
+// //       ],
+// //       type: "ai_evaluation",
+// //     },
+// //     {
+// //       title: "Automação Google Workspace (RPA)",
+// //       icon: <ArchitectureIcon fontSize="large" />,
+// //       description:
+// //         "Sistema automatizado para gerenciamento de domínio Google Workspace usando RPA para administração em larga escala.",
+// //       confidential: true,
+// //       metrics: [
+// //         "25+ tarefas",
+// //         "90% ↓ erros",
+// //         "Auditoria diária",
+// //         "Provisionamento automático",
+// //       ],
+// //       results: [
+// //         "Automação de 25+ tarefas administrativas recorrentes;",
+// //         "Diminuição de erros humanos;",
+// //         "Auditorias automáticas de segurança diárias;",
+// //         "Redução drástica em tempo de provisionamento.",
+// //       ],
+// //       techStack: [
+// //         "C#",
+// //         "CQRS",
+// //         "Google Admin SDK",
+// //         "Google Classroom API",
+// //         "Google Drive API",
+// //         "OAuth 2.0",
+// //         "DDD",
+// //         "Event Sourcing",
+// //       ],
+// //       type: "rpa_automation",
+// //     },
+// //     {
+// //       title: "Plataforma de Avaliações Educacionais (2M+ registros)",
+// //       icon: <IntegrationInstructionsIcon fontSize="large" />,
+// //       description:
+// //         "Solução de alta performance para processamento e correção automática de avaliações em escala, com arquitetura resiliente.",
+// //       confidential: true,
+// //       metrics: [
+// //         "2M+ avaliações",
+// //         "85% ↓ tempo",
+// //         "95% precisão",
+// //         "5 dias ciclo",
+// //       ],
+// //       results: [
+// //         "Redução de 85% no tempo: 3 semanas → 5 dias;",
+// //         "Diminuição de 93% em erros de sincronização;",
+// //         "Sistema centralizado com 1.2M+ alunos;",
+// //         "Redução de 78% em intervenções manuais.",
+// //       ],
+// //       techStack: [
+// //         ".NET",
+// //         "React",
+// //         "TypeScript",
+// //         "Microsserviços",
+// //         "SQL Server",
+// //         "OCR",
+// //       ],
+// //       type: "evaluation_platform",
+// //     },
+// //   ];
 
-  return (
-    <Container
-      sx={{ py: 8 }}
-      id="projects"
-      component="section"
-      ref={sectionRef}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <Typography variant="h2" sx={{ mb: 4, color: "primary.main" }}>
-          // Projetos
-        </Typography>
+// //   return (
+// //     <Container
+// //       sx={{ py: 8 }}
+// //       id="projects"
+// //       component="section"
+// //       ref={sectionRef}
+// //     >
+// //       <motion.div
+// //         initial={{ opacity: 0, y: 20 }}
+// //         whileInView={{ opacity: 1, y: 0 }}
+// //         transition={{ duration: 0.8 }}
+// //         viewport={{ once: true }}
+// //       >
+// //         <Typography variant="h2" sx={{ mb: 4, color: "primary.main" }}>
+// //           // Projetos
+// //         </Typography>
 
-        {/* Alerta sobre Confidencialidade */}
-        <AlertBox onClick={handleAlertBoxClick}>
-          <WarningIcon sx={{ color: "#ffc107", mt: 0.2 }} />
-          <Box>
-            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
-              Projetos Confidenciais
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ fontSize: "0.85rem", lineHeight: 1.5 }}
-            >
-              Os projetos foram desenvolvidos em ambiente corporativo com
-              acordos de confidencialidade. Detalhes técnicos e resultados são
-              apresentados de forma anonimizada, priorizando soluções
-              implementadas e impacto gerado.
-            </Typography>
-          </Box>
-        </AlertBox>
+// //         {/* Alerta sobre Confidencialidade */}
+// //         <AlertBox onClick={handleAlertBoxClick}>
+// //           <WarningIcon sx={{ color: "#ffc107", mt: 0.2 }} />
+// //           <Box>
+// //             <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
+// //               Projetos Confidenciais
+// //             </Typography>
+// //             <Typography
+// //               variant="body2"
+// //               sx={{ fontSize: "0.85rem", lineHeight: 1.5 }}
+// //             >
+// //               Os projetos foram desenvolvidos em ambiente corporativo com
+// //               acordos de confidencialidade. Detalhes técnicos e resultados são
+// //               apresentados de forma anonimizada, priorizando soluções
+// //               implementadas e impacto gerado.
+// //             </Typography>
+// //           </Box>
+// //         </AlertBox>
 
-        {/* Lista de Projetos */}
-        {projects.map((project, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.01 }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-          >
-            <ProjectCard
-              onClick={() =>
-                handleProjectCardClick(project.title, project.type)
-              }
-            >
-              <ProjectHeader>
-                <ProjectTitleBox>
-                  <ProjectIcon>{project.icon}</ProjectIcon>
-                  <Box>
-                    <ProjectTitle>{project.title}</ProjectTitle>
-                    {project.confidential && (
-                      <ConfidentialBadge
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleConfidentialBadgeClick(project.title);
-                        }}
-                      >
-                        <LockIcon sx={{ fontSize: 14 }} />
-                        Confidencial
-                      </ConfidentialBadge>
-                    )}
-                  </Box>
-                </ProjectTitleBox>
-              </ProjectHeader>
+// //         {/* Lista de Projetos */}
+// //         {projects.map((project, index) => (
+// //           <motion.div
+// //             key={index}
+// //             whileHover={{ scale: 1.01 }}
+// //             initial={{ opacity: 0, y: 20 }}
+// //             whileInView={{ opacity: 1, y: 0 }}
+// //             transition={{ duration: 0.5, delay: index * 0.1 }}
+// //             viewport={{ once: true }}
+// //           >
+// //             <ProjectCard
+// //               onClick={() =>
+// //                 handleProjectCardClick(project.title, project.type)
+// //               }
+// //             >
+// //               <ProjectHeader>
+// //                 <ProjectTitleBox>
+// //                   <ProjectIcon>{project.icon}</ProjectIcon>
+// //                   <Box>
+// //                     <ProjectTitle>{project.title}</ProjectTitle>
+// //                     {project.confidential && (
+// //                       <ConfidentialBadge
+// //                         onClick={(e) => {
+// //                           e.stopPropagation();
+// //                           handleConfidentialBadgeClick(project.title);
+// //                         }}
+// //                       >
+// //                         <LockIcon sx={{ fontSize: 14 }} />
+// //                         Confidencial
+// //                       </ConfidentialBadge>
+// //                     )}
+// //                   </Box>
+// //                 </ProjectTitleBox>
+// //               </ProjectHeader>
 
-              <Typography
-                variant="body2"
-                sx={{ mb: 2, fontSize: "0.9rem", lineHeight: 1.5 }}
-              >
-                {project.description}
-              </Typography>
+// //               <Typography
+// //                 variant="body2"
+// //                 sx={{ mb: 2, fontSize: "0.9rem", lineHeight: 1.5 }}
+// //               >
+// //                 {project.description}
+// //               </Typography>
 
-              {/* Métricas em Chips */}
-              <Box sx={{ mb: 2 }}>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: "text.secondary",
-                    mb: 1,
-                    display: "block",
-                  }}
-                >
-                  // Métricas principais:
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {project.metrics.map((metric, idx) => (
-                    <MetricChip
-                      key={idx}
-                      label={metric}
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleMetricChipClick(metric, project.title);
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
+// //               {/* Métricas em Chips */}
+// //               <Box sx={{ mb: 2 }}>
+// //                 <Typography
+// //                   variant="caption"
+// //                   sx={{
+// //                     fontFamily: '"Roboto Mono", monospace',
+// //                     color: "text.secondary",
+// //                     mb: 1,
+// //                     display: "block",
+// //                   }}
+// //                 >
+// //                   // Métricas principais:
+// //                 </Typography>
+// //                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+// //                   {project.metrics.map((metric, idx) => (
+// //                     <MetricChip
+// //                       key={idx}
+// //                       label={metric}
+// //                       size="small"
+// //                       onClick={(e) => {
+// //                         e.stopPropagation();
+// //                         handleMetricChipClick(metric, project.title);
+// //                       }}
+// //                     />
+// //                   ))}
+// //                 </Box>
+// //               </Box>
 
-              {/* Resultados Compactos */}
-              <Box sx={{ mb: 2, pl: 1 }}>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: "secondary.main",
-                    fontWeight: 500,
-                    mb: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                  }}
-                >
-                  <SpeedIcon sx={{ fontSize: 16 }} />
-                  Resultados:
-                </Typography>
-                {project.results.slice(0, 4).map((result, idx) => (
-                  <ResultItem
-                    key={idx}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleResultItemClick(idx, project.title);
-                    }}
-                  >
-                    {result}
-                  </ResultItem>
-                ))}
-                {project.results.length > 4 && (
-                  <Typography
-                    variant="caption"
-                    sx={{ color: "text.secondary", ml: 2, fontSize: "0.75rem" }}
-                  >
-                    +{project.results.length - 2} outros resultados
-                  </Typography>
-                )}
-              </Box>
+// //               {/* Resultados Compactos */}
+// //               <Box sx={{ mb: 2, pl: 1 }}>
+// //                 <Typography
+// //                   variant="caption"
+// //                   sx={{
+// //                     fontFamily: '"Roboto Mono", monospace',
+// //                     color: "secondary.main",
+// //                     fontWeight: 500,
+// //                     mb: 1,
+// //                     display: "flex",
+// //                     alignItems: "center",
+// //                     gap: 0.5,
+// //                   }}
+// //                 >
+// //                   <SpeedIcon sx={{ fontSize: 16 }} />
+// //                   Resultados:
+// //                 </Typography>
+// //                 {project.results.slice(0, 4).map((result, idx) => (
+// //                   <ResultItem
+// //                     key={idx}
+// //                     onClick={(e) => {
+// //                       e.stopPropagation();
+// //                       handleResultItemClick(idx, project.title);
+// //                     }}
+// //                   >
+// //                     {result}
+// //                   </ResultItem>
+// //                 ))}
+// //                 {project.results.length > 4 && (
+// //                   <Typography
+// //                     variant="caption"
+// //                     sx={{ color: "text.secondary", ml: 2, fontSize: "0.75rem" }}
+// //                   >
+// //                     +{project.results.length - 2} outros resultados
+// //                   </Typography>
+// //                 )}
+// //               </Box>
 
-              {/* Stack Tecnológica */}
-              <Box>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: "text.secondary",
-                    mb: 1,
-                    display: "block",
-                  }}
-                >
-                  // Stack:
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {project.techStack.map((tech, idx) => (
-                    <TechChip
-                      key={idx}
-                      label={tech}
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleTechChipClick(tech, project.title);
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            </ProjectCard>
-          </motion.div>
-        ))}
+// //               {/* Stack Tecnológica */}
+// //               <Box>
+// //                 <Typography
+// //                   variant="caption"
+// //                   sx={{
+// //                     fontFamily: '"Roboto Mono", monospace',
+// //                     color: "text.secondary",
+// //                     mb: 1,
+// //                     display: "block",
+// //                   }}
+// //                 >
+// //                   // Stack:
+// //                 </Typography>
+// //                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+// //                   {project.techStack.map((tech, idx) => (
+// //                     <TechChip
+// //                       key={idx}
+// //                       label={tech}
+// //                       size="small"
+// //                       onClick={(e) => {
+// //                         e.stopPropagation();
+// //                         handleTechChipClick(tech, project.title);
+// //                       }}
+// //                     />
+// //                   ))}
+// //                 </Box>
+// //               </Box>
+// //             </ProjectCard>
+// //           </motion.div>
+// //         ))}
 
-        <Divider sx={{ my: 4, borderColor: "rgba(255, 255, 255, 0.1)" }} />
+// //         <Divider sx={{ my: 4, borderColor: "rgba(255, 255, 255, 0.1)" }} />
 
-        {/* Seção de Projetos Demonstráveis - URGENTE */}
-        <CompactCard onClick={handleOpenSourceSectionClick}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-            <GitHubIcon sx={{ color: "secondary.main", mr: 1 }} />
-            <Typography
-              variant="h6"
-              sx={{
-                color: "secondary.main",
-                fontFamily: '"Roboto Mono", monospace',
-              }}
-            >
-              // Projetos Open Source (Em Desenvolvimento)
-            </Typography>
-          </Box>
+// //         {/* Seção de Projetos Demonstráveis - URGENTE */}
+// //         <CompactCard onClick={handleOpenSourceSectionClick}>
+// //           <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+// //             <GitHubIcon sx={{ color: "secondary.main", mr: 1 }} />
+// //             <Typography
+// //               variant="h6"
+// //               sx={{
+// //                 color: "secondary.main",
+// //                 fontFamily: '"Roboto Mono", monospace',
+// //               }}
+// //             >
+// //               // Projetos Open Source (Em Desenvolvimento)
+// //             </Typography>
+// //           </Box>
 
-          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-            Estou desenvolvendo projetos demonstráveis que complementarão este
-            portfólio:
-          </Typography>
+// //           <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+// //             Estou desenvolvendo projetos demonstráveis que complementarão este
+// //             portfólio:
+// //           </Typography>
 
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 3 }}>
-            <ActionButton
-              variant="outlined"
-              startIcon={<CodeIcon />}
-              disabled
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFutureProjectClick("sistema_gestao_fullstack");
-              }}
-            >
-              Sistema de Gestão Full-Stack
-            </ActionButton>
-            <ActionButton
-              variant="outlined"
-              startIcon={<ArchitectureIcon />}
-              disabled
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFutureProjectClick("microservicos_docker");
-              }}
-            >
-              Microsserviços + Docker
-            </ActionButton>
-            <ActionButton
-              variant="outlined"
-              startIcon={<LaunchIcon />}
-              disabled
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFutureProjectClick("dashboard_data_science");
-              }}
-            >
-              Dashboard com Data Science
-            </ActionButton>
-          </Box>
+// //           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 3 }}>
+// //             <ActionButton
+// //               variant="outlined"
+// //               startIcon={<CodeIcon />}
+// //               disabled
+// //               onClick={(e) => {
+// //                 e.stopPropagation();
+// //                 handleFutureProjectClick("sistema_gestao_fullstack");
+// //               }}
+// //             >
+// //               Sistema de Gestão Full-Stack
+// //             </ActionButton>
+// //             <ActionButton
+// //               variant="outlined"
+// //               startIcon={<ArchitectureIcon />}
+// //               disabled
+// //               onClick={(e) => {
+// //                 e.stopPropagation();
+// //                 handleFutureProjectClick("microservicos_docker");
+// //               }}
+// //             >
+// //               Microsserviços + Docker
+// //             </ActionButton>
+// //             <ActionButton
+// //               variant="outlined"
+// //               startIcon={<LaunchIcon />}
+// //               disabled
+// //               onClick={(e) => {
+// //                 e.stopPropagation();
+// //                 handleFutureProjectClick("dashboard_data_science");
+// //               }}
+// //             >
+// //               Dashboard com Data Science
+// //             </ActionButton>
+// //           </Box>
 
-          <Typography
-            variant="caption"
-            sx={{
-              color: "text.secondary",
-              fontStyle: "italic",
-              fontSize: "0.8rem",
-            }}
-          >
-            * Projetos em desenvolvimento para demonstração de competências
-            técnicas sem restrições de confidencialidade. Previsão: próximas
-            semanas.
-          </Typography>
-        </CompactCard>
+// //           <Typography
+// //             variant="caption"
+// //             sx={{
+// //               color: "text.secondary",
+// //               fontStyle: "italic",
+// //               fontSize: "0.8rem",
+// //             }}
+// //           >
+// //             * Projetos em desenvolvimento para demonstração de competências
+// //             técnicas sem restrições de confidencialidade. Previsão: próximas
+// //             semanas.
+// //           </Typography>
+// //         </CompactCard>
 
-        {/* Abordagem para Entrevistas */}
-        <CompactCard onClick={handleInterviewDiscussionClick}>
-          <Typography
-            variant="h6"
-            sx={{
-              color: "secondary.main",
-              mb: 2,
-              fontFamily: '"Roboto Mono", monospace',
-            }}
-          >
-            // Discussão Técnica em Entrevistas
-          </Typography>
+// //         {/* Abordagem para Entrevistas */}
+// //         <CompactCard onClick={handleInterviewDiscussionClick}>
+// //           <Typography
+// //             variant="h6"
+// //             sx={{
+// //               color: "secondary.main",
+// //               mb: 2,
+// //               fontFamily: '"Roboto Mono", monospace',
+// //             }}
+// //           >
+// //             // Discussão Técnica em Entrevistas
+// //           </Typography>
 
-          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-            Posso detalhar em entrevistas (respeitando confidencialidade):
-          </Typography>
+// //           <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+// //             Posso detalhar em entrevistas (respeitando confidencialidade):
+// //           </Typography>
 
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 0.5,
-              md: {
-                gridTemplateColumns: "repeat(2, 1fr)",
-              },
-            }}
-          >
-            <Box>
-              <SkillItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleInterviewTopicClick("technical_challenges_solutions");
-                }}
-              >
-                ▸ Desafios técnicos e estratégias de solução;
-              </SkillItem>
-              <SkillItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleInterviewTopicClick("architecture_decisions_tradeoffs");
-                }}
-              >
-                ▸ Decisões de arquitetura e trade-offs;
-              </SkillItem>
-            </Box>
-            <Box>
-              <SkillItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleInterviewTopicClick(
-                    "methodologies_engineering_practices"
-                  );
-                }}
-              >
-                ▸ Metodologias e práticas de engenharia;
-              </SkillItem>
-              <SkillItem
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleInterviewTopicClick(
-                    "lessons_learned_technical_evolution"
-                  );
-                }}
-              >
-                ▸ Lições aprendidas e evolução técnica.
-              </SkillItem>
-            </Box>
-          </Box>
-        </CompactCard>
-      </motion.div>
-    </Container>
-  );
-};
+// //           <Box
+// //             sx={{
+// //               display: "grid",
+// //               gridTemplateColumns: "1fr",
+// //               gap: 0.5,
+// //               md: {
+// //                 gridTemplateColumns: "repeat(2, 1fr)",
+// //               },
+// //             }}
+// //           >
+// //             <Box>
+// //               <SkillItem
+// //                 onClick={(e) => {
+// //                   e.stopPropagation();
+// //                   handleInterviewTopicClick("technical_challenges_solutions");
+// //                 }}
+// //               >
+// //                 ▸ Desafios técnicos e estratégias de solução;
+// //               </SkillItem>
+// //               <SkillItem
+// //                 onClick={(e) => {
+// //                   e.stopPropagation();
+// //                   handleInterviewTopicClick("architecture_decisions_tradeoffs");
+// //                 }}
+// //               >
+// //                 ▸ Decisões de arquitetura e trade-offs;
+// //               </SkillItem>
+// //             </Box>
+// //             <Box>
+// //               <SkillItem
+// //                 onClick={(e) => {
+// //                   e.stopPropagation();
+// //                   handleInterviewTopicClick(
+// //                     "methodologies_engineering_practices"
+// //                   );
+// //                 }}
+// //               >
+// //                 ▸ Metodologias e práticas de engenharia;
+// //               </SkillItem>
+// //               <SkillItem
+// //                 onClick={(e) => {
+// //                   e.stopPropagation();
+// //                   handleInterviewTopicClick(
+// //                     "lessons_learned_technical_evolution"
+// //                   );
+// //                 }}
+// //               >
+// //                 ▸ Lições aprendidas e evolução técnica.
+// //               </SkillItem>
+// //             </Box>
+// //           </Box>
+// //         </CompactCard>
+// //       </motion.div>
+// //     </Container>
+// //   );
+// // };
 
-export default ProjectsSection;
+// // export default ProjectsSection;
 
 // &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 

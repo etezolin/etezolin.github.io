@@ -484,7 +484,7 @@ const Contact: FC = () => {
                       color: "#f44336",
                       textDecoration: "none",
                       fontFamily: '"Roboto Mono", monospace',
-                      fontSize: "0.95rem",
+                      fontSize: { xs: "0.8rem", sm: "0.95rem" },
                       transition: "all 0.3s ease",
                       "&:hover": {
                         textDecoration: "underline",
@@ -512,7 +512,7 @@ const Contact: FC = () => {
                       color: "#4caf50",
                       textDecoration: "none",
                       fontFamily: '"Roboto Mono", monospace',
-                      fontSize: "0.95rem",
+                      fontSize: { xs: "0.8rem", sm: "0.95rem" },
                       transition: "all 0.3s ease",
                       "&:hover": {
                         textDecoration: "underline",

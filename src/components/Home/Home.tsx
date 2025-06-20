@@ -11,22 +11,24 @@ import { motion } from "framer-motion";
 import React, { type FC } from "react";
 import { BiCloud } from "react-icons/bi";
 import { FaGitAlt, FaGithub, FaNode } from "react-icons/fa";
-import { LuMailCheck } from "react-icons/lu";
 import {
-  SiApachesuperset,
+  SiApachekafka,
   SiDocker,
   SiDotnet,
   SiFirebase,
   SiJavascript,
   SiMui,
+  SiPostgresql,
+  SiRabbitmq,
   SiReact,
   SiTailwindcss,
   SiTypescript
 } from "react-icons/si";
-import { TbBrandCSharp, TbSql } from "react-icons/tb";
+import { TbBrandCSharp, TbBrandMongodb, TbSql } from "react-icons/tb";
 import foto from "../../assets/foto.png";
 
 // ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
+import { DiMsqlServer } from "react-icons/di";
 import {
   trackProfileConversion,
   trackProfileTabInteraction,
@@ -198,9 +200,10 @@ const Home: FC = () => {
   const techCategories = {
     backend: [
       { name: "C#", color: "#9B4F96", icon: TbBrandCSharp },
-      { name: ".NET", color: "#7e6dbb", icon: SiDotnet },
-      { name: "Node", color: "#44a18a", icon: FaNode },
-      { name: "Mensageria", color: "#c431bc", icon: LuMailCheck },
+      { name: ".NET", color: "#94d2bd", icon: SiDotnet },
+      { name: "Node", color: "#ffd166", icon: FaNode },
+      { name: "RabbitMQ", color: "#eae2b7", icon: SiRabbitmq },
+      { name: "Apache Kafka", color: "#adb5bd", icon: SiApachekafka },
     ],
     frontend: [
       { name: "JavaScript", color: "#F7DF1E", icon: SiJavascript },
@@ -212,11 +215,14 @@ const Home: FC = () => {
     database: [
       { name: "SQL", color: "#4479A1", icon: TbSql },
       { name: "Firebase", color: "#c49d31", icon: SiFirebase },
+      { name: "SQLServer", color: "#fff", icon: DiMsqlServer },
+      { name: "PostgreSQL", color: "#48cae4", icon: SiPostgresql },
+      { name: "MongoDB", color: "#adc178", icon: TbBrandMongodb },
     ],
     cloud: [
       { name: "Google Cloud", color: "#a14744", icon: BiCloud },
       { name: "Docker", color: "#2496ED", icon: SiDocker },
-      { name: "CI/CD", color: "#a17144", icon: SiApachesuperset },
+      // { name: "CI/CD", color: "#a17144", icon: SiApachesuperset },
       { name: "Github", color: "#44a149", icon: FaGithub },
       { name: "Git Actions", color: "#31c493", icon: FaGitAlt },
       { name: "Cloud Build", color: "#fb8500", icon: BiCloud },

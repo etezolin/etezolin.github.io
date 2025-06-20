@@ -1,17 +1,15 @@
-import type { FC, ReactElement, MouseEvent } from "react";
-import { Box, Container, Typography, Chip, type Theme } from "@mui/material";
-import { motion } from "framer-motion";
-import { styled } from "@mui/material/styles";
-import DataObjectIcon from "@mui/icons-material/DataObject";
-import SchoolIcon from "@mui/icons-material/School";
-import LaptopIcon from "@mui/icons-material/Laptop";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import StorageIcon from "@mui/icons-material/Storage";
-import LoopIcon from "@mui/icons-material/Loop";
-import CodeIcon from "@mui/icons-material/Code";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import CodeIcon from "@mui/icons-material/Code";
+import LaptopIcon from "@mui/icons-material/Laptop";
+import LoopIcon from "@mui/icons-material/Loop";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import SchoolIcon from "@mui/icons-material/School";
+import StorageIcon from "@mui/icons-material/Storage";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { Box, Chip, Container, Typography, type Theme } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { motion } from "framer-motion";
+import type { FC, MouseEvent, ReactElement } from "react";
 
 // Tipos TypeScript
 interface SkillGroupData {
@@ -43,8 +41,8 @@ interface FormationData {
 
 // ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
 import {
-  trackProfileTabInteraction,
   trackProfileConversion,
+  trackProfileTabInteraction,
 } from "../../firebase";
 
 // Componentes estilizados (simplificados)
@@ -187,74 +185,8 @@ const Formation: FC = () => {
   // ✅ Dados das formações (estrutura otimizada com tipos)
   const formations: FormationData[] = [
     {
-      id: "data_science",
-      icon: <DataObjectIcon sx={{ fontSize: 30, color: "secondary.main" }} />,
-      title: "Especialização em Ciência de Dados",
-      institution:
-        "Universidade Tecnológica Federal do Paraná | UTFPR • Em andamento",
-      highlight: "Áreas de Especialização",
-      description:
-        "Aprofundamento em técnicas avançadas de análise de dados, machine learning e IA.",
-      skillGroups: [
-        {
-          title: "Inteligência Artificial",
-          icon: <AutoAwesomeIcon sx={{ mr: 1, fontSize: 18 }} />,
-          skills: [
-            "Machine Learning",
-            "Deep Learning",
-            "NLP",
-            "Computer Vision",
-            "Neural Networks",
-          ],
-          category: "ai",
-        },
-        {
-          title: "Linguagens & Frameworks",
-          icon: <CodeIcon sx={{ mr: 1, fontSize: 18 }} />,
-          skills: [
-            "Python",
-            "R",
-            "SQL",
-            "Apache Spark",
-            "TensorFlow",
-            "PyTorch",
-          ],
-          category: "languages",
-        },
-        {
-          title: "Análise & Modelagem",
-          icon: <FunctionsIcon sx={{ mr: 1, fontSize: 18 }} />,
-          skills: [
-            "Estatística",
-            "Modelagem Preditiva",
-            "Time Series",
-            "A/B Testing",
-          ],
-          category: "analysis",
-        },
-        {
-          title: "Data Engineering",
-          icon: <StorageIcon sx={{ mr: 1, fontSize: 18 }} />,
-          skills: [
-            "ETL Pipelines",
-            "Data Lakes",
-            "Data Warehousing",
-            "Big Data",
-          ],
-          category: "data_eng",
-        },
-      ],
-      code: `import pandas as pd
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-
-def build_predictive_model(data, target):
-    # Aplicando conhecimentos da especialização
-    return model, insights, business_value`,
-    },
-    {
       id: "systems_development",
-      icon: <LaptopIcon sx={{ fontSize: 30, color: "secondary.main" }} />,
+      icon: <LaptopIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
       title: "Análise e Desenvolvimento de Sistemas",
       institution: "Centro Universitário OPET • Concluído",
       highlight: "Competências Desenvolvidas",
@@ -313,7 +245,7 @@ def build_predictive_model(data, target):
     },
     {
       id: "philosophy",
-      icon: <SchoolIcon sx={{ fontSize: 12, color: "secondary.main" }} />,
+      icon: <SchoolIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
       title: "Licenciatura em Filosofia",
       institution:
         "Pontifícia Universidade Católica do Paraná | PUCPR • Concluído",
@@ -380,7 +312,7 @@ def build_predictive_model(data, target):
                   handleClick("timeline_marker_click", formation.id)
                 }
               >
-                {formation.icon}
+                {/* {formation.icon} */}
               </TimelineMarker>
               <TimelineContent
                 whileHover={{ scale: 1.01 }}

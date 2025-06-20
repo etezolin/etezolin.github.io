@@ -1,42 +1,42 @@
-import type { FC } from "react";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DownloadIcon from "@mui/icons-material/Download";
+import EmailIcon from "@mui/icons-material/Email";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MessageIcon from "@mui/icons-material/Message";
+import PhoneIcon from "@mui/icons-material/Phone";
+import RocketIcon from "@mui/icons-material/Rocket";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import {
   Box,
-  Container,
+  Button,
   Card,
-  Typography,
+  Chip,
+  Container,
+  Divider,
   IconButton,
   Link,
   Tooltip,
-  Chip,
-  Button,
-  Divider,
+  Typography,
 } from "@mui/material";
-import { motion } from "framer-motion";
 import { styled } from "@mui/material/styles";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import DownloadIcon from "@mui/icons-material/Download";
-import ScheduleIcon from "@mui/icons-material/Schedule";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import EmailIcon from "@mui/icons-material/Email";
-import PhoneIcon from "@mui/icons-material/Phone";
-import RocketIcon from "@mui/icons-material/Rocket";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import MessageIcon from "@mui/icons-material/Message";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { motion } from "framer-motion";
+import type { FC } from "react";
 
 // ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
 import {
-  trackProfileTabInteraction,
   trackProfileConversion,
+  trackProfileTabInteraction,
 } from "../../firebase";
 
 const HeroCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(4),
-  background: `linear-gradient(135deg, 
-    rgba(13, 33, 55, 0.9) 0%, 
-    rgba(0, 20, 40, 0.8) 50%, 
+  background: `linear-gradient(135deg,
+    rgba(13, 33, 55, 0.9) 0%,
+    rgba(0, 20, 40, 0.8) 50%,
     rgba(13, 33, 55, 0.9) 100%)`,
   backdropFilter: "blur(20px)",
   border: "1px solid rgba(0, 229, 255, 0.2)",
@@ -223,23 +223,14 @@ const ContactIcon = styled(Box)(() => ({
 }));
 
 const QuickActionBox = styled(Box)(({ theme }) => ({
-  background: `linear-gradient(135deg, 
-    rgba(0, 229, 255, 0.08) 0%, 
+  background: `linear-gradient(135deg,
+    rgba(0, 229, 255, 0.08) 0%,
     rgba(2, 136, 209, 0.05) 100%)`,
   border: "1px solid rgba(0, 229, 255, 0.2)",
   borderRadius: theme.spacing(2),
   padding: theme.spacing(3),
   marginBottom: theme.spacing(3),
   position: "relative",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "2px",
-    background: `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`,
-  },
 }));
 
 const Contact: FC = () => {
@@ -321,7 +312,7 @@ const Contact: FC = () => {
       sx={{ py: 8 }}
       component="section"
       id="contact"
-      // ✅ CORREÇÃO: Removido ref={sectionRef}
+    // ✅ CORREÇÃO: Removido ref={sectionRef}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}

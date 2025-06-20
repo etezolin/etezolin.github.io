@@ -236,12 +236,7 @@ const Formation: FC = () => {
           category: "devops",
         },
       ],
-      code: `interface FullStackDeveloper {
-  buildScalableApplications(): EnterpriseSolution;
-  designSystemArchitecture(): ArchitectureBlueprint;
-  implementBestPractices(): QualityCode;
-  deliverBusinessValue(): ROI;
-}`,
+      code: ``,
     },
     {
       id: "philosophy",
@@ -276,13 +271,7 @@ const Formation: FC = () => {
           category: "innovation",
         },
       ],
-      code: `class PhilosophicalDeveloper extends TechExpert {
-  analyzeRequirements(problem) {
-    return this.applyCriticalThinking(problem)
-      .considerEthicalImplications()
-      .designHumanCenteredSolution();
-  }
-}`,
+      code: ``,
       quote:
         "A formação filosófica me proporciona uma perspectiva única no desenvolvimento de software. Consigo conectar soluções técnicas complexas a necessidades humanas reais, criando produtos que não apenas funcionam, mas que fazem sentido.",
     },

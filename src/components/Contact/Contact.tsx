@@ -64,6 +64,7 @@ const ContactCard = styled(Card)(({ theme }) => ({
   transition: "all 0.3s ease",
   position: "relative",
   overflow: "hidden",
+  height: "100%", // ✅ Adiciona altura igual para todos os cards
   "&:hover": {
     transform: "translateY(-5px)",
     borderColor: theme.palette.secondary.main,
@@ -438,11 +439,11 @@ const Contact: FC = () => {
           </HeroCard>
         </motion.div>
 
-        {/* Contact Details Grid */}
+        {/* Contact Details - ✅ ALTERAÇÃO: Cada seção com largura total como o Hero */}
         <Box
           sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" },
+            display: "flex",
+            flexDirection: "column",
             gap: 4,
           }}
         >
@@ -722,6 +723,8 @@ export default Contact;
 // ---------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------
+
+
 
 // // import type { FC } from "react";
 // // import {

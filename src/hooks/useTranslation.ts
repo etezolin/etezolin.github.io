@@ -30,6 +30,21 @@ type TranslationKeys =
     | 'frontend'
     | 'database'
     | 'cloud'
+    | "title"
+    | "description"
+    | "staticLocation"
+    | "googleMapsUnavailable"
+    | "configureApiKey"
+    | "curitibaLocation"
+    | "coordinates"
+    | "timezone"
+    | "contactButton"
+    | "brazilSouthRegion"
+    | "remoteNational"
+    | "remoteInternational"
+    | "curitibaLocal"
+    | "hybrid"
+    | "slogan"
 
     // Formation Page
     | 'formationTitle'

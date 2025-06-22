@@ -202,5 +202,20 @@
     "metrics013": "2M+ evaluations",
     "metrics014": "85% ↓ time",
     "metrics015": "95% accuracy",
-    "metrics016": "5 day cycle"
+    "metrics016": "5 day cycle",
+    "title": "🌍 Location & Availability",
+    "description": "Based in Curitiba, available for national and international remote work",
+    "staticLocation": "📍 Static Location",
+    "googleMapsUnavailable": "Google Maps not available",
+    "configureApiKey": "(Configure VITE_GOOGLE_MAPS_API_KEY)",
+    "curitibaLocation": "Curitiba, Paraná - Brazil",
+    "coordinates": "📍 Coordinates: -25.4284, -49.2733",
+    "timezone": "⏰ GMT-3 (Brasilia Time)",
+    "contactButton": "Contact Me",
+    "brazilSouthRegion": "🇧🇷 Southern Brazil Region",
+    "remoteNational": "Remote National",
+    "remoteInternational": "Remote International",
+    "curitibaLocal": "On-site work",
+    "hybrid": "Hybrid",
+    "slogan": "Connecting Brazilian talents with global opportunities"
 }

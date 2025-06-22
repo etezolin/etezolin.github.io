@@ -202,5 +202,20 @@
     "metrics013": "2M+ avaliações",
     "metrics014": "85% ↓ tempo",
     "metrics015": "95% precisão",
-    "metrics016": "5 dias ciclo"
+    "metrics016": "5 dias ciclo",
+    "title": "🌍 Localização & Disponibilidade",
+    "description": "Baseado em Curitiba, disponível para trabalho remoto nacional e internacional",
+    "staticLocation": "📍 Localização Estática",
+    "googleMapsUnavailable": "Google Maps não disponível",
+    "configureApiKey": "(Configure VITE_GOOGLE_MAPS_API_KEY)",
+    "curitibaLocation": "Curitiba, Paraná - Brasil",
+    "coordinates": "📍 Coordenadas: -25.4284, -49.2733",
+    "timezone": "⏰ GMT-3 (Horário de Brasília)",
+    "contactButton": "Entrar em Contato",
+    "brazilSouthRegion": "🇧🇷 Região Sul do Brasil",
+    "remoteNational": "Remoto Nacional",
+    "remoteInternational": "Remoto Internacional",
+    "curitibaLocal": "Presencial",
+    "hybrid": "Híbrido",
+    "slogan": "Conectando talentos brasileiros com oportunidades globais"
 }

@@ -2,7 +2,7 @@ name: Deploy to Firebase Hosting
 on:
   push:
     branches:
-      - main # Ajuste para a sua branch principal se não for "main"
+      - main
 
 jobs:
   build_and_deploy:
@@ -19,6 +19,9 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          CI: false
         run: npm run build
 
       - name: Deploy to Firebase

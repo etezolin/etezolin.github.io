@@ -3,13 +3,13 @@ name: Deploy React App
 on:
   push:
     branches:
-      - main # Considerando que a branch principal seja main
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Necessário para fazer push para a branch
+      contents: write
 
     steps:
       - name: Checkout código
@@ -18,17 +18,20 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "23" # Ajustar para a versão do Node.js que está usando
+          node-version: "23"
 
       - name: Instalar dependências
         run: npm ci
 
       - name: Construir projeto
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          CI: false
         run: npm run build
 
       - name: Deploy para GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages # Publicando o site na branch gh-pages
-          folder: dist # Pasta onde está o build do projeto (pode ser 'build' dependendo da sua configuração)
-          clean: true # Limpa arquivos existentes na branch de destino
+          branch: gh-pages
+          folder: dist
+          clean: true

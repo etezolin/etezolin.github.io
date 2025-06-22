@@ -10,17 +10,22 @@ import { Box, Chip, Container, Typography, type Theme } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { motion } from "framer-motion";
 import type { FC, MouseEvent, ReactElement } from "react";
+import {
+  trackProfileConversion,
+  trackProfileTabInteraction,
+} from "../../firebase";
+import { useTypedTranslation } from "../../hooks/useTranslation";
 
 // Tipos TypeScript
 interface SkillGroupData {
-  title: string;
+  titleKey: string;
   icon: ReactElement;
   skills: string[];
   category: string;
 }
 
 interface SkillGroupProps {
-  title: string;
+  titleKey: string;
   icon: ReactElement;
   skills: string[];
   category: string;
@@ -30,20 +35,14 @@ interface SkillGroupProps {
 interface FormationData {
   id: string;
   icon: ReactElement;
-  title: string;
-  institution: string;
-  highlight: string;
-  description: string;
+  titleKey: string;
+  institutionKey: string;
+  highlightKey: string;
+  descriptionKey: string;
   skillGroups: SkillGroupData[];
   code: string;
-  quote?: string;
+  quoteKey?: string;
 }
-
-// ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
-import {
-  trackProfileConversion,
-  trackProfileTabInteraction,
-} from "../../firebase";
 
 // Componentes estilizados (simplificados)
 const EducationTimeline = styled(Box)(({ theme }) => ({
@@ -121,7 +120,9 @@ const SkillChip = styled(Chip)(({ theme }) => ({
 }));
 
 const Formation: FC = () => {
-  // ✅ Funções de analytics otimizadas
+  const { t } = useTypedTranslation();
+
+  // Funções de analytics otimizadas
   const handleClick = (type: string, data: string) => {
     trackProfileTabInteraction("formation", type, data);
   };
@@ -131,9 +132,9 @@ const Formation: FC = () => {
     trackProfileConversion("technical_interest", "formation");
   };
 
-  // ✅ Componente reutilizável para Skills com tipos corretos
+  // Componente reutilizável para Skills com tipos corretos
   const SkillGroup: FC<SkillGroupProps> = ({
-    title,
+    titleKey,
     icon,
     skills,
     category,
@@ -162,7 +163,7 @@ const Formation: FC = () => {
           color: "secondary.main",
         }}
       >
-        {icon} {title}
+        {icon} {t(titleKey as any)}
       </Typography>
       <Box>
         {skills.map((skill: string, idx: number) => (
@@ -182,25 +183,24 @@ const Formation: FC = () => {
     </Box>
   );
 
-  // ✅ Dados das formações (estrutura otimizada com tipos)
+  // Dados das formações (estrutura otimizada com tipos)
   const formations: FormationData[] = [
     {
       id: "systems_development",
       icon: <LaptopIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
-      title: "Análise e Desenvolvimento de Sistemas",
-      institution: "Centro Universitário OPET • Concluído",
-      highlight: "Competências Desenvolvidas",
-      description:
-        "Formação em desenvolvimento, arquitetura e metodologias ágeis.",
+      titleKey: "systemsDevelopmentTitle",
+      institutionKey: "systemsInstitution",
+      highlightKey: "competenciesDeveloped",
+      descriptionKey: "systemsDescription",
       skillGroups: [
         {
-          title: "Backend Development",
+          titleKey: "backendDevelopment",
           icon: <CodeIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [".NET", "Node", "Dapper", "Web APIs", "Microservices"],
           category: "backend",
         },
         {
-          title: "Frontend Development",
+          titleKey: "frontendDevelopment",
           icon: <LaptopIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [
             "React",
@@ -213,7 +213,7 @@ const Formation: FC = () => {
           category: "frontend",
         },
         {
-          title: "Database & Cloud",
+          titleKey: "databaseCloud",
           icon: <StorageIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [
             "SQL Server",
@@ -225,7 +225,7 @@ const Formation: FC = () => {
           category: "database",
         },
         {
-          title: "DevOps & Architecture",
+          titleKey: "devopsArchitecture",
           icon: <LoopIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [
             "CI/CD Pipelines",
@@ -241,39 +241,44 @@ const Formation: FC = () => {
     {
       id: "philosophy",
       icon: <SchoolIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
-      title: "Licenciatura em Filosofia",
-      institution:
-        "Pontifícia Universidade Católica do Paraná | PUCPR • Concluído",
-      highlight: "Diferencial Competitivo",
-      description:
-        "Formação única que proporciona visão sistêmica e pensamento crítico avançado.",
+      titleKey: "philosophyTitle",
+      institutionKey: "philosophyInstitution",
+      highlightKey: "competitiveDifferential",
+      descriptionKey: "philosophyDescription",
       skillGroups: [
         {
-          title: "Pensamento Estratégico",
+          titleKey: "strategicThinking",
           icon: <PsychologyIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [
-            "Análise Sistêmica",
-            "Pensamento Crítico",
-            "Resolução de Problemas",
-            "Tomada de Decisão",
+            t("skills001"),
+            t("skills002"),
+            t("skills003"),
+            t("skills004"),
+            // "Análise Sistêmica / Systemic Analysis",
+            // "Pensamento Crítico / Critical Thinking",
+            // "Resolução de Problemas / Problem Solving",
+            // "Tomada de Decisão / Decision Making",
           ],
           category: "strategic",
         },
         {
-          title: "Inovação & Ética",
+          titleKey: "innovationEthics",
           icon: <AutoAwesomeIcon sx={{ mr: 1, fontSize: 18 }} />,
           skills: [
-            "Ética Tecnológica",
-            "Inovação Responsável",
-            "Design Centrado no Usuário",
-            "Impacto Social",
+            t("skills005"),
+            t("skills006"),
+            t("skills007"),
+            t("skills008"),
+            // "Ética Tecnológica / Tech Ethics",
+            // "Inovação Responsável / Responsible Innovation",
+            // "Design Centrado no Usuário / User-Centered Design",
+            // "Impacto Social / Social Impact",
           ],
           category: "innovation",
         },
       ],
       code: ``,
-      quote:
-        "A formação filosófica me proporciona uma perspectiva única no desenvolvimento de software. Consigo conectar soluções técnicas complexas a necessidades humanas reais, criando produtos que não apenas funcionam, mas que fazem sentido.",
+      quoteKey: "philosophicalQuote",
     },
   ];
 
@@ -290,7 +295,7 @@ const Formation: FC = () => {
         viewport={{ once: true }}
       >
         <Typography variant="h2" sx={{ mb: 4, color: "primary.main" }}>
-          // Formação
+          {t("formationTitle")}
         </Typography>
 
         <EducationTimeline>
@@ -300,9 +305,7 @@ const Formation: FC = () => {
                 onClick={() =>
                   handleClick("timeline_marker_click", formation.id)
                 }
-              >
-                {/* {formation.icon} */}
-              </TimelineMarker>
+              />
               <TimelineContent
                 whileHover={{ scale: 1.01 }}
                 initial={{ opacity: 0, x: -20 }}
@@ -312,20 +315,20 @@ const Formation: FC = () => {
                 onClick={() =>
                   handleClick(
                     "timeline_item_click",
-                    `${formation.title}_${formation.institution}`
+                    `${formation.titleKey}_${formation.institutionKey}`
                   )
                 }
               >
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   {formation.icon}
-                  <Typography variant="h5">{formation.title}</Typography>
+                  <Typography variant="h5">{t(formation.titleKey as any)}</Typography>
                 </Box>
 
                 <Typography
                   variant="body2"
                   sx={{ mb: 2, color: "text.secondary" }}
                 >
-                  {formation.institution}
+                  {t(formation.institutionKey as any)}
                 </Typography>
 
                 <Box
@@ -354,7 +357,7 @@ const Formation: FC = () => {
                     e.stopPropagation();
                     handleClick(
                       "highlight_section_click",
-                      `${formation.id}_${formation.highlight}`
+                      `${formation.id}_${formation.highlightKey}`
                     );
                   }}
                 >
@@ -363,11 +366,11 @@ const Formation: FC = () => {
                       sx={{ color: "secondary.main", mr: 1, fontSize: 20 }}
                     />
                     <Typography variant="h6" sx={{ color: "secondary.main" }}>
-                      {formation.highlight}
+                      {t(formation.highlightKey as any)}
                     </Typography>
                   </Box>
                   <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-                    {formation.description}
+                    {t(formation.descriptionKey as any)}
                   </Typography>
                 </Box>
 
@@ -383,7 +386,7 @@ const Formation: FC = () => {
                   {formation.skillGroups.map((group, idx) => (
                     <SkillGroup
                       key={idx}
-                      title={group.title}
+                      titleKey={group.titleKey}
                       icon={group.icon}
                       skills={group.skills}
                       category={group.category}
@@ -392,7 +395,7 @@ const Formation: FC = () => {
                   ))}
                 </Box>
 
-                {formation.quote && (
+                {formation.quoteKey && (
                   <Box
                     sx={{
                       mt: 3,
@@ -420,7 +423,7 @@ const Formation: FC = () => {
                         textAlign: "center",
                       }}
                     >
-                      "{formation.quote}"
+                      "{t(formation.quoteKey as any)}"
                     </Typography>
                   </Box>
                 )}
@@ -455,6 +458,476 @@ const Formation: FC = () => {
 };
 
 export default Formation;
+
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------
+
+
+// import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+// import CodeIcon from "@mui/icons-material/Code";
+// import LaptopIcon from "@mui/icons-material/Laptop";
+// import LoopIcon from "@mui/icons-material/Loop";
+// import PsychologyIcon from "@mui/icons-material/Psychology";
+// import SchoolIcon from "@mui/icons-material/School";
+// import StorageIcon from "@mui/icons-material/Storage";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// import { Box, Chip, Container, Typography, type Theme } from "@mui/material";
+// import { styled } from "@mui/material/styles";
+// import { motion } from "framer-motion";
+// import type { FC, MouseEvent, ReactElement } from "react";
+
+// // Tipos TypeScript
+// interface SkillGroupData {
+//   title: string;
+//   icon: ReactElement;
+//   skills: string[];
+//   category: string;
+// }
+
+// interface SkillGroupProps {
+//   title: string;
+//   icon: ReactElement;
+//   skills: string[];
+//   category: string;
+//   education: string;
+// }
+
+// interface FormationData {
+//   id: string;
+//   icon: ReactElement;
+//   title: string;
+//   institution: string;
+//   highlight: string;
+//   description: string;
+//   skillGroups: SkillGroupData[];
+//   code: string;
+//   quote?: string;
+// }
+
+// // ✅ CORREÇÃO: Apenas as funções de analytics, sem o hook
+// import {
+//   trackProfileConversion,
+//   trackProfileTabInteraction,
+// } from "../../firebase";
+
+// // Componentes estilizados (simplificados)
+// const EducationTimeline = styled(Box)(({ theme }) => ({
+//   position: "relative",
+//   padding: theme.spacing(0, 0, 0, 4),
+//   "&:before": {
+//     content: '""',
+//     position: "absolute",
+//     left: "11px",
+//     top: 0,
+//     bottom: 0,
+//     width: "2px",
+//     background: `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//   },
+// }));
+
+// const TimelineItem = styled(Box)(({ theme }) => ({
+//   position: "relative",
+//   marginBottom: theme.spacing(6),
+//   "&:last-child": { marginBottom: 0 },
+// }));
+
+// const TimelineMarker = styled(Box)(({ theme }) => ({
+//   position: "absolute",
+//   left: "-27px",
+//   top: "4px",
+//   width: "20px",
+//   height: "20px",
+//   borderRadius: "50%",
+//   border: `2px solid ${theme.palette.secondary.main}`,
+//   background: "rgba(13, 33, 55, 0.9)",
+//   display: "flex",
+//   alignItems: "center",
+//   justifyContent: "center",
+//   zIndex: 2,
+//   cursor: "pointer",
+// }));
+
+// const TimelineContent = styled(motion.div)(({ theme }) => ({
+//   background: "rgba(13, 33, 55, 0.7)",
+//   backdropFilter: "blur(10px)",
+//   border: "1px solid rgba(255, 255, 255, 0.1)",
+//   boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+//   borderRadius: theme.spacing(1),
+//   padding: theme.spacing(3),
+//   marginBottom: theme.spacing(4),
+//   position: "relative",
+//   overflow: "hidden",
+//   cursor: "pointer",
+//   "&::before": {
+//     content: '""',
+//     position: "absolute",
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     height: "2px",
+//     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//     opacity: 0.7,
+//   },
+// }));
+
+// const SkillChip = styled(Chip)(({ theme }) => ({
+//   margin: theme.spacing(0.5),
+//   backgroundColor: "rgba(0, 229, 255, 0.1)",
+//   color: theme.palette.text.primary,
+//   border: "1px solid rgba(0, 229, 255, 0.3)",
+//   fontFamily: '"Roboto Mono", monospace',
+//   fontSize: "0.8rem",
+//   cursor: "pointer",
+//   transition: "all 0.3s ease",
+//   "&:hover": {
+//     backgroundColor: "rgba(0, 229, 255, 0.2)",
+//     transform: "scale(1.05)",
+//   },
+// }));
+
+// const Formation: FC = () => {
+//   // ✅ Funções de analytics otimizadas
+//   const handleClick = (type: string, data: string) => {
+//     trackProfileTabInteraction("formation", type, data);
+//   };
+
+//   const handleCodeClick = (education: string) => {
+//     handleClick("code_snippet_click", education);
+//     trackProfileConversion("technical_interest", "formation");
+//   };
+
+//   // ✅ Componente reutilizável para Skills com tipos corretos
+//   const SkillGroup: FC<SkillGroupProps> = ({
+//     title,
+//     icon,
+//     skills,
+//     category,
+//     education,
+//   }) => (
+//     <Box
+//       sx={{
+//         background: "rgba(0, 0, 0, 0.2)",
+//         borderRadius: 1,
+//         p: 2,
+//         flex: "1 1 calc(50% - 8px)",
+//         minWidth: "280px",
+//         cursor: "pointer",
+//         "&:hover": { background: "rgba(0, 0, 0, 0.3)" },
+//       }}
+//       onClick={() =>
+//         handleClick("skill_category_click", `${category}_${education}`)
+//       }
+//     >
+//       <Typography
+//         sx={{
+//           display: "flex",
+//           alignItems: "center",
+//           mb: 1.5,
+//           fontWeight: "bold",
+//           color: "secondary.main",
+//         }}
+//       >
+//         {icon} {title}
+//       </Typography>
+//       <Box>
+//         {skills.map((skill: string, idx: number) => (
+//           <SkillChip
+//             key={idx}
+//             label={skill}
+//             onClick={(e: MouseEvent) => {
+//               e.stopPropagation();
+//               handleClick(
+//                 "skill_chip_click",
+//                 `${skill}_${category}_${education}`
+//               );
+//             }}
+//           />
+//         ))}
+//       </Box>
+//     </Box>
+//   );
+
+//   // ✅ Dados das formações (estrutura otimizada com tipos)
+//   const formations: FormationData[] = [
+//     {
+//       id: "systems_development",
+//       icon: <LaptopIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
+//       title: "Análise e Desenvolvimento de Sistemas",
+//       institution: "Centro Universitário OPET • Concluído",
+//       highlight: "Competências Desenvolvidas",
+//       description:
+//         "Formação em desenvolvimento, arquitetura e metodologias ágeis.",
+//       skillGroups: [
+//         {
+//           title: "Backend Development",
+//           icon: <CodeIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [".NET", "Node", "Dapper", "Web APIs", "Microservices"],
+//           category: "backend",
+//         },
+//         {
+//           title: "Frontend Development",
+//           icon: <LaptopIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [
+//             "React",
+//             "TypeScript",
+//             "Material UI",
+//             "Tailwind CSS",
+//             "Next.js",
+//             "Responsive Design",
+//           ],
+//           category: "frontend",
+//         },
+//         {
+//           title: "Database & Cloud",
+//           icon: <StorageIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [
+//             "SQL Server",
+//             "PostgreSQL",
+//             "MongoDB",
+//             "Google Cloud Platform",
+//             "Docker",
+//           ],
+//           category: "database",
+//         },
+//         {
+//           title: "DevOps & Architecture",
+//           icon: <LoopIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [
+//             "CI/CD Pipelines",
+//             "System Design",
+//             "Clean Architecture",
+//             "SOLID Principles",
+//           ],
+//           category: "devops",
+//         },
+//       ],
+//       code: ``,
+//     },
+//     {
+//       id: "philosophy",
+//       icon: <SchoolIcon sx={{ fontSize: 30, color: "secondary.main", marginRight: 2 }} />,
+//       title: "Licenciatura em Filosofia",
+//       institution:
+//         "Pontifícia Universidade Católica do Paraná | PUCPR • Concluído",
+//       highlight: "Diferencial Competitivo",
+//       description:
+//         "Formação única que proporciona visão sistêmica e pensamento crítico avançado.",
+//       skillGroups: [
+//         {
+//           title: "Pensamento Estratégico",
+//           icon: <PsychologyIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [
+//             "Análise Sistêmica",
+//             "Pensamento Crítico",
+//             "Resolução de Problemas",
+//             "Tomada de Decisão",
+//           ],
+//           category: "strategic",
+//         },
+//         {
+//           title: "Inovação & Ética",
+//           icon: <AutoAwesomeIcon sx={{ mr: 1, fontSize: 18 }} />,
+//           skills: [
+//             "Ética Tecnológica",
+//             "Inovação Responsável",
+//             "Design Centrado no Usuário",
+//             "Impacto Social",
+//           ],
+//           category: "innovation",
+//         },
+//       ],
+//       code: ``,
+//       quote:
+//         "A formação filosófica me proporciona uma perspectiva única no desenvolvimento de software. Consigo conectar soluções técnicas complexas a necessidades humanas reais, criando produtos que não apenas funcionam, mas que fazem sentido.",
+//     },
+//   ];
+
+//   return (
+//     <Container
+//       component="section"
+//       id="formation"
+//       sx={{ minHeight: "100vh", py: 8 }}
+//     >
+//       <motion.div
+//         initial={{ opacity: 0, y: 20 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.8 }}
+//         viewport={{ once: true }}
+//       >
+//         <Typography variant="h2" sx={{ mb: 4, color: "primary.main" }}>
+//           // Formação
+//         </Typography>
+
+//         <EducationTimeline>
+//           {formations.map((formation, index) => (
+//             <TimelineItem key={formation.id}>
+//               <TimelineMarker
+//                 onClick={() =>
+//                   handleClick("timeline_marker_click", formation.id)
+//                 }
+//               >
+//                 {/* {formation.icon} */}
+//               </TimelineMarker>
+//               <TimelineContent
+//                 whileHover={{ scale: 1.01 }}
+//                 initial={{ opacity: 0, x: -20 }}
+//                 whileInView={{ opacity: 1, x: 0 }}
+//                 transition={{ duration: 0.5, delay: index * 0.2 }}
+//                 viewport={{ once: true }}
+//                 onClick={() =>
+//                   handleClick(
+//                     "timeline_item_click",
+//                     `${formation.title}_${formation.institution}`
+//                   )
+//                 }
+//               >
+//                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+//                   {formation.icon}
+//                   <Typography variant="h5">{formation.title}</Typography>
+//                 </Box>
+
+//                 <Typography
+//                   variant="body2"
+//                   sx={{ mb: 2, color: "text.secondary" }}
+//                 >
+//                   {formation.institution}
+//                 </Typography>
+
+//                 <Box
+//                   sx={{
+//                     background:
+//                       "linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(2, 136, 209, 0.1))",
+//                     border: "1px solid rgba(0, 229, 255, 0.3)",
+//                     borderRadius: 1,
+//                     p: 2,
+//                     mt: 2,
+//                     position: "relative",
+//                     cursor: "pointer",
+//                     "&::before": {
+//                       content: '""',
+//                       position: "absolute",
+//                       top: 0,
+//                       left: 0,
+//                       width: "4px",
+//                       height: "100%",
+//                       background: (theme: Theme) =>
+//                         `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+//                       borderRadius: "2px 0 0 2px",
+//                     },
+//                   }}
+//                   onClick={(e: MouseEvent) => {
+//                     e.stopPropagation();
+//                     handleClick(
+//                       "highlight_section_click",
+//                       `${formation.id}_${formation.highlight}`
+//                     );
+//                   }}
+//                 >
+//                   <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+//                     <TrendingUpIcon
+//                       sx={{ color: "secondary.main", mr: 1, fontSize: 20 }}
+//                     />
+//                     <Typography variant="h6" sx={{ color: "secondary.main" }}>
+//                       {formation.highlight}
+//                     </Typography>
+//                   </Box>
+//                   <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
+//                     {formation.description}
+//                   </Typography>
+//                 </Box>
+
+//                 <Box
+//                   sx={{
+//                     display: "flex",
+//                     flexWrap: "wrap",
+//                     gap: 2,
+//                     mt: 2,
+//                     mb: 2,
+//                   }}
+//                 >
+//                   {formation.skillGroups.map((group, idx) => (
+//                     <SkillGroup
+//                       key={idx}
+//                       title={group.title}
+//                       icon={group.icon}
+//                       skills={group.skills}
+//                       category={group.category}
+//                       education={formation.id}
+//                     />
+//                   ))}
+//                 </Box>
+
+//                 {formation.quote && (
+//                   <Box
+//                     sx={{
+//                       mt: 3,
+//                       p: 3,
+//                       background:
+//                         "linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(2, 136, 209, 0.05))",
+//                       borderRadius: 2,
+//                       border: "1px solid rgba(0, 229, 255, 0.2)",
+//                       cursor: "pointer",
+//                     }}
+//                     onClick={(e: MouseEvent) => {
+//                       e.stopPropagation();
+//                       handleClick(
+//                         "philosophical_quote_click",
+//                         "unique_perspective"
+//                       );
+//                     }}
+//                   >
+//                     <Typography
+//                       variant="body1"
+//                       sx={{
+//                         fontStyle: "italic",
+//                         color: "#f0f0f0",
+//                         lineHeight: 1.7,
+//                         textAlign: "center",
+//                       }}
+//                     >
+//                       "{formation.quote}"
+//                     </Typography>
+//                   </Box>
+//                 )}
+
+//                 <Box
+//                   sx={{
+//                     fontFamily: '"Roboto Mono", monospace',
+//                     fontSize: "0.9rem",
+//                     lineHeight: 1.6,
+//                     backgroundColor: "rgba(0, 0, 0, 0.2)",
+//                     p: 2,
+//                     borderRadius: 1,
+//                     mt: 2,
+//                     cursor: "pointer",
+//                   }}
+//                   onClick={(e: MouseEvent) => {
+//                     e.stopPropagation();
+//                     handleCodeClick(formation.id);
+//                   }}
+//                 >
+//                   <pre style={{ margin: 0, color: "#f5f5f5" }}>
+//                     {formation.code}
+//                   </pre>
+//                 </Box>
+//               </TimelineContent>
+//             </TimelineItem>
+//           ))}
+//         </EducationTimeline>
+//       </motion.div>
+//     </Container>
+//   );
+// };
+
+// export default Formation;
+
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+
 
 // import type { FC } from "react";
 // import { Box, Container, Typography, Chip } from "@mui/material";

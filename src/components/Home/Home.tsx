@@ -710,7 +710,7 @@ const Home: FC<HomeProps> = ({
                   }}
                   onClick={() => handleContactClick("phone", () => window.open("tel:41998335860"))}
                 >
-                  "41 99833 5860"
+                  "+55 41 99833-5860"
                 </span>;<br />
                 <HighlightText>const</HighlightText> email ={isMobile ? <><br />&nbsp;&nbsp;</> : ' '}<span
                   style={{

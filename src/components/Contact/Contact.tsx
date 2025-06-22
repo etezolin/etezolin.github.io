@@ -515,7 +515,7 @@ const Contact: FC = () => {
                       },
                     }}
                   >
-                    (41) 99833-5860
+                    +55 41 99833-5860
                   </Link>
                 </Box>
               </ContactInfo>

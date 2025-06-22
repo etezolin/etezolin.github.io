@@ -1,8 +1,7 @@
-// etezolin-portfolio/src/components/shared/ScrollToTop.tsx
-import { useState, useEffect } from 'react';
-import type { FC } from 'react';
-import { Fab, Zoom } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Fab, Zoom } from '@mui/material';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 
 export const ScrollToTop: FC = () => {
   const [isVisible, setIsVisible] = useState(false);

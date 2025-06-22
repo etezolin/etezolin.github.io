@@ -11,7 +11,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 // Styled component para reduzir a altura do Select
-const CompactFormControl = styled(FormControl)(({ theme }) => ({
+const CompactFormControl = styled(FormControl)(() => ({
     '& .MuiInputBase-root': {
         height: '36px',
         fontSize: '0.875rem',
@@ -30,7 +30,7 @@ const CompactFormControl = styled(FormControl)(({ theme }) => ({
 }));
 
 const LanguageSelector: React.FC = () => {
-    const { i18n, t } = useTranslation();
+    const { i18n } = useTranslation();
 
     // Definir inglês como padrão se não houver idioma salvo
     useEffect(() => {

@@ -1,25 +1,46 @@
-import EmailIcon from "@mui/icons-material/Email";
-import HomeIcon from "@mui/icons-material/Home";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import WorkIcon from "@mui/icons-material/Work";
-import { Avatar, Box, Button, Card, Container, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { GoogleMap, InfoWindow, LoadScript, Marker } from '@react-google-maps/api';
-import { motion } from "framer-motion";
-import React, { type FC, useState } from "react";
-import { BiCloud } from "react-icons/bi";
-import { DiMsqlServer } from "react-icons/di";
-import { FaGitAlt, FaGithub, FaNode } from "react-icons/fa";
-import { SiApachekafka, SiDocker, SiDotnet, SiFirebase, SiJavascript, SiMui, SiPostgresql, SiRabbitmq, SiReact, SiTailwindcss, SiTypescript } from "react-icons/si";
-import { TbBrandCSharp, TbBrandMongodb, TbSql } from "react-icons/tb";
-import foto from "../../assets/foto.png";
-import { trackProfileConversion, trackProfileTabInteraction } from "../../firebase";
-import { useTypedTranslation } from "../../hooks/useTranslation";
+import EmailIcon from '@mui/icons-material/Email';
+import HomeIcon from '@mui/icons-material/Home';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import WorkIcon from '@mui/icons-material/Work';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Container,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { GoogleMap, InfoWindow, LoadScript, MarkerF } from '@react-google-maps/api';
+import { motion } from 'framer-motion';
+import React, { type FC, useState } from 'react';
+import { BiCloud } from 'react-icons/bi';
+import { DiMsqlServer } from 'react-icons/di';
+import { FaGitAlt, FaGithub, FaNode } from 'react-icons/fa';
+import {
+  SiApachekafka,
+  SiDocker,
+  SiDotnet,
+  SiFirebase,
+  SiJavascript,
+  SiMui,
+  SiPostgresql,
+  SiRabbitmq,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+} from 'react-icons/si';
+import { TbBrandCSharp, TbBrandMongodb, TbSql } from 'react-icons/tb';
+import foto from '../../assets/foto.png';
+import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
+import { useTypedTranslation } from '../../hooks/useTranslation';
 
 // Styled Components Melhorados para Responsividade
 const CodeText = styled(Typography)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
-  color: "#f5f5f5",
+  color: '#f5f5f5',
   opacity: 0.8,
   fontSize: '0.95rem',
   [theme.breakpoints.down('sm')]: {
@@ -27,70 +48,70 @@ const CodeText = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down('xs')]: {
     fontSize: '0.8rem',
-  }
+  },
 }));
 
-const HighlightText = styled("span")(({ theme }) => ({
+const HighlightText = styled('span')(({ theme }) => ({
   color: theme.palette.primary.main,
   fontWeight: 500,
 }));
 
-const HighlightTextV2 = styled("span")(({ theme }) => ({
+const HighlightTextV2 = styled('span')(({ theme }) => ({
   color: theme.palette.secondary.main,
 }));
 
 const GradientText = styled(Typography)(({ theme }) => ({
   backgroundImage: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-  backgroundClip: "text",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
   fontWeight: 700,
-  letterSpacing: "-0.5px",
+  letterSpacing: '-0.5px',
   [theme.breakpoints.down('sm')]: {
-    letterSpacing: "-0.3px",
-  }
+    letterSpacing: '-0.3px',
+  },
 }));
 
 const GlassCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
-  background: "rgba(13, 33, 55, 0.7)",
-  backdropFilter: "blur(10px)",
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-  transition: "all 0.3s ease",
-  overflow: "hidden",
-  position: "relative",
+  background: 'rgba(13, 33, 55, 0.7)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+  transition: 'all 0.3s ease',
+  overflow: 'hidden',
+  position: 'relative',
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(2),
   },
   [theme.breakpoints.down('xs')]: {
     padding: theme.spacing(1.5),
   },
-  "&::before": {
+  '&::before': {
     content: '""',
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: "2px",
+    height: '2px',
     background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
     opacity: 0.7,
   },
 }));
 
 const TechBadge = styled(motion.div)(({ theme }) => ({
-  backgroundColor: "rgba(13, 33, 55, 0.9)",
+  backgroundColor: 'rgba(13, 33, 55, 0.9)',
   borderRadius: theme.spacing(1),
   padding: theme.spacing(1, 2),
   margin: theme.spacing(0.5),
   fontFamily: '"Roboto Mono", monospace',
-  border: "1px solid rgba(255, 255, 255, 0.1)",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   gap: theme.spacing(1),
-  cursor: "pointer",
+  cursor: 'pointer',
   minWidth: 120,
   maxWidth: 160,
   flex: '1 1 auto',
@@ -106,7 +127,7 @@ const TechBadge = styled(motion.div)(({ theme }) => ({
     minWidth: 90,
     maxWidth: 120,
     gap: theme.spacing(0.5),
-  }
+  },
 }));
 
 const BaseHeader = styled(Typography)(({ theme }) => ({
@@ -114,37 +135,37 @@ const BaseHeader = styled(Typography)(({ theme }) => ({
   fontWeight: 600,
   [theme.breakpoints.down('sm')]: {
     fontSize: '0.95rem',
-  }
+  },
 }));
 
 const TechStackHeader = styled(BaseHeader)(({ theme }) => ({
   marginBottom: 25,
   opacity: 0.8,
-  fontSize: "1.05rem",
-  borderLeft: "3px solid #00E5FF",
+  fontSize: '1.05rem',
+  borderLeft: '3px solid #00E5FF',
   paddingLeft: 8,
-  display: "inline-block",
-  color: "#f5f5f5",
+  display: 'inline-block',
+  color: '#f5f5f5',
   [theme.breakpoints.down('sm')]: {
     marginBottom: 20,
-    fontSize: "1rem",
+    fontSize: '1rem',
     paddingLeft: 6,
-  }
+  },
 }));
 
 const CategoryHeader = styled(BaseHeader)(({ theme }) => ({
   marginBottom: 5,
   marginTop: 15,
   opacity: 0.9,
-  fontSize: "0.9rem",
-  color: "#00E5FF",
-  textTransform: "uppercase",
-  letterSpacing: "1px",
+  fontSize: '0.9rem',
+  color: '#00E5FF',
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
   [theme.breakpoints.down('sm')]: {
-    fontSize: "0.85rem",
+    fontSize: '0.85rem',
     marginTop: 12,
-    letterSpacing: "0.8px",
-  }
+    letterSpacing: '0.8px',
+  },
 }));
 
 const MapContainer = styled(Card)(({ theme }) => ({
@@ -246,33 +267,33 @@ const LocationChip = styled(Box)(({ theme }) => ({
     padding: theme.spacing(0.3, 1),
     fontSize: '0.65rem',
     margin: theme.spacing(0.15),
-  }
+  },
 }));
 
 const ContactButton = styled(Button)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
-  fontSize: "0.9rem",
-  textTransform: "none",
+  fontSize: '0.9rem',
+  textTransform: 'none',
   borderRadius: theme.spacing(3),
   padding: theme.spacing(1.5, 3),
   marginTop: theme.spacing(2),
   background: `linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #e55039 100%)`,
-  color: "#ffffff",
-  border: "none",
-  boxShadow: "0 4px 15px rgba(238, 90, 36, 0.3)",
+  color: '#ffffff',
+  border: 'none',
+  boxShadow: '0 4px 15px rgba(238, 90, 36, 0.3)',
   [theme.breakpoints.down('sm')]: {
-    fontSize: "0.85rem",
+    fontSize: '0.85rem',
     padding: theme.spacing(1.2, 2.5),
     marginTop: theme.spacing(1.5),
   },
   [theme.breakpoints.down('xs')]: {
-    fontSize: "0.8rem",
+    fontSize: '0.8rem',
     padding: theme.spacing(1, 2),
     marginTop: theme.spacing(1),
   },
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(238, 90, 36, 0.4)",
+  '&:hover': {
+    transform: 'translateY(-2px)',
+    boxShadow: '0 8px 25px rgba(238, 90, 36, 0.4)',
     background: `linear-gradient(135deg, #ff7675 0%, #e84393 50%, #fd79a8 100%)`,
   },
 }));
@@ -293,7 +314,7 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = ({
-  googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
+  googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
 }) => {
   const theme = useTheme();
   const { t } = useTypedTranslation();
@@ -307,94 +328,104 @@ const Home: FC<HomeProps> = ({
 
   // Event Handlers Consolidados
   const handleTrack = (action: string, label: string, extra?: string) => {
-    trackProfileTabInteraction("home", action, label);
-    if (extra) trackProfileConversion(extra, "home");
+    trackProfileTabInteraction('home', action, label);
+    if (extra) trackProfileConversion(extra, 'home');
   };
 
   const handleContactClick = (method: string, action: () => void) => {
-    handleTrack("contact_click", method, `${method}_contact`);
+    handleTrack('contact_click', method, `${method}_contact`);
     action();
   };
 
   const handleSocialClick = (platform: string, url: string) => {
-    handleTrack("social_link_click", platform, "social_visit");
-    window.open(url, "_blank", "noopener noreferrer");
+    handleTrack('social_link_click', platform, 'social_visit');
+    window.open(url, '_blank', 'noopener noreferrer');
   };
 
   const scrollToContact = () => {
-    handleTrack("map_contact_button", "scroll_to_contact");
+    handleTrack('map_contact_button', 'scroll_to_contact');
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Tech Stack Data Consolidado
   const techCategories = {
     backend: [
-      { name: "C#", color: "#9B4F96", icon: TbBrandCSharp },
-      { name: ".NET", color: "#94d2bd", icon: SiDotnet },
-      { name: "Node", color: "#ffd166", icon: FaNode },
-      { name: "RabbitMQ", color: "#eae2b7", icon: SiRabbitmq },
-      { name: "Apache Kafka", color: "#adb5bd", icon: SiApachekafka },
+      { name: 'C#', color: '#9B4F96', icon: TbBrandCSharp },
+      { name: '.NET', color: '#94d2bd', icon: SiDotnet },
+      { name: 'Node', color: '#ffd166', icon: FaNode },
+      { name: 'RabbitMQ', color: '#eae2b7', icon: SiRabbitmq },
+      { name: 'Apache Kafka', color: '#adb5bd', icon: SiApachekafka },
     ],
     frontend: [
-      { name: "JavaScript", color: "#F7DF1E", icon: SiJavascript },
-      { name: "React", color: "#61DAFB", icon: SiReact },
-      { name: "TypeScript", color: "#007ACC", icon: SiTypescript },
-      { name: "MaterialUI", color: "#0081CB", icon: SiMui },
-      { name: "Tailwind CSS", color: "#6668e9", icon: SiTailwindcss },
+      { name: 'JavaScript', color: '#F7DF1E', icon: SiJavascript },
+      { name: 'React', color: '#61DAFB', icon: SiReact },
+      { name: 'TypeScript', color: '#007ACC', icon: SiTypescript },
+      { name: 'MaterialUI', color: '#0081CB', icon: SiMui },
+      { name: 'Tailwind CSS', color: '#6668e9', icon: SiTailwindcss },
     ],
     database: [
-      { name: "SQL", color: "#4479A1", icon: TbSql },
-      { name: "Firebase", color: "#c49d31", icon: SiFirebase },
-      { name: "SQLServer", color: "#fff", icon: DiMsqlServer },
-      { name: "PostgreSQL", color: "#48cae4", icon: SiPostgresql },
-      { name: "MongoDB", color: "#adc178", icon: TbBrandMongodb },
+      { name: 'SQL', color: '#4479A1', icon: TbSql },
+      { name: 'Firebase', color: '#c49d31', icon: SiFirebase },
+      { name: 'SQLServer', color: '#fff', icon: DiMsqlServer },
+      { name: 'PostgreSQL', color: '#48cae4', icon: SiPostgresql },
+      { name: 'MongoDB', color: '#adc178', icon: TbBrandMongodb },
     ],
     cloud: [
-      { name: "Google Cloud", color: "#a14744", icon: BiCloud },
-      { name: "Docker", color: "#2496ED", icon: SiDocker },
-      { name: "Github", color: "#44a149", icon: FaGithub },
-      { name: "Git Actions", color: "#31c493", icon: FaGitAlt },
-      { name: "Cloud Build", color: "#fb8500", icon: BiCloud },
+      { name: 'Google Cloud', color: '#a14744', icon: BiCloud },
+      { name: 'Docker', color: '#2496ED', icon: SiDocker },
+      { name: 'Github', color: '#44a149', icon: FaGithub },
+      { name: 'Git Actions', color: '#31c493', icon: FaGitAlt },
+      { name: 'Cloud Build', color: '#fb8500', icon: BiCloud },
     ],
   };
 
-  const renderTechSection = (categoryKey: string, techs: Array<{ name: string, color: string, icon: any }>) => (
+  const renderTechSection = (
+    categoryKey: 'backend' | 'frontend' | 'database' | 'cloud',
+    techs: Array<{ name: string; color: string; icon: React.ComponentType }>
+  ) => (
     <Box key={categoryKey} sx={{ mb: { xs: 2, sm: 3 } }}>
-      <CategoryHeader>{t(categoryKey as any)}</CategoryHeader>
-      <Box sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: { xs: "4px", sm: "6px", md: "8px" },
-        justifyContent: { xs: 'center', sm: 'flex-start' }
-      }}>
+      <CategoryHeader>{t(categoryKey)}</CategoryHeader>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: { xs: '4px', sm: '6px', md: '8px' },
+          justifyContent: { xs: 'center', sm: 'flex-start' },
+        }}
+      >
         {techs.map((item) => (
           <motion.div
             key={item.name}
             variants={itemVariants}
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)", y: -5 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)', y: -5 }}
             whileTap={{ scale: 0.95 }}
           >
             <TechBadge
-              style={{ borderLeft: `3px solid ${item.color}`, justifyContent: "left" }}
-              onClick={() => handleTrack("tech_badge_click", item.name)}
-              onMouseEnter={() => handleTrack("tech_badge_hover", item.name)}
+              style={{ borderLeft: `3px solid ${item.color}`, justifyContent: 'left' }}
+              onClick={() => handleTrack('tech_badge_click', item.name)}
+              onMouseEnter={() => handleTrack('tech_badge_hover', item.name)}
             >
-              <Box component="span" sx={{
-                color: item.color,
-                display: "flex",
-                alignItems: "center",
-                fontSize: { xs: "0.85rem", sm: "0.9rem", md: "1rem" }
-              }}>
+              <Box
+                component="span"
+                sx={{
+                  color: item.color,
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+                }}
+              >
                 {React.createElement(item.icon)}
               </Box>
-              <Typography sx={{
-                color: "white",
-                fontSize: { xs: 10, sm: 11, md: 11.5 },
-                fontWeight: 500,
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-              }}>
+              <Typography
+                sx={{
+                  color: 'white',
+                  fontSize: { xs: 10, sm: 11, md: 11.5 },
+                  fontWeight: 500,
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
                 {item.name}
               </Typography>
             </TechBadge>
@@ -408,16 +439,24 @@ const Home: FC<HomeProps> = ({
     const mapHeight = isMobile ? 280 : isTablet ? 320 : 350;
 
     const modernMapStyles = [
-      { "featureType": "all", "elementType": "geometry", "stylers": [{ "color": "#0a1929" }] },
-      { "featureType": "all", "elementType": "labels.text.fill", "stylers": [{ "color": "#00e5ff" }] },
-      { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [{ "color": "#0a1929" }, { "weight": 2 }] },
-      { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#0d47a1" }] },
-      { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#4fc3f7" }] },
-      { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#1a237e" }] },
-      { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "color": "#3f51b5" }] },
-      { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#0f1419" }] },
-      { "featureType": "poi", "elementType": "geometry", "stylers": [{ "color": "#1565c0" }] },
-      { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [{ "color": "#00e5ff" }, { "weight": 1 }] },
+      { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#0a1929' }] },
+      { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#00e5ff' }] },
+      {
+        featureType: 'all',
+        elementType: 'labels.text.stroke',
+        stylers: [{ color: '#0a1929' }, { weight: 2 }],
+      },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d47a1' }] },
+      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4fc3f7' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#1a237e' }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3f51b5' }] },
+      { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#0f1419' }] },
+      { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#1565c0' }] },
+      {
+        featureType: 'administrative',
+        elementType: 'geometry.stroke',
+        stylers: [{ color: '#00e5ff' }, { weight: 1 }],
+      },
     ];
 
     const mapOptions: google.maps.MapOptions = {
@@ -435,72 +474,91 @@ const Home: FC<HomeProps> = ({
 
     if (!googleMapsApiKey || googleMapsApiKey.length <= 10) {
       return (
-        <Box sx={{
-          height: mapHeight,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: '2px dashed rgba(0, 229, 255, 0.3)',
-          borderRadius: 2,
-          backgroundColor: 'rgba(0, 229, 255, 0.05)',
-          padding: { xs: 2, sm: 3 },
-          position: 'relative',
-          zIndex: 1,
-        }}>
-          <Typography variant="h6" sx={{
-            color: 'secondary.main',
-            mb: 2,
-            fontSize: { xs: '1rem', sm: '1.25rem' },
-            textAlign: 'center'
-          }}>
-            {t("staticLocation")}
-          </Typography>
-          <Typography variant="body2" sx={{
-            color: 'text.secondary',
-            textAlign: 'center',
-            mb: 3,
-            fontSize: { xs: '0.8rem', sm: '0.875rem' }
-          }}>
-            {t("googleMapsUnavailable")}
-          </Typography>
-          <Box sx={{
-            p: { xs: 2, sm: 3 },
-            textAlign: 'center',
-            border: '1px solid rgba(0, 229, 255, 0.2)',
+        <Box
+          sx={{
+            height: mapHeight,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '2px dashed rgba(0, 229, 255, 0.3)',
             borderRadius: 2,
-            backgroundColor: 'rgba(13, 33, 55, 0.3)',
-            width: '100%',
-            maxWidth: 400
-          }}>
-            <Typography variant="h6" sx={{
+            backgroundColor: 'rgba(0, 229, 255, 0.05)',
+            padding: { xs: 2, sm: 3 },
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
               color: 'secondary.main',
               mb: 2,
-              fontSize: { xs: '1rem', sm: '1.25rem' }
-            }}>
-              {t("curitibaLocation")}
-            </Typography>
-            <Typography variant="body2" sx={{
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              textAlign: 'center',
+            }}
+          >
+            {t('staticLocation')}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
               color: 'text.secondary',
-              mb: 1,
-              fontSize: { xs: '0.75rem', sm: '0.875rem' }
-            }}>
-              {t("coordinates")}
+              textAlign: 'center',
+              mb: 3,
+              fontSize: { xs: '0.8rem', sm: '0.875rem' },
+            }}
+          >
+            {t('googleMapsUnavailable')}
+          </Typography>
+          <Box
+            sx={{
+              p: { xs: 2, sm: 3 },
+              textAlign: 'center',
+              border: '1px solid rgba(0, 229, 255, 0.2)',
+              borderRadius: 2,
+              backgroundColor: 'rgba(13, 33, 55, 0.3)',
+              width: '100%',
+              maxWidth: 400,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                color: 'secondary.main',
+                mb: 2,
+                fontSize: { xs: '1rem', sm: '1.25rem' },
+              }}
+            >
+              {t('curitibaLocation')}
             </Typography>
-            <Typography variant="body2" sx={{
-              color: 'text.secondary',
-              mb: 2,
-              fontSize: { xs: '0.75rem', sm: '0.875rem' }
-            }}>
-              {t("timezone")}
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
+                mb: 1,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+              }}
+            >
+              {t('coordinates')}
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
+                mb: 2,
+                fontSize: { xs: '0.75rem', sm: '0.875rem' },
+              }}
+            >
+              {t('timezone')}
             </Typography>
             <ContactButton
               onClick={scrollToContact}
               startIcon={<EmailIcon />}
               fullWidth={isMobile}
-              size={isMobile ? "small" : "medium"}
+              size={isMobile ? 'small' : 'medium'}
             >
-              {t("contactButton")}
+              {t('contactButton')}
             </ContactButton>
           </Box>
         </Box>
@@ -508,29 +566,30 @@ const Home: FC<HomeProps> = ({
     }
 
     return (
-      <Box sx={{
-        width: '100%',
-        height: mapHeight,
-        borderRadius: 1.5,
-        overflow: 'hidden',
-        border: '2px solid rgba(0, 229, 255, 0.3)',
-        boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3)',
-        position: 'relative',
-        zIndex: 1,
-      }}>
+      <Box
+        sx={{
+          width: '100%',
+          height: mapHeight,
+          borderRadius: 1.5,
+          overflow: 'hidden',
+          border: '2px solid rgba(0, 229, 255, 0.3)',
+          boxShadow: '0 8px 25px rgba(0, 0, 0, 0.3)',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
-          <GoogleMap
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-            options={mapOptions}
-          >
-            <Marker
+          <GoogleMap mapContainerStyle={{ width: '100%', height: '100%' }} options={mapOptions}>
+            <MarkerF
               position={curitibaPosition}
               onClick={() => {
                 setIsInfoWindowOpen(true);
-                handleTrack("map_interaction", "curitiba_marker");
+                handleTrack('map_interaction', 'curitiba_marker');
               }}
               icon={{
-                url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                url:
+                  'data:image/svg+xml;charset=UTF-8,' +
+                  encodeURIComponent(`
                   <svg width="${isMobile ? 35 : 40}" height="${isMobile ? 35 : 40}" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <radialGradient id="grad" cx="50%" cy="50%" r="50%">
@@ -550,12 +609,20 @@ const Home: FC<HomeProps> = ({
                     <circle cx="20" cy="20" r="3" fill="#00e5ff"/>
                   </svg>
                 `),
-                scaledSize: typeof window !== 'undefined' && window.google ?
-                  new window.google.maps.Size(isMobile ? 35 : 40, isMobile ? 35 : 40) : undefined,
-                anchor: typeof window !== 'undefined' && window.google ?
-                  new window.google.maps.Point(isMobile ? 17.5 : 20, isMobile ? 17.5 : 20) : undefined,
+                scaledSize:
+                  typeof window !== 'undefined' && window.google
+                    ? new window.google.maps.Size(isMobile ? 35 : 40, isMobile ? 35 : 40)
+                    : undefined,
+                anchor:
+                  typeof window !== 'undefined' && window.google
+                    ? new window.google.maps.Point(isMobile ? 17.5 : 20, isMobile ? 17.5 : 20)
+                    : undefined,
               }}
-              animation={typeof window !== 'undefined' && window.google ? window.google.maps.Animation.DROP : undefined}
+              animation={
+                typeof window !== 'undefined' && window.google
+                  ? window.google.maps.Animation.DROP
+                  : undefined
+              }
             />
 
             {isInfoWindowOpen && (
@@ -563,39 +630,51 @@ const Home: FC<HomeProps> = ({
                 position={curitibaPosition}
                 onCloseClick={() => setIsInfoWindowOpen(false)}
                 options={{
-                  pixelOffset: typeof window !== 'undefined' && window.google ?
-                    new window.google.maps.Size(0, isMobile ? -35 : -40) : undefined
+                  pixelOffset:
+                    typeof window !== 'undefined' && window.google
+                      ? new window.google.maps.Size(0, isMobile ? -35 : -40)
+                      : undefined,
                 }}
               >
-                <Box sx={{
-                  background: `linear-gradient(135deg, rgba(13, 33, 55, 0.95) 0%, rgba(1, 20, 40, 0.9) 100%)`,
-                  border: '1px solid rgba(0, 229, 255, 0.4)',
-                  borderRadius: 1.5,
-                  padding: { xs: 1.5, sm: 2 },
-                  minWidth: { xs: 240, sm: 280 },
-                  maxWidth: { xs: 280, sm: 320 },
-                  backdropFilter: 'blur(10px)',
-                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)'
-                }}>
-                  <Typography variant="h6" sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: '#00e5ff',
-                    mb: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    fontSize: { xs: '0.9rem', sm: '1rem' }
-                  }}>
+                <Box
+                  sx={{
+                    background: `linear-gradient(135deg, rgba(13, 33, 55, 0.95) 0%, rgba(1, 20, 40, 0.9) 100%)`,
+                    border: '1px solid rgba(0, 229, 255, 0.4)',
+                    borderRadius: 1.5,
+                    padding: { xs: 1.5, sm: 2 },
+                    minWidth: { xs: 240, sm: 280 },
+                    maxWidth: { xs: 280, sm: 320 },
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.4)',
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontFamily: '"Roboto Mono", monospace',
+                      color: '#00e5ff',
+                      mb: 1.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      fontSize: { xs: '0.9rem', sm: '1rem' },
+                    }}
+                  >
                     <HomeIcon sx={{ fontSize: { xs: 18, sm: 20 } }} />
-                    {t("curitibaLocation")}
+                    {t('curitibaLocation')}
                   </Typography>
-                  <Typography variant="body2" sx={{
-                    color: '#ffffff',
-                    lineHeight: 1.5,
-                    fontSize: { xs: '0.75rem', sm: '0.85rem' }
-                  }}>
-                    {t("brazilSouthRegion")}<br />
-                    {t("timezone")}<br />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#ffffff',
+                      lineHeight: 1.5,
+                      fontSize: { xs: '0.75rem', sm: '0.85rem' },
+                    }}
+                  >
+                    {t('brazilSouthRegion')}
+                    <br />
+                    {t('timezone')}
+                    <br />
                   </Typography>
                 </Box>
               </InfoWindow>
@@ -611,23 +690,29 @@ const Home: FC<HomeProps> = ({
       component="section"
       id="home"
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        px: { xs: 2, sm: 3, md: 4 }
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        px: { xs: 2, sm: 3, md: 4 },
       }}
     >
-      <motion.div variants={containerVariants} initial="hidden" animate="visible" style={{ width: "100%" }}>
-
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ width: '100%' }}
+      >
         {/* Hero Section */}
-        <Box sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: "center",
-          gap: { xs: 4, sm: 5, md: 6 },
-          mb: { xs: 6, sm: 7, md: 8 },
-          textAlign: { xs: 'center', md: 'left' }
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+            gap: { xs: 4, sm: 5, md: 6 },
+            mb: { xs: 6, sm: 7, md: 8 },
+            textAlign: { xs: 'center', md: 'left' },
+          }}
+        >
           <motion.div variants={itemVariants}>
             <Avatar
               src={foto}
@@ -635,49 +720,58 @@ const Home: FC<HomeProps> = ({
               sx={{
                 width: { xs: 100, sm: 120, md: 160 },
                 height: { xs: 100, sm: 120, md: 160 },
-                border: "4px solid #00E5FF",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-                cursor: "pointer",
-                marginTop: { xs: 2 }
+                border: '4px solid #00E5FF',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                cursor: 'pointer',
+                marginTop: { xs: 2 },
               }}
-              onClick={() => handleTrack("avatar_click", "profile_photo")}
+              onClick={() => handleTrack('avatar_click', 'profile_photo')}
             />
           </motion.div>
 
           <Box sx={{ width: '100%' }}>
             <motion.div variants={itemVariants}>
               <CodeText variant="body2" gutterBottom sx={{ mb: 1 }}>
-                {t("helloEveryone")}
+                {t('helloEveryone')}
               </CodeText>
             </motion.div>
             <motion.div variants={itemVariants}>
-              <GradientText variant="h1" sx={{
-                fontSize: { xs: "2rem", sm: "2.5rem", md: "4rem" },
-                mb: 2,
-                wordBreak: 'break-word'
-              }}>
+              <GradientText
+                variant="h1"
+                sx={{
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '4rem' },
+                  mb: 2,
+                  wordBreak: 'break-word',
+                }}
+              >
                 Edison Tezolin
               </GradientText>
             </motion.div>
             <motion.div variants={itemVariants}>
-              <Typography variant="h2" sx={{
-                fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" },
-                color: "text.secondary",
-                fontFamily: '"Roboto Mono", monospace',
-                display: "flex",
-                alignItems: "center",
-                justifyContent: { xs: 'center', md: 'flex-start' },
-                flexWrap: 'wrap'
-              }}>
-                <Box component="span" sx={{
-                  color: theme.palette.secondary.main,
-                  mr: 1,
-                  fontSize: "1.3em",
-                  opacity: 0.8
-                }}>
+              <Typography
+                variant="h2"
+                sx={{
+                  fontSize: { xs: '1rem', sm: '1.2rem', md: '1.5rem' },
+                  color: 'text.secondary',
+                  fontFamily: '"Roboto Mono", monospace',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: { xs: 'center', md: 'flex-start' },
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{
+                    color: theme.palette.secondary.main,
+                    mr: 1,
+                    fontSize: '1.3em',
+                    opacity: 0.8,
+                  }}
+                >
                   &gt;
                 </Box>
-                {t("fullStackDeveloper")}
+                {t('fullStackDeveloper')}
               </Typography>
             </motion.div>
           </Box>
@@ -685,65 +779,107 @@ const Home: FC<HomeProps> = ({
 
         {/* Contact Card */}
         <motion.div variants={itemVariants}>
-          <GlassCard sx={{
-            mb: 4,
-            maxWidth: { xs: '100%', sm: 700 },
-            mx: 'auto'
-          }}>
+          <GlassCard
+            sx={{
+              mb: 4,
+              // maxWidth: { xs: '100%', sm: 700 },
+              mx: 'auto',
+            }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <CodeText sx={{
-                fontSize: { xs: "0.8rem", sm: "0.9rem", md: "0.95rem" },
-                lineHeight: 1.8,
-                wordBreak: 'keep-all',
-                overflowWrap: 'break-word',
-                whiteSpace: { xs: 'pre-wrap', sm: 'nowrap' }
-              }}>
-                <HighlightText>const</HighlightText> phone = <span
+              <CodeText
+                sx={{
+                  fontSize: { xs: '0.8rem', sm: '0.9rem', md: '0.95rem' },
+                  lineHeight: 1.8,
+                  wordBreak: 'keep-all',
+                  overflowWrap: 'break-word',
+                  whiteSpace: { xs: 'pre-wrap', sm: 'nowrap' },
+                }}
+              >
+                <HighlightText>const</HighlightText> phone ={' '}
+                <span
                   style={{
                     color: theme.palette.secondary.main,
-                    cursor: "pointer",
-                    whiteSpace: 'nowrap'
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
                   }}
-                  onClick={() => handleContactClick("phone", () => window.open("tel:41998335860"))}
+                  onClick={() => handleContactClick('phone', () => window.open('tel:41998335860'))}
                 >
                   "+55 41 99833-5860"
-                </span>;<br />
-                <HighlightText>const</HighlightText> email ={isMobile ? <><br />&nbsp;&nbsp;</> : ' '}<span
+                </span>
+                ;<br />
+                <HighlightText>const</HighlightText> email =
+                {isMobile ? (
+                  <>
+                    <br />
+                    &nbsp;&nbsp;
+                  </>
+                ) : (
+                  ' '
+                )}
+                <span
                   style={{
                     color: theme.palette.secondary.main,
-                    cursor: "pointer",
-                    whiteSpace: 'nowrap'
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
                   }}
-                  onClick={() => handleContactClick("email", () => window.open("mailto:tezolin.edison@gmail.com"))}
+                  onClick={() =>
+                    handleContactClick('email', () =>
+                      window.open('mailto:tezolin.edison@gmail.com')
+                    )
+                  }
                 >
                   "tezolin.edison@gmail.com"
-                </span>;<br />
-                <HighlightText>const</HighlightText> github ={isMobile ? <><br />&nbsp;&nbsp;</> : ' '}<span
-                  onClick={() => handleSocialClick("github", "https://github.com/etezolin")}
+                </span>
+                ;<br />
+                <HighlightText>const</HighlightText> github =
+                {isMobile ? (
+                  <>
+                    <br />
+                    &nbsp;&nbsp;
+                  </>
+                ) : (
+                  ' '
+                )}
+                <span
+                  onClick={() => handleSocialClick('github', 'https://github.com/etezolin')}
                   style={{
                     color: theme.palette.secondary.main,
-                    textDecoration: "none",
-                    cursor: "pointer",
-                    whiteSpace: 'nowrap'
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   "github.com/etezolin"
-                </span>;<br />
-                <HighlightText>const</HighlightText> linkedIn ={isMobile ? <><br />&nbsp;&nbsp;</> : ' '}<span
-                  onClick={() => handleSocialClick("linkedin", "https://www.linkedin.com/in/etezolin")}
+                </span>
+                ;<br />
+                <HighlightText>const</HighlightText> linkedIn =
+                {isMobile ? (
+                  <>
+                    <br />
+                    &nbsp;&nbsp;
+                  </>
+                ) : (
+                  ' '
+                )}
+                <span
+                  onClick={() =>
+                    handleSocialClick('linkedin', 'https://www.linkedin.com/in/etezolin')
+                  }
                   style={{
                     color: theme.palette.secondary.main,
-                    textDecoration: "none",
-                    cursor: "pointer",
-                    whiteSpace: 'nowrap'
+                    textDecoration: 'none',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   "linkedin.com/in/etezolin"
-                </span>;
+                </span>
+                ;
               </CodeText>
             </motion.div>
           </GlassCard>
@@ -766,72 +902,83 @@ const Home: FC<HomeProps> = ({
               (e.currentTarget as HTMLElement).style.setProperty('--mouse-y', y + 'px');
             }}
           >
-            <Typography variant="h4" sx={{
-              fontFamily: '"Roboto Mono", monospace',
-              color: 'secondary.main',
-              textAlign: 'center',
-              mb: 1,
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1,
-              fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
-              flexWrap: 'wrap',
-              position: 'relative',
-              zIndex: 1,
-            }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontFamily: '"Roboto Mono", monospace',
+                color: 'secondary.main',
+                textAlign: 'center',
+                mb: 1,
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1,
+                fontSize: { xs: '1.25rem', sm: '1.5rem', md: '2rem' },
+                flexWrap: 'wrap',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
               <LocationOnIcon />
-              <span>{t("title")}</span>
+              <span>{t('title')}</span>
             </Typography>
-            <Typography variant="body1" sx={{
-              fontFamily: '"Roboto Mono", monospace',
-              color: 'text.secondary',
-              textAlign: 'center',
-              mb: 3,
-              fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
-              px: { xs: 1, sm: 2 },
-              position: 'relative',
-              zIndex: 1,
-            }}>
-              {t("description")}
+            <Typography
+              variant="body1"
+              sx={{
+                fontFamily: '"Roboto Mono", monospace',
+                color: 'text.secondary',
+                textAlign: 'center',
+                mb: 3,
+                fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
+                px: { xs: 1, sm: 2 },
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {t('description')}
             </Typography>
 
             {renderMap()}
 
             <Box sx={{ mt: 3, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-              <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: { xs: 0.5, sm: 1 },
-                flexWrap: 'wrap',
-                mb: 2
-              }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: { xs: 0.5, sm: 1 },
+                  flexWrap: 'wrap',
+                  mb: 2,
+                }}
+              >
                 <LocationChip>
                   <WorkIcon sx={{ fontSize: { xs: 12, sm: 14 } }} />
-                  {t("remoteNational")}
+                  {t('remoteNational')}
                 </LocationChip>
                 <LocationChip>
                   <WorkIcon sx={{ fontSize: { xs: 12, sm: 14 } }} />
-                  {t("remoteInternational")}
+                  {t('remoteInternational')}
                 </LocationChip>
                 <LocationChip>
                   <LocationOnIcon sx={{ fontSize: { xs: 12, sm: 14 } }} />
-                  {t("curitibaLocal")}
+                  {t('curitibaLocal')}
                 </LocationChip>
                 <LocationChip>
                   <HomeIcon sx={{ fontSize: { xs: 12, sm: 14 } }} />
-                  {t("hybrid")}
+                  {t('hybrid')}
                 </LocationChip>
               </Box>
-              <Typography variant="body2" sx={{
-                fontFamily: '"Roboto Mono", monospace',
-                color: 'text.secondary',
-                fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' },
-                fontStyle: 'italic',
-                px: { xs: 1, sm: 2 }
-              }}>
-                {t("slogan")}
+              <Typography
+                variant="body2"
+                sx={{
+                  fontFamily: '"Roboto Mono", monospace',
+                  color: 'text.secondary',
+                  fontSize: { xs: '0.75rem', sm: '0.8rem', md: '0.85rem' },
+                  fontStyle: 'italic',
+                  px: { xs: 1, sm: 2 },
+                }}
+              >
+                {t('slogan')}
               </Typography>
             </Box>
           </MapContainer>
@@ -839,34 +986,43 @@ const Home: FC<HomeProps> = ({
 
         {/* Tech Stack */}
         <motion.div variants={itemVariants}>
-          <TechStackHeader sx={{ marginBottom: 1 }}>
-            {t("myTechStack")}
-          </TechStackHeader>
+          <TechStackHeader sx={{ marginBottom: 1 }}>{t('myTechStack')}</TechStackHeader>
         </motion.div>
 
-        <motion.div variants={{
-          hidden: { opacity: 0 },
-          visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.7 } }
-        }}>
-          {Object.entries(techCategories).map(([key, techs]) => renderTechSection(key, techs))}
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.7 } },
+          }}
+        >
+          {(
+            Object.entries(techCategories) as Array<
+              [
+                'backend' | 'frontend' | 'database' | 'cloud',
+                Array<{ name: string; color: string; icon: React.ComponentType }>,
+              ]
+            >
+          ).map(([key, techs]) => renderTechSection(key, techs))}
         </motion.div>
 
         <Box sx={{ mt: { xs: 2, sm: 3 } }}>
           <motion.div variants={itemVariants}>
-            <TechStackHeader>{t("messageToRecruiters")}</TechStackHeader>
+            <TechStackHeader>{t('messageToRecruiters')}</TechStackHeader>
           </motion.div>
-          <Typography sx={{
-            fontFamily: '"Roboto Mono", monospace',
-            color: theme.palette.text.primary,
-            marginBottom: theme.spacing(3),
-            lineHeight: 1.6,
-            fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' }
-          }}>
-            {t("recruiterMessagePt1")}
-            <HighlightTextV2>{t("technicalExcellence")}</HighlightTextV2>
-            {t("recruiterMessagePt2")}
-            <HighlightTextV2>{t("valueDelivery")}</HighlightTextV2>
-            {t("recruiterMessagePt3")}
+          <Typography
+            sx={{
+              fontFamily: '"Roboto Mono", monospace',
+              color: theme.palette.text.primary,
+              marginBottom: theme.spacing(3),
+              lineHeight: 1.6,
+              fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' },
+            }}
+          >
+            {t('recruiterMessagePt1')}
+            <HighlightTextV2>{t('technicalExcellence')}</HighlightTextV2>
+            {t('recruiterMessagePt2')}
+            <HighlightTextV2>{t('valueDelivery')}</HighlightTextV2>
+            {t('recruiterMessagePt3')}
           </Typography>
         </Box>
 
@@ -877,17 +1033,17 @@ const Home: FC<HomeProps> = ({
           animate={{ opacity: 0.05 }}
           transition={{ duration: 1, delay: 0.5 }}
           sx={{
-            position: "absolute",
-            top: "20%",
-            right: "5%",
-            width: "40%",
-            height: "40%",
-            backgroundImage: "url(/code-bg.svg)",
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
+            position: 'absolute',
+            top: '20%',
+            right: '5%',
+            width: '40%',
+            height: '40%',
+            backgroundImage: 'url(/code-bg.svg)',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
             zIndex: -1,
-            filter: "blur(1px)",
-            display: { xs: "none", md: "block" }
+            filter: 'blur(1px)',
+            display: { xs: 'none', md: 'block' },
           }}
         />
       </motion.div>

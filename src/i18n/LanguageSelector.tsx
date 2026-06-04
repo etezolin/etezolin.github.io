@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

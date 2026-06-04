@@ -2,19 +2,21 @@ import ArchitectureIcon from '@mui/icons-material/Architecture';
 import CodeIcon from '@mui/icons-material/Code';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
 import LaunchIcon from '@mui/icons-material/Launch';
 import LockIcon from '@mui/icons-material/Lock';
 import SpeedIcon from '@mui/icons-material/Speed';
-import WarningIcon from '@mui/icons-material/Warning';
+import StorageIcon from '@mui/icons-material/Storage';
 import { Box, Button, Card, Chip, Container, Divider, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC, MouseEvent, ReactElement } from 'react';
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation, type TranslationKeys } from '../../hooks/useTranslation';
 
-// Tipos TypeScript
+// ─── Types ────────────────────────────────────────────────────────────────────
+
 interface ProjectData {
   titleKey: string;
   icon: ReactElement;
@@ -26,16 +28,21 @@ interface ProjectData {
   type: string;
 }
 
-// Componentes estilizados otimizados
-const ProjectCard = styled(motion.div)(({ theme }) => ({
-  padding: theme.spacing(2.5),
-  marginBottom: theme.spacing(3),
-  background: 'rgba(13, 33, 55, 0.7)',
-  backdropFilter: 'blur(10px)',
-  border: '1px solid rgba(255, 255, 255, 0.1)',
-  borderRadius: 8,
+// ─── Shared card base (same as Competence) ───────────────────────────────────
+
+const SectionCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(3),
+  background: alpha(theme.palette.background.paper, 0.9),
+  backdropFilter: 'blur(20px)',
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
+  borderRadius: 14,
+  boxShadow:
+    theme.palette.mode === 'dark'
+      ? '0 4px 32px rgba(0,0,0,0.45)'
+      : '0 4px 24px rgba(15,23,42,0.08)',
+  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
   position: 'relative',
-  transition: 'all 0.3s ease',
+  overflow: 'hidden',
   cursor: 'pointer',
   '&::before': {
     content: '""',
@@ -44,163 +51,162 @@ const ProjectCard = styled(motion.div)(({ theme }) => ({
     left: 0,
     right: 0,
     height: '2px',
-    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    opacity: 0.7,
+    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
+    opacity: 0.45,
   },
   '&:hover': {
-    transform: 'translateY(-5px)',
-    borderColor: theme.palette.secondary.main,
+    borderColor: alpha(theme.palette.primary.main, 0.28),
+    boxShadow:
+      theme.palette.mode === 'dark'
+        ? '0 8px 48px rgba(0,0,0,0.55)'
+        : '0 8px 32px rgba(15,23,42,0.12)',
+    transform: 'translateY(-3px)',
+  },
+  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
+}));
+
+// ─── Category header (same as Competence) ────────────────────────────────────
+
+const CardHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(2.5),
+  paddingBottom: theme.spacing(1.5),
+  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
+}));
+
+const CardIcon = styled(Box)(({ theme }) => ({
+  width: 40,
+  height: 40,
+  borderRadius: '10px',
+  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#ffffff',
+  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
+  flexShrink: 0,
+}));
+
+// ─── Result row (mirrors SkillRow from Competence) ───────────────────────────
+
+const ResultRow = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1.25),
+  padding: theme.spacing(0.75, 1.25),
+  borderRadius: 8,
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.07)}`,
+  background:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255,255,255,0.03)'
+      : alpha(theme.palette.primary.main, 0.025),
+  transition: 'all 0.2s ease',
+  cursor: 'pointer',
+  '&:hover': {
+    background: alpha(theme.palette.primary.main, 0.06),
+    borderColor: alpha(theme.palette.primary.main, 0.18),
+    transform: 'translateX(4px)',
   },
 }));
 
-const StyledChip = styled(Chip)<{ chiptype: 'metric' | 'tech' }>(({ theme, chiptype }) => ({
-  margin: theme.spacing(0.25),
+// ─── Tech / metric chips ──────────────────────────────────────────────────────
+
+const TechChip = styled(Chip)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
   fontSize: '0.7rem',
-  height: chiptype === 'metric' ? 20 : 22,
+  height: 22,
   cursor: 'pointer',
-  transition: 'all 0.3s ease',
-  ...(chiptype === 'metric'
-    ? {
-        backgroundColor: 'rgba(0, 229, 255, 0.1)',
-        color: theme.palette.secondary.main,
-        border: '1px solid rgba(0, 229, 255, 0.3)',
-        '&:hover': {
-          backgroundColor: 'rgba(0, 229, 255, 0.2)',
-          transform: 'scale(1.05)',
-        },
-      }
-    : {
-        backgroundColor: 'rgba(20, 40, 80, 0.6)',
-        color: theme.palette.text.primary,
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        '&:hover': {
-          backgroundColor: 'rgba(20, 40, 80, 0.8)',
-          transform: 'scale(1.05)',
-        },
-      }),
+  transition: 'all 0.2s ease',
+  backgroundColor: alpha(theme.palette.primary.main, 0.08),
+  color: theme.palette.primary.main,
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.primary.main, 0.15),
+    transform: 'scale(1.04)',
+  },
 }));
+
+const MetricChip = styled(Chip)(({ theme }) => ({
+  fontFamily: '"Roboto Mono", monospace',
+  fontSize: '0.7rem',
+  height: 20,
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  backgroundColor: alpha(theme.palette.secondary.main, 0.1),
+  color: theme.palette.secondary.dark,
+  border: `1px solid ${alpha(theme.palette.secondary.main, 0.25)}`,
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.secondary.main, 0.18),
+    transform: 'scale(1.04)',
+  },
+}));
+
+// ─── Section label (reused inline) ───────────────────────────────────────────
+
+const SectionLabel = ({ icon, label }: { icon?: ReactElement; label: string }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 0.5,
+      mb: 1,
+    }}
+  >
+    {icon && (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          color: 'text.disabled',
+          '& svg': { fontSize: 13 },
+        }}
+      >
+        {icon}
+      </Box>
+    )}
+    <Typography
+      variant="caption"
+      sx={{
+        fontFamily: '"Roboto Mono", monospace',
+        fontSize: '0.68rem',
+        color: 'text.disabled',
+        letterSpacing: '0.4px',
+        textTransform: 'uppercase',
+      }}
+    >
+      {label}
+    </Typography>
+  </Box>
+);
+
+// ─── Main component ───────────────────────────────────────────────────────────
 
 const ProjectsSection: FC = () => {
   const { t } = useTypedTranslation();
 
-  // Funções de analytics otimizadas
-  const handleClick = (type: string, data: string) => {
+  const handleClick = (type: string, data: string) =>
     trackProfileTabInteraction('projects', type, data);
-  };
-
-  const handleConversion = (type: string) => {
-    trackProfileConversion(type, 'projects');
-  };
+  const handleConversion = (type: string) => trackProfileConversion(type, 'projects');
 
   const handleProjectClick = (title: string, type: string) => {
     handleClick('project_card_click', `${type}_${title}`);
     handleConversion('project_interest');
   };
-
   const handleMetricClick = (metric: string, title: string) => {
     handleClick('metric_chip_click', `${metric}_${title}`);
-    if (metric.includes('↓') || metric.includes('M+') || metric.includes('k+')) {
+    if (metric.includes('↓') || metric.includes('M+') || metric.includes('k+'))
       handleConversion('results_focused_interest');
-    }
   };
-
   const handleTechClick = (tech: string, title: string) => {
     handleClick('tech_stack_click', `${tech}_${title}`);
-    if (['.NET', 'React', 'TypeScript', 'Microsserviços', 'IA Generativa'].includes(tech)) {
+    if (['.NET', 'React', 'TypeScript', 'Microservices', 'Generative AI'].includes(tech))
       handleConversion('tech_stack_match');
-    }
   };
 
-  // Dados dos projetos com chaves de tradução
-  const projects: ProjectData[] = [
-    {
-      titleKey: 'project1Title',
-      icon: <IntegrationInstructionsIcon fontSize="large" />,
-      descriptionKey: 'project1Description',
-      confidential: true,
-      metrics: [t('metrics001'), t('metrics002'), t('metrics003'), t('metrics004')],
-      resultsKeys: ['project1Result1', 'project1Result2', 'project1Result3', 'project1Result4'],
-      techStack: ['.NET', 'React', 'TypeScript', 'Microservices', 'PostgreSQL', 'API RESTful'],
-      type: 'integration_hub',
-    },
-    {
-      titleKey: 'project2Title',
-      icon: <EditNoteIcon fontSize="large" />,
-      descriptionKey: 'project2Description',
-      confidential: true,
-      metrics: [t('metrics005'), t('metrics006'), t('metrics007'), t('metrics008')],
-      resultsKeys: ['project2Result1', 'project2Result2', 'project2Result3', 'project2Result4'],
-      techStack: ['C#', '.NET', 'React', 'PostgreSQL', 'Docker', 'Generative AI', 'CI/CD', 'GCP'],
-      type: 'ai_evaluation',
-    },
-    {
-      titleKey: 'project3Title',
-      icon: <ArchitectureIcon fontSize="large" />,
-      descriptionKey: 'project3Description',
-      confidential: true,
-      metrics: [t('metrics009'), t('metrics010'), t('metrics011'), t('metrics012')],
-      resultsKeys: ['project3Result1', 'project3Result2', 'project3Result3', 'project3Result4'],
-      techStack: ['C#', 'CQRS', 'Google Admin SDK', 'OAuth 2.0', 'DDD', 'Event Sourcing'],
-      type: 'rpa_automation',
-    },
-    {
-      titleKey: 'project4Title',
-      icon: <IntegrationInstructionsIcon fontSize="large" />,
-      descriptionKey: 'project4Description',
-      confidential: true,
-      metrics: [t('metrics013'), t('metrics014'), t('metrics015'), t('metrics016')],
-      resultsKeys: ['project4Result1', 'project4Result2', 'project4Result3', 'project4Result4'],
-      techStack: ['.NET', 'React', 'TypeScript', 'Microservices', 'SQL Server', 'OCR'],
-      type: 'evaluation_platform',
-    },
-  ];
+  const currentLang = t('home') === 'Início' ? 'pt' : 'en';
 
-  const futureProjects: Array<{
-    nameKey: TranslationKeys;
-    icon: ReactElement;
-    key: string;
-  }> = [
-    {
-      nameKey: 'futureProject1',
-      icon: <CodeIcon />,
-      key: 'sistema_gestao_fullstack',
-    },
-    {
-      nameKey: 'futureProject2',
-      icon: <ArchitectureIcon />,
-      key: 'microservicos_docker',
-    },
-    {
-      nameKey: 'futureProject3',
-      icon: <LaunchIcon />,
-      key: 'dashboard_data_science',
-    },
-  ];
-
-  const interviewTopics: Array<{
-    textKey: TranslationKeys;
-    key: string;
-  }> = [
-    {
-      textKey: 'interviewTopic1',
-      key: 'technical_challenges_solutions',
-    },
-    {
-      textKey: 'interviewTopic2',
-      key: 'architecture_decisions_tradeoffs',
-    },
-    {
-      textKey: 'interviewTopic3',
-      key: 'methodologies_engineering_practices',
-    },
-    {
-      textKey: 'interviewTopic4',
-      key: 'lessons_learned_technical_evolution',
-    },
-  ];
-
-  // Dados estáticos dos projetos em ambos idiomas
   const projectsData = {
     pt: {
       project1Title: 'Hub de Integração Educacional Enterprise',
@@ -263,7 +269,61 @@ const ProjectsSection: FC = () => {
     },
   };
 
-  const currentLang = t('home') === 'Início' ? 'pt' : 'en';
+  const projects: ProjectData[] = [
+    {
+      titleKey: 'project1Title',
+      icon: <IntegrationInstructionsIcon />,
+      descriptionKey: 'project1Description',
+      confidential: true,
+      metrics: [t('metrics001'), t('metrics002'), t('metrics003'), t('metrics004')],
+      resultsKeys: ['project1Result1', 'project1Result2', 'project1Result3', 'project1Result4'],
+      techStack: ['.NET', 'React', 'TypeScript', 'Microservices', 'PostgreSQL', 'API RESTful'],
+      type: 'integration_hub',
+    },
+    {
+      titleKey: 'project2Title',
+      icon: <EditNoteIcon />,
+      descriptionKey: 'project2Description',
+      confidential: true,
+      metrics: [t('metrics005'), t('metrics006'), t('metrics007'), t('metrics008')],
+      resultsKeys: ['project2Result1', 'project2Result2', 'project2Result3', 'project2Result4'],
+      techStack: ['C#', '.NET', 'React', 'PostgreSQL', 'Docker', 'Generative AI', 'CI/CD', 'GCP'],
+      type: 'ai_evaluation',
+    },
+    {
+      titleKey: 'project3Title',
+      icon: <ArchitectureIcon />,
+      descriptionKey: 'project3Description',
+      confidential: true,
+      metrics: [t('metrics009'), t('metrics010'), t('metrics011'), t('metrics012')],
+      resultsKeys: ['project3Result1', 'project3Result2', 'project3Result3', 'project3Result4'],
+      techStack: ['C#', 'CQRS', 'Google Admin SDK', 'OAuth 2.0', 'DDD', 'Event Sourcing'],
+      type: 'rpa_automation',
+    },
+    {
+      titleKey: 'project4Title',
+      icon: <StorageIcon />,
+      descriptionKey: 'project4Description',
+      confidential: true,
+      metrics: [t('metrics013'), t('metrics014'), t('metrics015'), t('metrics016')],
+      resultsKeys: ['project4Result1', 'project4Result2', 'project4Result3', 'project4Result4'],
+      techStack: ['.NET', 'React', 'TypeScript', 'Microservices', 'SQL Server', 'OCR'],
+      type: 'evaluation_platform',
+    },
+  ];
+
+  const futureProjects: Array<{ nameKey: TranslationKeys; icon: ReactElement; key: string }> = [
+    { nameKey: 'futureProject1', icon: <CodeIcon />, key: 'sistema_gestao_fullstack' },
+    { nameKey: 'futureProject2', icon: <ArchitectureIcon />, key: 'microservicos_docker' },
+    { nameKey: 'futureProject3', icon: <LaunchIcon />, key: 'dashboard_data_science' },
+  ];
+
+  const interviewTopics: Array<{ textKey: TranslationKeys; key: string }> = [
+    { textKey: 'interviewTopic1', key: 'technical_challenges_solutions' },
+    { textKey: 'interviewTopic2', key: 'architecture_decisions_tradeoffs' },
+    { textKey: 'interviewTopic3', key: 'methodologies_engineering_practices' },
+    { textKey: 'interviewTopic4', key: 'lessons_learned_technical_evolution' },
+  ];
 
   return (
     <Container sx={{ py: 8 }} id="projects" component="section">
@@ -273,369 +333,395 @@ const ProjectsSection: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <Typography variant="h2" sx={{ mb: 4, color: 'primary.main' }}>
+        {/* ── Section title ── */}
+        <Typography
+          variant="h2"
+          sx={{
+            mb: 4,
+            backgroundImage: (t) =>
+              `linear-gradient(135deg, ${t.palette.primary.light} 0%, ${t.palette.primary.main} 40%, ${t.palette.secondary.main} 100%)`,
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            fontWeight: 700,
+            fontSize: { xs: '1.75rem', md: '2rem' },
+          }}
+        >
           {t('projectsTitle')}
         </Typography>
 
-        {/* Alerta sobre Confidencialidade */}
+        {/* ── Confidentiality notice ── */}
         <Box
-          sx={{
-            background: 'rgba(255, 193, 7, 0.1)',
-            border: '1px solid rgba(255, 193, 7, 0.3)',
-            borderRadius: 1,
-            p: 2,
-            mb: 3,
+          sx={() => ({
             display: 'flex',
             alignItems: 'flex-start',
             gap: 2,
+            p: 2,
+            mb: 4,
+            borderRadius: 2,
+            border: `1px solid ${alpha('#fbbf24', 0.25)}`,
+            background: alpha('#fbbf24', 0.05),
             cursor: 'pointer',
-          }}
+          })}
           onClick={() => handleClick('confidentiality_alert_click', 'understanding_constraints')}
         >
-          <WarningIcon sx={{ color: '#ffc107', mt: 0.2 }} />
+          <InfoOutlinedIcon sx={{ color: '#d97706', mt: 0.2, flexShrink: 0, fontSize: 18 }} />
           <Box>
-            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 600,
+                mb: 0.5,
+                fontFamily: '"Roboto Mono", monospace',
+                fontSize: '0.83rem',
+                color: '#b45309',
+              }}
+            >
               {t('confidentialProjects')}
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: '0.8rem',
+                lineHeight: 1.6,
+                color: 'text.secondary',
+                fontFamily: '"Roboto Mono", monospace',
+              }}
+            >
               {t('confidentialDescription')}
             </Typography>
           </Box>
         </Box>
 
-        {/* Lista de Projetos */}
-        {projects.map((project, index) => (
-          <motion.div
-            key={index}
-            whileHover={{ scale: 1.01 }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-          >
-            <ProjectCard onClick={() => handleProjectClick(project.titleKey, project.type)}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  mb: 2,
-                  flexWrap: 'wrap',
-                  gap: 1,
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 2,
-                    flex: 1,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      color: 'secondary.main',
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {project.icon}
-                  </Box>
-                  <Box>
+        {/* ── Project cards ── */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mb: 3 }}>
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              viewport={{ once: true }}
+            >
+              <SectionCard onClick={() => handleProjectClick(project.titleKey, project.type)}>
+                {/* Header */}
+                <CardHeader>
+                  <CardIcon>{project.icon}</CardIcon>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography
                       variant="h6"
                       sx={{
+                        fontFamily: '"Roboto Mono", monospace',
                         fontWeight: 600,
-                        fontSize: '1.1rem',
+                        fontSize: '0.97rem',
                         lineHeight: 1.3,
+                        color: 'text.primary',
                       }}
                     >
                       {projectsData[currentLang][project.titleKey as keyof typeof projectsData.pt]}
                     </Typography>
+
                     {project.confidential && (
                       <Box
                         sx={{
-                          display: 'flex',
+                          display: 'inline-flex',
                           alignItems: 'center',
                           gap: 0.5,
-                          fontSize: '0.75rem',
-                          color: 'text.secondary',
-                          backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                          border: '1px solid rgba(255, 193, 7, 0.3)',
-                          p: '4px 8px',
-                          borderRadius: 3,
-                          mt: 1,
-                          width: 'fit-content',
+                          mt: 0.75,
+                          px: 1,
+                          py: '2px',
+                          borderRadius: '5px',
+                          border: `1px solid ${alpha('#fbbf24', 0.3)}`,
+                          background: alpha('#fbbf24', 0.07),
                           cursor: 'pointer',
+                          width: 'fit-content',
                         }}
                         onClick={(e: MouseEvent) => {
                           e.stopPropagation();
                           handleClick('confidential_badge_click', project.titleKey);
                         }}
                       >
-                        <LockIcon sx={{ fontSize: 14 }} />
-                        {t('confidential')}
+                        <LockIcon sx={{ fontSize: 11, color: '#b45309' }} />
+                        <Typography
+                          sx={{
+                            fontFamily: '"Roboto Mono", monospace',
+                            fontSize: '0.67rem',
+                            color: '#b45309',
+                            fontWeight: 600,
+                          }}
+                        >
+                          {t('confidential')}
+                        </Typography>
                       </Box>
                     )}
                   </Box>
-                </Box>
-              </Box>
+                </CardHeader>
 
-              <Typography variant="body2" sx={{ mb: 2, fontSize: '0.9rem', lineHeight: 1.5 }}>
-                {projectsData[currentLang][project.descriptionKey as keyof typeof projectsData.pt]}
-              </Typography>
-
-              {/* Métricas */}
-              <Box sx={{ mb: 2 }}>
+                {/* Description */}
                 <Typography
-                  variant="caption"
+                  variant="body2"
                   sx={{
+                    mb: 2.5,
+                    fontSize: '0.85rem',
+                    lineHeight: 1.7,
                     fontFamily: '"Roboto Mono", monospace',
                     color: 'text.secondary',
-                    mb: 1,
-                    display: 'block',
                   }}
                 >
-                  {t('mainMetrics')}
+                  {
+                    projectsData[currentLang][
+                      project.descriptionKey as keyof typeof projectsData.pt
+                    ]
+                  }
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {project.metrics.map((metric, idx) => (
-                    <StyledChip
-                      key={idx}
-                      label={metric}
-                      size="small"
-                      chiptype="metric"
-                      onClick={(e: MouseEvent) => {
-                        e.stopPropagation();
-                        handleMetricClick(metric, project.titleKey);
-                      }}
-                    />
-                  ))}
+
+                {/* Metrics */}
+                <Box sx={{ mb: 2.5 }}>
+                  <SectionLabel label={t('mainMetrics')} />
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
+                    {project.metrics.map((metric, idx) => (
+                      <MetricChip
+                        key={idx}
+                        label={metric}
+                        size="small"
+                        onClick={(e: MouseEvent) => {
+                          e.stopPropagation();
+                          handleMetricClick(metric, project.titleKey);
+                        }}
+                      />
+                    ))}
+                  </Box>
                 </Box>
-              </Box>
 
-              {/* Resultados */}
-              <Box sx={{ mb: 2, pl: 1 }}>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: 'secondary.main',
-                    fontWeight: 500,
-                    mb: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                  }}
-                >
-                  <SpeedIcon sx={{ fontSize: 16 }} />
-                  {t('results')}
-                </Typography>
-                {project.resultsKeys.slice(0, 4).map((resultKey, idx) => (
-                  <Typography
-                    key={idx}
-                    sx={{
-                      fontSize: '0.85rem',
-                      mb: 0.5,
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 1,
-                      cursor: 'pointer',
-                      transition: 'color 0.3s ease',
-                      '&:hover': { color: 'secondary.main' },
-                      '&::before': {
-                        content: '"▸"',
-                        color: 'secondary.main',
-                        fontWeight: 'bold',
-                        flexShrink: 0,
-                      },
-                    }}
-                    onClick={(e: MouseEvent) => {
-                      e.stopPropagation();
-                      handleClick('result_item_click', `result_${idx}_${project.titleKey}`);
-                    }}
-                  >
-                    {projectsData[currentLang][resultKey as keyof typeof projectsData.pt]}
-                  </Typography>
-                ))}
-              </Box>
+                {/* Results — mirrors SkillRow */}
+                <Box sx={{ mb: 2.5 }}>
+                  <SectionLabel icon={<SpeedIcon />} label={t('results')} />
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+                    {project.resultsKeys.map((resultKey, idx) => (
+                      <ResultRow
+                        key={idx}
+                        onClick={(e: MouseEvent) => {
+                          e.stopPropagation();
+                          handleClick('result_item_click', `result_${idx}_${project.titleKey}`);
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            width: 5,
+                            height: 5,
+                            borderRadius: '50%',
+                            flexShrink: 0,
+                            background: (t) =>
+                              `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`,
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontFamily: '"Roboto Mono", monospace',
+                            fontSize: '0.82rem',
+                            color: 'text.primary',
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          {projectsData[currentLang][resultKey as keyof typeof projectsData.pt]}
+                        </Typography>
+                      </ResultRow>
+                    ))}
+                  </Box>
+                </Box>
 
-              {/* Stack Tecnológica */}
+                {/* Tech stack */}
+                <Box>
+                  <SectionLabel label={t('stack')} />
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
+                    {project.techStack.map((tech, idx) => (
+                      <TechChip
+                        key={idx}
+                        label={tech}
+                        size="small"
+                        onClick={(e: MouseEvent) => {
+                          e.stopPropagation();
+                          handleTechClick(tech, project.titleKey);
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+              </SectionCard>
+            </motion.div>
+          ))}
+        </Box>
+
+        <Divider sx={{ my: 4, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
+
+        {/* ── Open Source ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <SectionCard
+            sx={{ mb: 3, cursor: 'pointer' }}
+            onClick={() => handleClick('open_source_section_click', 'future_projects')}
+          >
+            <CardHeader>
+              <CardIcon>
+                <GitHubIcon />
+              </CardIcon>
               <Box>
                 <Typography
+                  variant="h6"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    fontWeight: 600,
+                    fontSize: '0.97rem',
+                    color: 'text.primary',
+                  }}
+                >
+                  {t('openSourceTitle')}
+                </Typography>
+                <Typography
                   variant="caption"
                   sx={{
                     fontFamily: '"Roboto Mono", monospace',
+                    fontSize: '0.72rem',
                     color: 'text.secondary',
-                    mb: 1,
-                    display: 'block',
                   }}
                 >
-                  {t('stack')}
+                  {t('openSourceDescription')}
                 </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {project.techStack.map((tech, idx) => (
-                    <StyledChip
-                      key={idx}
-                      label={tech}
-                      size="small"
-                      chiptype="tech"
-                      onClick={(e: MouseEvent) => {
-                        e.stopPropagation();
-                        handleTechClick(tech, project.titleKey);
-                      }}
-                    />
-                  ))}
-                </Box>
               </Box>
-            </ProjectCard>
-          </motion.div>
-        ))}
+            </CardHeader>
 
-        <Divider sx={{ my: 4, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2.5 }}>
+              {futureProjects.map((project, idx) => (
+                <Button
+                  key={idx}
+                  variant="outlined"
+                  startIcon={project.icon}
+                  disabled
+                  sx={(theme) => ({
+                    fontFamily: '"Roboto Mono", monospace',
+                    fontSize: '0.75rem',
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    p: '4px 12px',
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+                    color: 'primary.main',
+                    '&:hover': {
+                      borderColor: 'secondary.main',
+                      backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                    },
+                  })}
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                    handleClick('future_project_interest', project.key);
+                    handleConversion('future_collaboration_interest');
+                  }}
+                >
+                  {t(project.nameKey)}
+                </Button>
+              ))}
+            </Box>
 
-        {/* Projetos Open Source */}
-        <Card
-          sx={{
-            p: 2.5,
-            background: 'rgba(13, 33, 55, 0.7)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            mb: 2,
-            transition: 'all 0.3s ease',
-            cursor: 'pointer',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              borderColor: 'secondary.main',
-            },
-          }}
-          onClick={() => handleClick('open_source_section_click', 'future_projects')}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <GitHubIcon sx={{ color: 'secondary.main', mr: 1 }} />
             <Typography
-              variant="h6"
+              variant="caption"
               sx={{
-                color: 'secondary.main',
+                color: 'text.disabled',
+                fontStyle: 'italic',
+                fontSize: '0.75rem',
                 fontFamily: '"Roboto Mono", monospace',
               }}
             >
-              {t('openSourceTitle')}
+              {t('openSourceNote')}
             </Typography>
-          </Box>
+          </SectionCard>
+        </motion.div>
 
-          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-            {t('openSourceDescription')}
-          </Typography>
-
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-            {futureProjects.map((project, idx) => (
-              <Button
-                key={idx}
-                variant="outlined"
-                startIcon={project.icon}
-                disabled
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  fontSize: '0.75rem',
-                  textTransform: 'none',
-                  borderRadius: 3,
-                  p: '4px 12px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  '&:hover': {
-                    borderColor: 'secondary.main',
-                    backgroundColor: 'rgba(0, 229, 255, 0.1)',
-                  },
-                }}
-                onClick={(e: MouseEvent) => {
-                  e.stopPropagation();
-                  handleClick('future_project_interest', project.key);
-                  handleConversion('future_collaboration_interest');
-                }}
-              >
-                {t(project.nameKey)}
-              </Button>
-            ))}
-          </Box>
-
-          <Typography
-            variant="caption"
-            sx={{
-              color: 'text.secondary',
-              fontStyle: 'italic',
-              fontSize: '0.8rem',
-            }}
-          >
-            {t('openSourceNote')}
-          </Typography>
-        </Card>
-
-        {/* Discussão Técnica */}
-        <Card
-          sx={{
-            p: 2.5,
-            background: 'rgba(13, 33, 55, 0.7)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            transition: 'all 0.3s ease',
-            cursor: 'pointer',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              borderColor: 'secondary.main',
-            },
-          }}
-          onClick={() => {
-            handleClick('interview_discussion_click', 'technical_details');
-            handleConversion('interview_preparation');
-          }}
+        {/* ── Technical Discussion ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.05 }}
+          viewport={{ once: true }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              color: 'secondary.main',
-              mb: 2,
-              fontFamily: '"Roboto Mono", monospace',
+          <SectionCard
+            onClick={() => {
+              handleClick('interview_discussion_click', 'technical_details');
+              handleConversion('interview_preparation');
             }}
           >
-            {t('technicalDiscussionTitle')}
-          </Typography>
+            <CardHeader>
+              <CardIcon>
+                <CodeIcon />
+              </CardIcon>
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    fontWeight: 600,
+                    fontSize: '0.97rem',
+                    color: 'text.primary',
+                  }}
+                >
+                  {t('technicalDiscussionTitle')}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: '"Roboto Mono", monospace',
+                    fontSize: '0.72rem',
+                    color: 'text.secondary',
+                  }}
+                >
+                  {t('technicalDiscussionDescription')}
+                </Typography>
+              </Box>
+            </CardHeader>
 
-          <Typography variant="body2" sx={{ mb: 2, lineHeight: 1.6 }}>
-            {t('technicalDiscussionDescription')}
-          </Typography>
-
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-              gap: 0.5,
-            }}
-          >
-            {interviewTopics.map((topic, idx) => (
-              <Typography
-                key={idx}
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  color: '#f0f0f0',
-                  mb: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  cursor: 'pointer',
-                  transition: 'color 0.3s ease',
-                  '&:hover': { color: 'secondary.main' },
-                }}
-                onClick={(e: MouseEvent) => {
-                  e.stopPropagation();
-                  handleClick('interview_topic_click', topic.key);
-                }}
-              >
-                ▸ {t(topic.textKey)}
-              </Typography>
-            ))}
-          </Box>
-        </Card>
+            {/* Topics — mirrors SkillRow */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+                gap: 0.75,
+              }}
+            >
+              {interviewTopics.map((topic, idx) => (
+                <ResultRow
+                  key={idx}
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation();
+                    handleClick('interview_topic_click', topic.key);
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 5,
+                      height: 5,
+                      borderRadius: '50%',
+                      flexShrink: 0,
+                      background: (t) =>
+                        `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontFamily: '"Roboto Mono", monospace',
+                      fontSize: '0.83rem',
+                      color: 'text.primary',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {t(topic.textKey)}
+                  </Typography>
+                </ResultRow>
+              ))}
+            </Box>
+          </SectionCard>
+        </motion.div>
       </motion.div>
     </Container>
   );

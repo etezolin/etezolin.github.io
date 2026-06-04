@@ -3,8 +3,10 @@ import ArchitectureIcon from '@mui/icons-material/Architecture';
 import CloseIcon from '@mui/icons-material/Close';
 import CodeIcon from '@mui/icons-material/Code';
 import ContactPageIcon from '@mui/icons-material/ContactPage';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import HomeIcon from '@mui/icons-material/Home';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import MenuIcon from '@mui/icons-material/Menu';
 import SchoolIcon from '@mui/icons-material/School';
@@ -15,19 +17,24 @@ import {
   AppBar,
   Box,
   Container,
+  Divider,
   Drawer,
   IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useActiveSection } from '../../hooks/useActiveSection';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 import LanguageSelector from '../../i18n/LanguageSelector';
+import { useThemeMode } from '../../themes/ThemeContext';
 import { ScrollToTop } from '../shared/ScrollToTop';
 
 // Definição explícita de props
@@ -38,10 +45,16 @@ interface MainLayoutProps {
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
-  background: 'rgba(6, 17, 33, 0.8)',
-  backdropFilter: 'blur(12px)',
-  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+  background: theme.palette.mode === 'dark' ? 'rgba(4, 10, 22, 0.85)' : 'rgba(255, 255, 255, 0.9)',
+  backdropFilter: 'blur(16px)',
+  boxShadow:
+    theme.palette.mode === 'dark'
+      ? '0 1px 0 rgba(51, 153, 255, 0.08)'
+      : '0 1px 0 rgba(37, 99, 235, 0.1)',
+  borderBottom:
+    theme.palette.mode === 'dark'
+      ? '1px solid rgba(51, 153, 255, 0.07)'
+      : '1px solid rgba(37, 99, 235, 0.08)',
   padding: theme.spacing(1.5, 2),
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(1, 4),
@@ -75,6 +88,34 @@ const NavLinks = styled(Box)(({ theme }) => ({
 interface NavLinkProps {
   active?: boolean;
 }
+
+const NavGroupBtn = styled(motion.button)<NavLinkProps>(({ theme, active }) => ({
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  color: active ? theme.palette.primary.main : theme.palette.text.primary,
+  fontFamily: '"Roboto Mono", monospace',
+  fontSize: '0.95rem',
+  padding: theme.spacing(0.5, 1),
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+  position: 'relative',
+  transition: 'color 0.25s ease',
+  '&:hover': { color: theme.palette.primary.main },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    width: '100%',
+    height: '2px',
+    bottom: -4,
+    left: 0,
+    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    opacity: active ? 1 : 0,
+    transition: 'opacity 0.3s ease',
+    borderRadius: '4px',
+  },
+}));
 
 const NavLink = styled(motion.a)<NavLinkProps>(({ theme, active }) => ({
   color: active ? theme.palette.primary.main : theme.palette.text.primary,
@@ -114,34 +155,29 @@ const CodeLine = styled(Box)(({ theme }) => ({
 const MenuSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(2),
-  backgroundColor: 'rgba(30, 45, 70, 0.25)',
-  borderRadius: theme.spacing(1),
-  border: '1px solid rgba(80, 160, 255, 0.1)',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: 'linear-gradient(90deg, transparent, rgba(80, 160, 255, 0.2), transparent)',
-  },
+  backgroundColor: theme.palette.mode === 'dark'
+    ? 'rgba(30, 45, 70, 0.25)'
+    : alpha(theme.palette.primary.main, 0.04),
+  borderRadius: theme.spacing(1.5),
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
 }));
 
 const MobileDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
     width: '100%',
-    maxWidth: '320px',
-    background: 'rgba(10, 25, 41, 0.97)',
-    backdropFilter: 'blur(12px)',
+    maxWidth: '300px',
+    background:
+      theme.palette.mode === 'dark' ? 'rgba(4, 10, 22, 0.97)' : 'rgba(248, 250, 252, 0.97)',
+    backdropFilter: 'blur(20px)',
     padding: theme.spacing(4, 2),
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    borderLeft: '1px solid rgba(80, 160, 255, 0.1)',
-    backgroundImage: `linear-gradient(to bottom,
-      rgba(10, 25, 41, 0.97),
-      rgba(15, 30, 50, 0.97)),
-      radial-gradient(circle at 20% 30%, rgba(51, 153, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(100, 100, 255, 0.08) 0%, transparent 50%)`,
+    boxShadow:
+      theme.palette.mode === 'dark'
+        ? '0 8px 48px rgba(0, 0, 0, 0.5)'
+        : '0 8px 48px rgba(15, 23, 42, 0.12)',
+    borderLeft:
+      theme.palette.mode === 'dark'
+        ? '1px solid rgba(51, 153, 255, 0.1)'
+        : '1px solid rgba(37, 99, 235, 0.1)',
   },
 }));
 
@@ -163,9 +199,9 @@ const DrawerNavLink = styled(motion.a)<DrawerNavLinkProps>(({ theme, active }) =
   marginBottom: theme.spacing(1.5),
   borderRadius: '0 6px 6px 0',
   position: 'relative',
-  backgroundColor: active ? 'rgba(51, 153, 255, 0.1)' : 'transparent',
+  backgroundColor: active ? alpha(theme.palette.primary.main, 0.1) : 'transparent',
   '&:hover': {
-    backgroundColor: 'rgba(51, 153, 255, 0.05)',
+    backgroundColor: alpha(theme.palette.primary.main, 0.06),
     color: theme.palette.primary.main,
     '&::after': {
       width: '30px',
@@ -209,56 +245,47 @@ const LineNumber = styled(Box)(({ theme }) => ({
 const MenuFooter = styled(Box)(({ theme }) => ({
   marginTop: theme.spacing(4),
   padding: theme.spacing(2),
-  borderTop: '1px solid rgba(80, 160, 255, 0.1)',
-  position: 'relative',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: '20%',
-    right: '20%',
-    height: '1px',
-    background: 'linear-gradient(90deg, transparent, rgba(80, 160, 255, 0.2), transparent)',
-  },
+  borderTop: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
 }));
 
 const SocialSection = styled(Box)(({ theme }) => ({
   display: 'flex',
-  marginTop: '15px !important',
+  marginTop: theme.spacing(2),
   justifyContent: 'center',
-  gap: theme.spacing(3),
+  gap: theme.spacing(2),
   position: 'relative',
-  padding: theme.spacing(2),
+  padding: theme.spacing(1.5, 2),
   '&::before': {
     position: 'absolute',
     top: '-8px',
     left: '50%',
     transform: 'translateX(-50%)',
     fontFamily: '"Roboto Mono", monospace',
-    fontSize: '0.75rem',
+    fontSize: '0.7rem',
     color: theme.palette.primary.main,
-    backgroundColor: 'rgba(10, 25, 41, 0.97)',
+    backgroundColor: theme.palette.mode === 'dark'
+      ? 'rgba(4, 10, 22, 0.97)'
+      : 'rgba(248, 250, 252, 0.97)',
     padding: '0 8px',
+    whiteSpace: 'nowrap',
   },
 }));
 
 const SocialLink = styled('a')(({ theme }) => ({
   color: theme.palette.text.secondary,
-  padding: theme.spacing(1),
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  transition: 'all 0.3s ease',
-  borderRadius: '50%',
-  background: 'rgba(30, 45, 70, 0.3)',
-  border: '1px solid rgba(80, 160, 255, 0.1)',
-  width: '42px',
-  height: '42px',
+  transition: 'all 0.22s ease',
+  borderRadius: 8,
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+  width: 34,
+  height: 34,
+  flexShrink: 0,
   '&:hover': {
     color: theme.palette.primary.main,
-    transform: 'translateY(-3px) scale(1.05)',
-    boxShadow: '0 5px 15px rgba(0, 120, 255, 0.2)',
-    background: 'rgba(30, 45, 70, 0.5)',
+    borderColor: alpha(theme.palette.primary.main, 0.45),
+    background: alpha(theme.palette.primary.main, 0.07),
   },
 }));
 
@@ -292,6 +319,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { t, currentLanguage } = useTypedTranslation();
+  const { mode, toggleMode } = useThemeMode();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -310,14 +338,70 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
-  // Links do menu com tradução dinâmica
-  const menuLinks = [
-    { id: 'home', label: `_${t('home').toLowerCase()}` },
-    { id: 'formation', label: `_${t('formation').toLowerCase()}` },
-    { id: 'experience', label: `_${t('experience').toLowerCase()}` },
-    { id: 'projects', label: `_${t('projects').toLowerCase()}` },
-    { id: 'competence', label: `_${t('skills').toLowerCase()}` },
-    { id: 'contact', label: `_${t('contact').toLowerCase()}` },
+  // Hover dropdown — open on mouse enter, close with delay on leave
+  const [anchorEls, setAnchorEls] = useState<{ [key: string]: HTMLElement | null }>({});
+  const closeTimers = useRef<{ [key: string]: ReturnType<typeof setTimeout> }>({});
+
+  const openMenu = (id: string, el: HTMLElement) => {
+    if (closeTimers.current[id]) clearTimeout(closeTimers.current[id]);
+    setAnchorEls((prev) => ({ ...prev, [id]: el }));
+  };
+  const scheduleClose = (id: string) => {
+    closeTimers.current[id] = setTimeout(
+      () => setAnchorEls((prev) => ({ ...prev, [id]: null })),
+      160
+    );
+  };
+  const cancelClose = (id: string) => {
+    if (closeTimers.current[id]) clearTimeout(closeTimers.current[id]);
+  };
+
+  // Grouped navigation
+  const navGroups = [
+    {
+      id: 'about',
+      label: `_${t('about').toLowerCase()}`,
+      items: [
+        { id: 'home', label: `_${t('home').toLowerCase()}`, icon: <HomeIcon fontSize="small" /> },
+        {
+          id: 'formation',
+          label: `_${t('formation').toLowerCase()}`,
+          icon: <SchoolIcon fontSize="small" />,
+        },
+      ],
+    },
+    {
+      id: 'portfolio',
+      label: `_${t('portfolio').toLowerCase()}`,
+      items: [
+        {
+          id: 'experience',
+          label: `_${t('experience').toLowerCase()}`,
+          icon: <WorkIcon fontSize="small" />,
+        },
+        {
+          id: 'projects',
+          label: `_${t('projects').toLowerCase()}`,
+          icon: <ArchitectureIcon fontSize="small" />,
+        },
+        {
+          id: 'competence',
+          label: `_${t('skills').toLowerCase()}`,
+          icon: <TipsAndUpdatesIcon fontSize="small" />,
+        },
+      ],
+    },
+  ];
+
+  // All flat links (for mobile drawer)
+  const allLinks = [
+    ...navGroups[0].items,
+    ...navGroups[1].items,
+    {
+      id: 'contact',
+      label: `_${t('contact').toLowerCase()}`,
+      icon: <ContactPageIcon fontSize="small" />,
+    },
   ];
 
   return (
@@ -333,9 +417,18 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <StyledToolbar
           sx={{
             ...(scrolled && {
-              backgroundColor: 'rgba(5, 15, 30, 0.95)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+              backgroundColor:
+                theme.palette.mode === 'dark'
+                  ? 'rgba(5, 15, 30, 0.97)'
+                  : 'rgba(255, 255, 255, 0.97)',
+              borderBottom:
+                theme.palette.mode === 'dark'
+                  ? '1px solid rgba(51, 153, 255, 0.1)'
+                  : '1px solid rgba(37, 99, 235, 0.1)',
+              boxShadow:
+                theme.palette.mode === 'dark'
+                  ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+                  : '0 4px 20px rgba(15, 23, 42, 0.06)',
             }),
           }}
         >
@@ -358,41 +451,177 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           ) : (
             <>
               <NavLinks>
-                {menuLinks.map((link) => (
-                  <NavLink
-                    key={link.id}
-                    href={`#${link.id}`}
-                    active={activeSection === link.id}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection(link.id);
-                    }}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {link.label}
-                  </NavLink>
-                ))}
+                {navGroups.map((group) => {
+                  const isActive = group.items.some((item) => activeSection === item.id);
+                  const isOpen = Boolean(anchorEls[group.id]);
+                  return (
+                    <Box
+                      key={group.id}
+                      onMouseEnter={(e) => openMenu(group.id, e.currentTarget)}
+                      onMouseLeave={() => scheduleClose(group.id)}
+                    >
+                      <NavGroupBtn
+                        active={isActive}
+                        onClick={() => scrollToSection(group.items[0].id)}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {group.label}
+                        <Box
+                          component="span"
+                          sx={{
+                            fontSize: '0.6rem',
+                            opacity: 0.55,
+                            display: 'inline-block',
+                            transition: 'transform 0.2s ease',
+                            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                            mt: '1px',
+                          }}
+                        >
+                          ▾
+                        </Box>
+                      </NavGroupBtn>
+
+                      <Menu
+                        open={isOpen}
+                        anchorEl={anchorEls[group.id]}
+                        onClose={() => setAnchorEls((prev) => ({ ...prev, [group.id]: null }))}
+                        disableAutoFocusItem
+                        disableRestoreFocus
+                        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+                        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+                        MenuListProps={{
+                          onMouseEnter: () => cancelClose(group.id),
+                          onMouseLeave: () => scheduleClose(group.id),
+                          disablePadding: true,
+                        }}
+                        slotProps={{
+                          paper: {
+                            sx: {
+                              background: alpha(theme.palette.background.paper, 0.97),
+                              backdropFilter: 'blur(20px)',
+                              border: `1px solid ${alpha(theme.palette.primary.main, 0.14)}`,
+                              borderRadius: 2,
+                              mt: 1,
+                              minWidth: 180,
+                              overflow: 'hidden',
+                              boxShadow:
+                                theme.palette.mode === 'dark'
+                                  ? '0 12px 40px rgba(0,0,0,0.45)'
+                                  : '0 8px 28px rgba(15,23,42,0.12)',
+                              '&::before': {
+                                content: '""',
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: '2px',
+                                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                                opacity: 0.6,
+                              },
+                            },
+                          },
+                        }}
+                      >
+                        <Box sx={{ py: 0.5 }}>
+                          {group.items.map((item, idx) => (
+                            <MenuItem
+                              key={item.id}
+                              onClick={() => {
+                                scrollToSection(item.id);
+                                setAnchorEls((prev) => ({ ...prev, [group.id]: null }));
+                              }}
+                              sx={{
+                                fontFamily: '"Roboto Mono", monospace',
+                                fontSize: '0.85rem',
+                                width: '380px !important',
+                                py: 1.1,
+                                px: 2.5,
+                                color:
+                                  activeSection === item.id ? 'primary.main' : 'text.secondary',
+                                borderLeft: `2px solid ${
+                                  activeSection === item.id
+                                    ? theme.palette.primary.main
+                                    : 'transparent'
+                                }`,
+                                transition: 'all 0.18s ease',
+                                '&:hover': {
+                                  background: alpha(theme.palette.primary.main, 0.06),
+                                  color: 'primary.main',
+                                  borderLeftColor: alpha(theme.palette.primary.main, 0.4),
+                                },
+                                ...(idx > 0 && {
+                                  borderTop: `1px solid ${alpha(theme.palette.divider, 0.3)}`,
+                                }),
+                              }}
+                            >
+                              {item.label}
+                            </MenuItem>
+                          ))}
+                        </Box>
+                      </Menu>
+                    </Box>
+                  );
+                })}
+
+                {/* Contact — direct link */}
+                <NavLink
+                  href="#contact"
+                  active={activeSection === 'contact'}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('contact');
+                  }}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {`_${t('contact').toLowerCase()}`}
+                </NavLink>
               </NavLinks>
 
-              <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
                 <LanguageSelector />
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <SocialLink
-                    href="https://github.com/etezolin"
-                    target="_blank"
-                    aria-label="GitHub"
+                <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'} placement="bottom">
+                  <IconButton
+                    onClick={toggleMode}
+                    size="small"
+                    sx={(t) => ({
+                      color: 'text.secondary',
+                      border: `1px solid ${alpha(t.palette.primary.main, 0.2)}`,
+                      borderRadius: 1,
+                      width: 34,
+                      height: 34,
+                      transition: 'all 0.22s ease',
+                      '&:hover': {
+                        color: 'primary.main',
+                        borderColor: alpha(t.palette.primary.main, 0.45),
+                        background: alpha(t.palette.primary.main, 0.07),
+                      },
+                    })}
                   >
-                    <GitHubIcon />
-                  </SocialLink>
-                  <SocialLink
-                    href="https://www.linkedin.com/in/etezolin"
-                    target="_blank"
-                    aria-label="LinkedIn"
-                  >
-                    <LinkedInIcon />
-                  </SocialLink>
-                </Box>
+                    {mode === 'dark' ? (
+                      <LightModeIcon sx={{ fontSize: 17 }} />
+                    ) : (
+                      <DarkModeIcon sx={{ fontSize: 17 }} />
+                    )}
+                  </IconButton>
+                </Tooltip>
+                <SocialLink
+                  href="https://github.com/etezolin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                >
+                  <GitHubIcon sx={{ fontSize: 18 }} />
+                </SocialLink>
+                <SocialLink
+                  href="https://www.linkedin.com/in/etezolin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedInIcon sx={{ fontSize: 18 }} />
+                </SocialLink>
               </Box>
             </>
           )}
@@ -425,46 +654,104 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </StatusBadge>
             <IconButton
               onClick={() => setDrawerOpen(false)}
-              sx={{
+              sx={(t) => ({
                 color: 'text.secondary',
-                border: '1px solid rgba(80, 160, 255, 0.1)',
-                background: 'rgba(30, 45, 70, 0.3)',
-              }}
+                border: `1px solid ${alpha(t.palette.primary.main, 0.12)}`,
+                background: alpha(t.palette.primary.main, 0.06),
+                '&:hover': { background: alpha(t.palette.primary.main, 0.12) },
+              })}
             >
               <CloseIcon />
             </IconButton>
           </Box>
         </Box>
 
-        <Box sx={{ mb: 2, px: 2 }}>
+        <Box sx={{ mb: 2, px: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
           <LanguageSelector />
+          <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'}>
+            <IconButton
+              onClick={toggleMode}
+              size="small"
+              sx={{
+                color: 'text.secondary',
+                border: '1px solid rgba(51, 153, 255, 0.18)',
+                background: 'rgba(51, 153, 255, 0.05)',
+                width: 34,
+                height: 34,
+                '&:hover': { color: 'primary.main', borderColor: 'rgba(51, 153, 255, 0.4)' },
+              }}
+            >
+              {mode === 'dark' ? (
+                <LightModeIcon sx={{ fontSize: 18 }} />
+              ) : (
+                <DarkModeIcon sx={{ fontSize: 18 }} />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
 
         <MenuSection>
-          {menuLinks.map((link, index) => (
-            <DrawerNavLink
-              key={link.id}
-              href={`#${link.id}`}
-              active={activeSection === link.id}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(link.id);
-              }}
-              whileTap={{ x: 6 }}
-              whileHover={{ x: 6 }}
-            >
-              <LineNumber>{index + 1}</LineNumber>
-              <DrawerNavIcon>
-                {link.id === 'home' && <HomeIcon fontSize="small" />}
-                {link.id === 'formation' && <SchoolIcon fontSize="small" />}
-                {link.id === 'experience' && <WorkIcon fontSize="small" />}
-                {link.id === 'projects' && <ArchitectureIcon fontSize="small" />}
-                {link.id === 'competence' && <TipsAndUpdatesIcon fontSize="small" />}
-                {link.id === 'contact' && <ContactPageIcon fontSize="small" />}
-              </DrawerNavIcon>
-              {link.label}
-            </DrawerNavLink>
+          {/* Group labels + items */}
+          {navGroups.map((group, gIdx) => (
+            <Box key={group.id}>
+              {gIdx > 0 && (
+                <Divider sx={{ my: 1.5, borderColor: (t) => alpha(t.palette.primary.main, 0.1) }} />
+              )}
+              <Typography
+                sx={{
+                  fontFamily: '"Roboto Mono", monospace',
+                  fontSize: '0.65rem',
+                  letterSpacing: '1.8px',
+                  textTransform: 'uppercase',
+                  color: 'primary.main',
+                  opacity: 0.55,
+                  pl: 1,
+                  mb: 0.5,
+                }}
+              >
+                {group.label.replace('_', '')}
+              </Typography>
+              {group.items.map((link, index) => {
+                const globalIdx = gIdx === 0 ? index : navGroups[0].items.length + index;
+                return (
+                  <DrawerNavLink
+                    key={link.id}
+                    href={`#${link.id}`}
+                    active={activeSection === link.id}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(link.id);
+                    }}
+                    whileTap={{ x: 6 }}
+                    whileHover={{ x: 6 }}
+                  >
+                    <LineNumber>{globalIdx + 1}</LineNumber>
+                    <DrawerNavIcon>{link.icon}</DrawerNavIcon>
+                    {link.label}
+                  </DrawerNavLink>
+                );
+              })}
+            </Box>
           ))}
+
+          {/* Contact */}
+          <Divider sx={{ my: 1.5, borderColor: (t) => alpha(t.palette.primary.main, 0.1) }} />
+          <DrawerNavLink
+            href="#contact"
+            active={activeSection === 'contact'}
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToSection('contact');
+            }}
+            whileTap={{ x: 6 }}
+            whileHover={{ x: 6 }}
+          >
+            <LineNumber>{allLinks.length}</LineNumber>
+            <DrawerNavIcon>
+              <ContactPageIcon fontSize="small" />
+            </DrawerNavIcon>
+            {`_${t('contact').toLowerCase()}`}
+          </DrawerNavLink>
         </MenuSection>
 
         <MenuFooter>

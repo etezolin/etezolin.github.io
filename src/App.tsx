@@ -1,6 +1,4 @@
 import { Box, CircularProgress } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
 import { logEvent } from "firebase/analytics";
 import { Suspense, useEffect } from "react";
 import Competence from "./components/Competence/Competence";
@@ -16,7 +14,7 @@ import { analytics } from "./firebase";
 import './i18n';
 import { initializeLanguage } from './i18n/languageInitializer';
 
-import { theme } from "./themes/theme";
+import { AppThemeProvider } from "./themes/ThemeContext";
 
 // ✅ CORREÇÃO: Imports corretos dos hooks
 import { useActiveSection } from "./hooks/useActiveSection";
@@ -37,7 +35,7 @@ const LoadingFallback = () => (
 function App() {
   // ✅ CORREÇÃO: Usar os hooks na ordem correta
   const activeSection = useActiveSection();
-  const { currentTab, deviceType, trafficSource } =
+  const { deviceType, trafficSource } =
     useActiveTabAnalytics(activeSection);
 
   // ✅ Inicializar idioma na primeira carga
@@ -64,16 +62,8 @@ function App() {
     }
   }, [deviceType, trafficSource]);
 
-  // ✅ Debug log (remover em produção)
-  useEffect(() => {
-    if (currentTab && process.env.NODE_ENV === 'development') {
-      console.log(`📍 Seção ativa: ${activeSection} -> Aba: ${currentTab}`);
-    }
-  }, [activeSection, currentTab]);
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <AppThemeProvider>
       <Suspense fallback={<LoadingFallback />}>
         <MainLayout>
           <Home />
@@ -84,7 +74,7 @@ function App() {
           <Contact />
         </MainLayout>
       </Suspense>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }
 

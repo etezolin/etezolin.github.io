@@ -8,10 +8,18 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import LockIcon from '@mui/icons-material/Lock';
 import SpeedIcon from '@mui/icons-material/Speed';
 import StorageIcon from '@mui/icons-material/Storage';
-import { Box, Button, Card, Chip, Container, Divider, Typography } from '@mui/material';
+import { Box, Button, Card, Chip, Container, Divider } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC, MouseEvent, ReactElement } from 'react';
+import {
+  BodyMono,
+  CardSubtitle,
+  CardTitle,
+  MetaMono,
+  SectionLabel,
+  SectionTitle,
+} from '../../components/shared/TypographyTokens';
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation, type TranslationKeys } from '../../hooks/useTranslation';
 
@@ -28,7 +36,7 @@ interface ProjectData {
   type: string;
 }
 
-// ─── Shared card base (same as Competence) ───────────────────────────────────
+// ─── Shared card base ─────────────────────────────────────────────────────────
 
 const SectionCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -65,8 +73,6 @@ const SectionCard = styled(Card)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
 }));
 
-// ─── Category header (same as Competence) ────────────────────────────────────
-
 const CardHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -89,8 +95,6 @@ const CardIcon = styled(Box)(({ theme }) => ({
   flexShrink: 0,
 }));
 
-// ─── Result row (mirrors SkillRow from Competence) ───────────────────────────
-
 const ResultRow = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -111,8 +115,6 @@ const ResultRow = styled(Box)(({ theme }) => ({
   },
 }));
 
-// ─── Tech / metric chips ──────────────────────────────────────────────────────
-
 const TechChip = styled(Chip)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
   fontSize: '0.7rem',
@@ -122,10 +124,7 @@ const TechChip = styled(Chip)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.primary.main, 0.08),
   color: theme.palette.primary.main,
   border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-    transform: 'scale(1.04)',
-  },
+  '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.15), transform: 'scale(1.04)' },
 }));
 
 const MetricChip = styled(Chip)(({ theme }) => ({
@@ -143,43 +142,13 @@ const MetricChip = styled(Chip)(({ theme }) => ({
   },
 }));
 
-// ─── Section label (reused inline) ───────────────────────────────────────────
-
-const SectionLabel = ({ icon, label }: { icon?: ReactElement; label: string }) => (
-  <Box
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: 0.5,
-      mb: 1,
-    }}
-  >
-    {icon && (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          color: 'text.disabled',
-          '& svg': { fontSize: 13 },
-        }}
-      >
-        {icon}
-      </Box>
-    )}
-    <Typography
-      variant="caption"
-      sx={{
-        fontFamily: '"Roboto Mono", monospace',
-        fontSize: '0.68rem',
-        color: 'text.disabled',
-        letterSpacing: '0.4px',
-        textTransform: 'uppercase',
-      }}
-    >
-      {label}
-    </Typography>
-  </Box>
-);
+const RowDot = styled(Box)(({ theme }) => ({
+  width: 5,
+  height: 5,
+  borderRadius: '50%',
+  flexShrink: 0,
+  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+}));
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -189,7 +158,6 @@ const ProjectsSection: FC = () => {
   const handleClick = (type: string, data: string) =>
     trackProfileTabInteraction('projects', type, data);
   const handleConversion = (type: string) => trackProfileConversion(type, 'projects');
-
   const handleProjectClick = (title: string, type: string) => {
     handleClick('project_card_click', `${type}_${title}`);
     handleConversion('project_interest');
@@ -211,7 +179,7 @@ const ProjectsSection: FC = () => {
     pt: {
       project1Title: 'Hub de Integração Educacional Enterprise',
       project1Description:
-        'Plataforma conectando 2.000+ instituições via APIs robustas e sincronização em tempo real.',
+        'Plataforma conectando 7k+ instituições via APIs robustas e sincronização em tempo real.',
       project1Result1: 'Redução de 60% no tempo de processamento administrativo',
       project1Result2: 'Diminuição de 70% em erros de sincronização',
       project1Result3: 'Centralização de dados de 1+ milhão de alunos',
@@ -241,7 +209,7 @@ const ProjectsSection: FC = () => {
     en: {
       project1Title: 'Enterprise Educational Integration Hub',
       project1Description:
-        'Platform connecting 2,000+ institutions via robust APIs and real-time synchronization.',
+        'Platform connecting 7k+ institutions via robust APIs and real-time synchronization.',
       project1Result1: '60% reduction in administrative processing time',
       project1Result2: '70% decrease in synchronization errors',
       project1Result3: 'Centralization of 1+ million student data',
@@ -333,22 +301,8 @@ const ProjectsSection: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* ── Section title ── */}
-        <Typography
-          variant="h2"
-          sx={{
-            mb: 4,
-            backgroundImage: (t) =>
-              `linear-gradient(135deg, ${t.palette.primary.light} 0%, ${t.palette.primary.main} 40%, ${t.palette.secondary.main} 100%)`,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700,
-            fontSize: { xs: '1.75rem', md: '2rem' },
-          }}
-        >
-          {t('projectsTitle')}
-        </Typography>
+        {/* SectionTitle — token */}
+        <SectionTitle>{t('projectsTitle')}</SectionTitle>
 
         {/* ── Confidentiality notice ── */}
         <Box
@@ -367,29 +321,14 @@ const ProjectsSection: FC = () => {
         >
           <InfoOutlinedIcon sx={{ color: '#d97706', mt: 0.2, flexShrink: 0, fontSize: 18 }} />
           <Box>
-            <Typography
-              variant="body2"
-              sx={{
-                fontWeight: 600,
-                mb: 0.5,
-                fontFamily: '"Roboto Mono", monospace',
-                fontSize: '0.83rem',
-                color: '#b45309',
-              }}
-            >
+            {/* CardTitle for notice heading — token */}
+            <CardTitle sx={{ color: '#b45309', mb: 0.5, fontSize: '0.83rem' }}>
               {t('confidentialProjects')}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: '0.8rem',
-                lineHeight: 1.6,
-                color: 'text.secondary',
-                fontFamily: '"Roboto Mono", monospace',
-              }}
-            >
+            </CardTitle>
+            {/* BodyMono for notice body — token */}
+            <BodyMono sx={{ fontSize: '0.8rem', lineHeight: 1.6 }}>
               {t('confidentialDescription')}
-            </Typography>
+            </BodyMono>
           </Box>
         </Box>
 
@@ -404,22 +343,13 @@ const ProjectsSection: FC = () => {
               viewport={{ once: true }}
             >
               <SectionCard onClick={() => handleProjectClick(project.titleKey, project.type)}>
-                {/* Header */}
+                {/* Header — CardTitle + confidential badge */}
                 <CardHeader>
                   <CardIcon>{project.icon}</CardIcon>
                   <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontFamily: '"Roboto Mono", monospace',
-                        fontWeight: 600,
-                        fontSize: '0.97rem',
-                        lineHeight: 1.3,
-                        color: 'text.primary',
-                      }}
-                    >
+                    <CardTitle>
                       {projectsData[currentLang][project.titleKey as keyof typeof projectsData.pt]}
-                    </Typography>
+                    </CardTitle>
 
                     {project.confidential && (
                       <Box
@@ -442,42 +372,27 @@ const ProjectsSection: FC = () => {
                         }}
                       >
                         <LockIcon sx={{ fontSize: 11, color: '#b45309' }} />
-                        <Typography
-                          sx={{
-                            fontFamily: '"Roboto Mono", monospace',
-                            fontSize: '0.67rem',
-                            color: '#b45309',
-                            fontWeight: 600,
-                          }}
-                        >
+                        {/* MetaMono for badge label — token */}
+                        <MetaMono sx={{ fontSize: '0.67rem', color: '#b45309', fontWeight: 600 }}>
                           {t('confidential')}
-                        </Typography>
+                        </MetaMono>
                       </Box>
                     )}
                   </Box>
                 </CardHeader>
 
-                {/* Description */}
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 2.5,
-                    fontSize: '0.85rem',
-                    lineHeight: 1.7,
-                    fontFamily: '"Roboto Mono", monospace',
-                    color: 'text.secondary',
-                  }}
-                >
+                {/* Description — BodyMono token */}
+                <BodyMono sx={{ mb: 2.5, fontSize: '0.85rem', lineHeight: 1.7 }}>
                   {
                     projectsData[currentLang][
                       project.descriptionKey as keyof typeof projectsData.pt
                     ]
                   }
-                </Typography>
+                </BodyMono>
 
-                {/* Metrics */}
+                {/* Metrics — SectionLabel token */}
                 <Box sx={{ mb: 2.5 }}>
-                  <SectionLabel label={t('mainMetrics')} />
+                  <SectionLabel>{t('mainMetrics')}</SectionLabel>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
                     {project.metrics.map((metric, idx) => (
                       <MetricChip
@@ -493,9 +408,12 @@ const ProjectsSection: FC = () => {
                   </Box>
                 </Box>
 
-                {/* Results — mirrors SkillRow */}
+                {/* Results — SectionLabel with icon + BodyMono tokens */}
                 <Box sx={{ mb: 2.5 }}>
-                  <SectionLabel icon={<SpeedIcon />} label={t('results')} />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
+                    <SpeedIcon sx={{ fontSize: 13, color: 'text.disabled' }} />
+                    <SectionLabel sx={{ mb: 0 }}>{t('results')}</SectionLabel>
+                  </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
                     {project.resultsKeys.map((resultKey, idx) => (
                       <ResultRow
@@ -505,34 +423,20 @@ const ProjectsSection: FC = () => {
                           handleClick('result_item_click', `result_${idx}_${project.titleKey}`);
                         }}
                       >
-                        <Box
-                          sx={{
-                            width: 5,
-                            height: 5,
-                            borderRadius: '50%',
-                            flexShrink: 0,
-                            background: (t) =>
-                              `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`,
-                          }}
-                        />
-                        <Typography
-                          sx={{
-                            fontFamily: '"Roboto Mono", monospace',
-                            fontSize: '0.82rem',
-                            color: 'text.primary',
-                            lineHeight: 1.5,
-                          }}
+                        <RowDot />
+                        <BodyMono
+                          sx={{ color: 'text.primary', fontSize: '0.82rem', lineHeight: 1.5 }}
                         >
                           {projectsData[currentLang][resultKey as keyof typeof projectsData.pt]}
-                        </Typography>
+                        </BodyMono>
                       </ResultRow>
                     ))}
                   </Box>
                 </Box>
 
-                {/* Tech stack */}
+                {/* Tech stack — SectionLabel token */}
                 <Box>
-                  <SectionLabel label={t('stack')} />
+                  <SectionLabel>{t('stack')}</SectionLabel>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
                     {project.techStack.map((tech, idx) => (
                       <TechChip
@@ -570,27 +474,8 @@ const ProjectsSection: FC = () => {
                 <GitHubIcon />
               </CardIcon>
               <Box>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontWeight: 600,
-                    fontSize: '0.97rem',
-                    color: 'text.primary',
-                  }}
-                >
-                  {t('openSourceTitle')}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontSize: '0.72rem',
-                    color: 'text.secondary',
-                  }}
-                >
-                  {t('openSourceDescription')}
-                </Typography>
+                <CardTitle>{t('openSourceTitle')}</CardTitle>
+                <CardSubtitle>{t('openSourceDescription')}</CardSubtitle>
               </Box>
             </CardHeader>
 
@@ -625,17 +510,10 @@ const ProjectsSection: FC = () => {
               ))}
             </Box>
 
-            <Typography
-              variant="caption"
-              sx={{
-                color: 'text.disabled',
-                fontStyle: 'italic',
-                fontSize: '0.75rem',
-                fontFamily: '"Roboto Mono", monospace',
-              }}
-            >
+            {/* MetaMono for note — token */}
+            <MetaMono sx={{ fontStyle: 'italic', color: 'text.disabled', fontSize: '0.75rem' }}>
               {t('openSourceNote')}
-            </Typography>
+            </MetaMono>
           </SectionCard>
         </motion.div>
 
@@ -657,31 +535,11 @@ const ProjectsSection: FC = () => {
                 <CodeIcon />
               </CardIcon>
               <Box>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontWeight: 600,
-                    fontSize: '0.97rem',
-                    color: 'text.primary',
-                  }}
-                >
-                  {t('technicalDiscussionTitle')}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontSize: '0.72rem',
-                    color: 'text.secondary',
-                  }}
-                >
-                  {t('technicalDiscussionDescription')}
-                </Typography>
+                <CardTitle>{t('technicalDiscussionTitle')}</CardTitle>
+                <CardSubtitle>{t('technicalDiscussionDescription')}</CardSubtitle>
               </Box>
             </CardHeader>
 
-            {/* Topics — mirrors SkillRow */}
             <Box
               sx={{
                 display: 'grid',
@@ -697,26 +555,10 @@ const ProjectsSection: FC = () => {
                     handleClick('interview_topic_click', topic.key);
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: 5,
-                      height: 5,
-                      borderRadius: '50%',
-                      flexShrink: 0,
-                      background: (t) =>
-                        `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`,
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontSize: '0.83rem',
-                      color: 'text.primary',
-                      lineHeight: 1.5,
-                    }}
-                  >
+                  <RowDot />
+                  <BodyMono sx={{ color: 'text.primary', fontSize: '0.83rem', lineHeight: 1.5 }}>
                     {t(topic.textKey)}
-                  </Typography>
+                  </BodyMono>
                 </ResultRow>
               ))}
             </Box>

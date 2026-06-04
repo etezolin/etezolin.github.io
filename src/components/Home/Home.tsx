@@ -1,6 +1,10 @@
+import ApartmentIcon from '@mui/icons-material/Apartment';
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
+import HubIcon from '@mui/icons-material/Hub';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WorkIcon from '@mui/icons-material/Work';
 import {
   Avatar,
@@ -15,41 +19,19 @@ import {
 import { alpha, keyframes, styled } from '@mui/material/styles';
 import { GoogleMap, InfoWindow, LoadScript, MarkerF } from '@react-google-maps/api';
 import { motion } from 'framer-motion';
-import React, { type FC, useState } from 'react';
-import { BiCloud } from 'react-icons/bi';
-import { DiMsqlServer } from 'react-icons/di';
-import { FaGitAlt, FaGithub, FaNode } from 'react-icons/fa';
-import {
-  SiDocker,
-  SiDotnet,
-  SiFigma,
-  SiGithubactions,
-  SiGooglebigquery,
-  SiJavascript,
-  SiJira,
-  SiMui,
-  SiPostgresql,
-  SiPostman,
-  SiRabbitmq,
-  SiReact,
-  SiSwagger,
-  SiTailwindcss,
-  SiTypescript,
-} from 'react-icons/si';
-import {
-  TbApi,
-  TbBrandCSharp,
-  TbBrandMongodb,
-  TbDatabase,
-  TbHierarchy3,
-  TbLayersIntersect,
-  TbTopologyStar3,
-} from 'react-icons/tb';
+import { type FC, useState } from 'react';
 import foto from '../../assets/foto.png';
+import {
+  BodyMono,
+  CardSubtitle,
+  CardTitle,
+  MetaMono,
+} from '../../components/shared/TypographyTokens';
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 
-// ─── Keyframe Animations ───────────────────────────────────────────────────────
+// ─── Animations ───────────────────────────────────────────────────────────────
+
 const rotateGradient = keyframes`
   0%   { background-position: 0%   50%; }
   50%  { background-position: 100% 50%; }
@@ -62,11 +44,71 @@ const pulseDot = keyframes`
 `;
 
 const blinkCursor = keyframes`
-  0%, 49% { opacity: 1; }
+  0%, 49%   { opacity: 1; }
   50%, 100% { opacity: 0; }
 `;
 
-// ─── Styled Components ─────────────────────────────────────────────────────────
+// ─── Shared card base (identical to all pages) ───────────────────────────────
+
+const SectionCard = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(3),
+  background: alpha(theme.palette.background.paper, 0.9),
+  backdropFilter: 'blur(20px)',
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
+  borderRadius: 14,
+  boxShadow:
+    theme.palette.mode === 'dark'
+      ? '0 4px 32px rgba(0,0,0,0.45)'
+      : '0 4px 24px rgba(15,23,42,0.08)',
+  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '2px',
+    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
+    opacity: 0.45,
+  },
+  '&:hover': {
+    borderColor: alpha(theme.palette.primary.main, 0.28),
+    boxShadow:
+      theme.palette.mode === 'dark'
+        ? '0 8px 48px rgba(0,0,0,0.55)'
+        : '0 8px 32px rgba(15,23,42,0.12)',
+  },
+  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
+}));
+
+// ─── Category header (identical to all pages) ────────────────────────────────
+
+const CardHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(2.5),
+  paddingBottom: theme.spacing(1.5),
+  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
+}));
+
+const CardIcon = styled(Box)(({ theme }) => ({
+  width: 40,
+  height: 40,
+  borderRadius: '10px',
+  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#ffffff',
+  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
+  flexShrink: 0,
+}));
+
+// ─── Avatar ring ──────────────────────────────────────────────────────────────
+
 const AvatarRingWrapper = styled(Box)(({ theme }) => ({
   padding: '3px',
   borderRadius: '50%',
@@ -76,10 +118,12 @@ const AvatarRingWrapper = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  boxShadow: `0 0 32px rgba(51, 153, 255, 0.22), 0 0 80px rgba(51, 153, 255, 0.08)`,
+  boxShadow: `0 0 32px ${alpha(theme.palette.primary.main, 0.22)}, 0 0 80px ${alpha(theme.palette.primary.main, 0.08)}`,
   cursor: 'pointer',
   flexShrink: 0,
 }));
+
+// ─── Status badge ─────────────────────────────────────────────────────────────
 
 const StatusBadge = styled(Box)(({ theme }) => ({
   display: 'inline-flex',
@@ -106,6 +150,8 @@ const PulseDot = styled(Box)(({ theme }) => ({
   animation: `${pulseDot} 2s ease-in-out infinite`,
 }));
 
+// ─── Gradient name ────────────────────────────────────────────────────────────
+
 const GradientText = styled(Typography)(({ theme }) => ({
   backgroundImage: `linear-gradient(135deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 35%, ${theme.palette.secondary.main} 100%)`,
   backgroundClip: 'text',
@@ -127,135 +173,105 @@ const CursorBlink = styled('span')({
   borderRadius: '1px',
 });
 
-const TerminalCard = styled(Card)(({ theme }) => ({
-  background: alpha(theme.palette.background.paper, 0.92),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  overflow: 'hidden',
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04)'
-      : '0 4px 24px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.8)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-  },
-  [theme.breakpoints.down('sm')]: {
-    borderRadius: 10,
-  },
-}));
+// ─── Tech stack — dot badge system ───────────────────────────────────────────
 
-const TerminalHeader = styled(Box)(({ theme }) => ({
-  background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.45)' : 'rgba(0,0,0,0.05)',
-  padding: '10px 16px',
-  display: 'flex',
+const DotBadge = styled(Box)(({ theme }) => ({
+  display: 'inline-flex',
   alignItems: 'center',
-  gap: 7,
-  borderBottom:
-    theme.palette.mode === 'dark'
-      ? '1px solid rgba(255,255,255,0.04)'
-      : `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
-  userSelect: 'none',
-}));
-
-const TerminalContent = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2.5, 3),
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: '0.9rem',
-  lineHeight: 2.1,
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
-    fontSize: '0.8rem',
-    lineHeight: 2,
-  },
-}));
-
-const SectionTitle = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Roboto Mono", monospace',
-  fontWeight: 600,
-  fontSize: '0.95rem',
-  color: theme.palette.text.secondary,
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(1),
-  marginBottom: theme.spacing(2),
-  '&::before': {
-    content: '""',
-    display: 'inline-block',
-    width: '3px',
-    height: '1em',
-    background: `linear-gradient(180deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    borderRadius: '2px',
-    flexShrink: 0,
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.88rem',
-  },
-}));
-
-const TechBadge = styled(motion.div)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(1),
-  padding: theme.spacing(0.85, 1.5),
+  gap: 6,
+  padding: '4px 10px',
   background: alpha(theme.palette.background.paper, 0.9),
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 8,
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+  borderRadius: 7,
   cursor: 'pointer',
-  minWidth: 105,
-  boxShadow:
-    theme.palette.mode === 'dark' ? '0 2px 8px rgba(0,0,0,0.25)' : '0 2px 8px rgba(15,23,42,0.07)',
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(0.7, 1.2),
-    minWidth: 88,
-    gap: theme.spacing(0.75),
+  transition: 'border-color 0.2s ease, background 0.2s ease',
+  '&:hover': {
+    borderColor: alpha(theme.palette.primary.main, 0.25),
+    background: alpha(theme.palette.primary.main, 0.04),
   },
 }));
 
-const CategoryLabel = styled(Typography)(({ theme }) => ({
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: '0.68rem',
-  fontWeight: 700,
-  letterSpacing: '1.8px',
-  textTransform: 'uppercase',
-  color: theme.palette.primary.main,
-  opacity: 0.6,
-  marginBottom: theme.spacing(0.75),
-  marginTop: theme.spacing(2),
+const TechDot = styled(Box)<{ dotcolor: string }>(({ dotcolor }) => ({
+  width: 6,
+  height: 6,
+  borderRadius: '50%',
+  backgroundColor: dotcolor,
+  flexShrink: 0,
 }));
 
-const MapContainer = styled(Card)(({ theme }) => ({
-  position: 'relative',
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.92),
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  backdropFilter: 'blur(16px)',
-  boxShadow:
-    theme.palette.mode === 'dark' ? '0 4px 32px rgba(0,0,0,0.4)' : '0 4px 24px rgba(15,23,42,0.08)',
+const ColLabel = styled(Typography)(({ theme }) => ({
+  fontFamily: '"Roboto Mono", monospace',
+  fontSize: '0.65rem',
+  fontWeight: 600,
+  letterSpacing: '1.6px',
+  textTransform: 'uppercase',
+  color: theme.palette.text.disabled,
+  marginBottom: theme.spacing(0.75),
+}));
+
+// ─── Intro card components ────────────────────────────────────────────────────
+
+const StatCard = styled(Box)(({ theme }) => ({
+  background:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255,255,255,0.04)'
+      : alpha(theme.palette.primary.main, 0.04),
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.08)}`,
+  borderRadius: 10,
+  padding: theme.spacing(1.25, 1),
+  textAlign: 'center',
+  transition: 'border-color 0.2s ease',
+  cursor: 'default',
+  '&:hover': { borderColor: alpha(theme.palette.primary.main, 0.18) },
+}));
+
+const DiffCard = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  gap: theme.spacing(1.25),
+  background:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255,255,255,0.03)'
+      : alpha(theme.palette.primary.main, 0.025),
+  border: `1px solid ${alpha(theme.palette.primary.main, 0.07)}`,
+  borderRadius: 10,
+  padding: theme.spacing(1.25, 1.5),
+  transition: 'all 0.2s ease',
+  cursor: 'default',
+  '&:hover': {
+    background: alpha(theme.palette.primary.main, 0.06),
+    borderColor: alpha(theme.palette.primary.main, 0.18),
+  },
+}));
+
+const DiffIcon = styled(Box)(() => ({
+  width: 30,
+  height: 30,
+  borderRadius: 8,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+  '& svg': { fontSize: 16 },
+}));
+
+// ─── Map card — FLAT, no elevation, theme-aware ───────────────────────────────
+
+const MapCard = styled(SectionCard)(({ theme }) => ({
+  // override: no hover lift, no extra shadow — keep it flat like the rest
+  cursor: 'default',
   marginTop: theme.spacing(5),
   marginBottom: theme.spacing(5),
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '1px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 70%, transparent 100%)`,
-    opacity: 0.5,
+  '&:hover': {
+    transform: 'none',
+    boxShadow:
+      theme.palette.mode === 'dark'
+        ? '0 4px 32px rgba(0,0,0,0.45)'
+        : '0 4px 24px rgba(15,23,42,0.08)',
   },
   [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(2),
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
-    borderRadius: 10,
   },
 }));
 
@@ -288,15 +304,16 @@ const ContactButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
   background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
   color: '#fff',
-  boxShadow: '0 4px 16px rgba(51, 153, 255, 0.25)',
+  boxShadow: `0 4px 16px ${alpha(theme.palette.primary.main, 0.25)}`,
   '&:hover': {
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 28px rgba(51, 153, 255, 0.35)',
+    boxShadow: `0 8px 28px ${alpha(theme.palette.primary.main, 0.35)}`,
     background: `linear-gradient(135deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
   },
 }));
 
-// ─── Animation Variants ────────────────────────────────────────────────────────
+// ─── Motion variants ──────────────────────────────────────────────────────────
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
@@ -312,7 +329,62 @@ const techStackVariants = {
   visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.5 } },
 };
 
-// ─── Component ─────────────────────────────────────────────────────────────────
+// ─── Google Maps style sets ───────────────────────────────────────────────────
+
+// Dark: deep navy matching the site's dark palette
+const darkMapStyles: google.maps.MapTypeStyle[] = [
+  { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#060e1c' }] },
+  { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#4dabff' }] },
+  {
+    featureType: 'all',
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#060e1c' }, { weight: 2 }],
+  },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d2b5e' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4fc3f7' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#0f1f40' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#1a3680' }] },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#080f20' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#0f1e3d' }] },
+  {
+    featureType: 'administrative',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#3399ff' }, { weight: 1 }],
+  },
+];
+
+// Light: soft slate-blue tones matching the site's light palette — no black, no harsh contrast
+const lightMapStyles: google.maps.MapTypeStyle[] = [
+  { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#e8eef7' }] },
+  { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#2563eb' }] },
+  {
+    featureType: 'all',
+    elementType: 'labels.text.stroke',
+    stylers: [{ color: '#ffffff' }, { weight: 2 }],
+  },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#b8d0f0' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#1d4ed8' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#c9d8f0' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#93c5fd' }] },
+  { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#f0f5ff' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#dbeafe' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#d1fae5' }] },
+  {
+    featureType: 'administrative',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#93c5fd' }, { weight: 1 }],
+  },
+  {
+    featureType: 'administrative.country',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#60a5fa' }, { weight: 1.5 }],
+  },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 interface HomeProps {
   googleMapsApiKey?: string;
 }
@@ -325,21 +397,12 @@ const Home: FC<HomeProps> = ({
   const [isInfoWindowOpen, setIsInfoWindowOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const isDark = theme.palette.mode === 'dark';
   const curitibaPosition = { lat: -25.4284, lng: -49.2733 };
 
   const handleTrack = (action: string, label: string, extra?: string) => {
     trackProfileTabInteraction('home', action, label);
     if (extra) trackProfileConversion(extra, 'home');
-  };
-
-  const handleContactClick = (method: string, action: () => void) => {
-    handleTrack('contact_click', method, `${method}_contact`);
-    action();
-  };
-
-  const handleSocialClick = (platform: string, url: string) => {
-    handleTrack('social_link_click', platform, 'social_visit');
-    window.open(url, '_blank', 'noopener noreferrer');
   };
 
   const scrollToContact = () => {
@@ -349,155 +412,120 @@ const Home: FC<HomeProps> = ({
 
   const techCategories = {
     backend: [
-      { name: 'C#', color: '#9B4F96', icon: TbBrandCSharp },
-      { name: '.NET', color: '#94d2bd', icon: SiDotnet },
-      { name: 'ASP.NET Core', color: '#512BD4', icon: SiDotnet },
-      { name: 'Node.js', color: '#539E43', icon: FaNode },
-      { name: 'Dapper', color: '#2563EB', icon: TbDatabase },
-      { name: 'Entity Framework', color: '#68217A', icon: SiDotnet },
+      { name: 'C#', color: '#9B4F96' },
+      { name: '.NET', color: '#94d2bd' },
+      { name: 'ASP.NET Core', color: '#512BD4' },
+      { name: 'Node.js', color: '#539E43' },
+      { name: 'Dapper', color: '#2563EB' },
+      { name: 'Entity Framework', color: '#68217A' },
     ],
     frontend: [
-      { name: 'JavaScript', color: '#F7DF1E', icon: SiJavascript },
-      { name: 'React', color: '#61DAFB', icon: SiReact },
-      { name: 'TypeScript', color: '#007ACC', icon: SiTypescript },
-      { name: 'MaterialUI', color: '#0081CB', icon: SiMui },
-      { name: 'Tailwind CSS', color: '#6668e9', icon: SiTailwindcss },
+      { name: 'JavaScript', color: '#F7DF1E' },
+      { name: 'React', color: '#61DAFB' },
+      { name: 'TypeScript', color: '#007ACC' },
+      { name: 'Material UI', color: '#0081CB' },
+      { name: 'Tailwind CSS', color: '#6668e9' },
     ],
     database: [
-      { name: 'SQLServer', color: '#ac0e0e', icon: DiMsqlServer },
-      { name: 'PostgreSQL', color: '#48cae4', icon: SiPostgresql },
-      { name: 'BigQuery', color: '#c49d31', icon: SiGooglebigquery },
-      { name: 'MongoDB', color: '#adc178', icon: TbBrandMongodb },
+      { name: 'SQL Server', color: '#ac0e0e' },
+      { name: 'PostgreSQL', color: '#48cae4' },
+      { name: 'BigQuery', color: '#c49d31' },
+      { name: 'MongoDB', color: '#adc178' },
     ],
     cloud: [
-      { name: 'Google Cloud', color: '#a14744', icon: BiCloud },
-      { name: 'Docker', color: '#2496ED', icon: SiDocker },
-      { name: 'Git', color: '#F05032', icon: FaGitAlt },
-      { name: 'Github', color: '#44a149', icon: FaGithub },
-      { name: 'GitHub Actions', color: '#2088FF', icon: SiGithubactions },
-      { name: 'Cloud Build', color: '#fb8500', icon: BiCloud },
+      { name: 'Google Cloud', color: '#a14744' },
+      { name: 'Docker', color: '#2496ED' },
+      { name: 'Git', color: '#F05032' },
+      { name: 'GitHub', color: '#44a149' },
+      { name: 'GitHub Actions', color: '#2088FF' },
+      { name: 'Cloud Build', color: '#fb8500' },
     ],
     tools: [
-      { name: 'Postman', color: '#FF6C37', icon: SiPostman },
-      { name: 'Swagger', color: '#85EA2D', icon: SiSwagger },
-      { name: 'Figma', color: '#F24E1E', icon: SiFigma },
-      { name: 'Jira', color: '#0052CC', icon: SiJira },
+      { name: 'Postman', color: '#FF6C37' },
+      { name: 'Swagger', color: '#85EA2D' },
+      { name: 'Figma', color: '#F24E1E' },
+      { name: 'Jira', color: '#0052CC' },
     ],
     architecture: [
-      { name: 'Clean Architecture', color: '#7B68EE', icon: TbLayersIntersect },
-      { name: 'DDD', color: '#8B5CF6', icon: TbHierarchy3 },
-      { name: 'Microservices', color: '#7B68EE', icon: TbTopologyStar3 },
-      { name: 'RabbitMQ', color: '#FF6600', icon: SiRabbitmq },
-      // { name: 'Apache Kafka', color: '#231F20', icon: SiApachekafka },
-      { name: 'REST API', color: '#3DDC84', icon: TbApi },
+      { name: 'Clean Architecture', color: '#7B68EE' },
+      { name: 'DDD', color: '#8B5CF6' },
+      { name: 'Microservices', color: '#7B68EE' },
+      { name: 'RabbitMQ', color: '#FF6600' },
+      { name: 'REST API', color: '#3DDC84' },
     ],
   };
 
-  const contactItems = [
-    {
-      key: 'phone',
-      label: 'phone',
-      value: '"+55 41 99833-5860"',
-      onClick: () => handleContactClick('phone', () => window.open('tel:41998335860')),
-    },
-    {
-      key: 'email',
-      label: 'email',
-      value: '"tezolin.edison@gmail.com"',
-      onClick: () =>
-        handleContactClick('email', () => window.open('mailto:tezolin.edison@gmail.com')),
-    },
-    {
-      key: 'github',
-      label: 'github',
-      value: '"github.com/etezolin"',
-      onClick: () => handleSocialClick('github', 'https://github.com/etezolin'),
-    },
-    {
-      key: 'linkedin',
-      label: 'linkedIn',
-      value: '"linkedin.com/in/etezolin"',
-      onClick: () => handleSocialClick('linkedin', 'https://www.linkedin.com/in/etezolin'),
-    },
+  // Pairs of categories rendered side-by-side
+  const techPairs: Array<[keyof typeof techCategories, keyof typeof techCategories]> = [
+    ['backend', 'frontend'],
+    ['database', 'cloud'],
+    ['tools', 'architecture'],
   ];
 
-  const renderTechSection = (
-    categoryKey: 'backend' | 'frontend' | 'database' | 'cloud',
-    techs: Array<{ name: string; color: string; icon: React.ComponentType }>
+  const renderTechCol = (
+    categoryKey: keyof typeof techCategories,
+    techs: Array<{ name: string; color: string }>
   ) => (
-    <Box key={categoryKey} sx={{ mb: { xs: 1, sm: 1.5 } }}>
-      <CategoryLabel>{t(categoryKey)}</CategoryLabel>
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: '5px', sm: '7px' } }}>
+    <Box key={categoryKey}>
+      <ColLabel>{t(categoryKey as any)}</ColLabel>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
         {techs.map((item) => (
-          <motion.div
-            key={item.name}
-            variants={itemVariants}
-            whileHover={{ scale: 1.05, y: -3 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <TechBadge
-              style={{ borderLeft: `2px solid ${item.color}` }}
-              onClick={() => handleTrack('tech_badge_click', item.name)}
-              onMouseEnter={() => handleTrack('tech_badge_hover', item.name)}
+          <DotBadge key={item.name} onClick={() => handleTrack('tech_badge_click', item.name)}>
+            <TechDot dotcolor={item.color} />
+            <MetaMono
+              sx={{
+                color: 'text.primary',
+                fontSize: { xs: '0.7rem', sm: '0.72rem' },
+                fontWeight: 500,
+                whiteSpace: 'nowrap',
+                lineHeight: 1,
+              }}
             >
-              <Box
-                component="span"
-                sx={{
-                  color: item.color,
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: { xs: '0.9rem', sm: '1rem' },
-                }}
-              >
-                {React.createElement(item.icon)}
-              </Box>
-              <Typography
-                sx={{
-                  color: 'text.primary',
-                  fontSize: { xs: 9.5, sm: 10.5 },
-                  fontFamily: '"Roboto Mono", monospace',
-                  fontWeight: 500,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {item.name}
-              </Typography>
-            </TechBadge>
-          </motion.div>
+              {item.name}
+            </MetaMono>
+          </DotBadge>
         ))}
       </Box>
     </Box>
   );
 
+  const renderTechGrid = () => (
+    <motion.div variants={techStackVariants}>
+      {techPairs.map(([left, right], pairIdx) => (
+        <Box key={`${left}-${right}`}>
+          {pairIdx > 0 && (
+            <Box
+              sx={(theme) => ({
+                height: '1px',
+                background: alpha(theme.palette.divider, 0.5),
+                my: 2,
+              })}
+            />
+          )}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
+              gap: { xs: 2, sm: 3 },
+            }}
+          >
+            {renderTechCol(left, techCategories[left])}
+            {renderTechCol(right, techCategories[right])}
+          </Box>
+        </Box>
+      ))}
+    </motion.div>
+  );
+
   const renderMap = () => {
     const mapHeight = isMobile ? 260 : isTablet ? 300 : 340;
-
-    const modernMapStyles = [
-      { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#060e1c' }] },
-      { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#4dabff' }] },
-      {
-        featureType: 'all',
-        elementType: 'labels.text.stroke',
-        stylers: [{ color: '#060e1c' }, { weight: 2 }],
-      },
-      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0d2b5e' }] },
-      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4fc3f7' }] },
-      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#0f1f40' }] },
-      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#1a3680' }] },
-      { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#080f20' }] },
-      { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#0f1e3d' }] },
-      {
-        featureType: 'administrative',
-        elementType: 'geometry.stroke',
-        stylers: [{ color: '#3399ff' }, { weight: 1 }],
-      },
-    ];
+    const mapStyles = isDark ? darkMapStyles : lightMapStyles;
 
     const mapOptions: google.maps.MapOptions = {
       zoom: isMobile ? 5 : isTablet ? 5.5 : 6,
       center: curitibaPosition,
       mapTypeId: 'roadmap',
-      styles: modernMapStyles,
+      styles: mapStyles,
       disableDefaultUI: isMobile,
       zoomControl: !isMobile,
       streetViewControl: false,
@@ -506,78 +534,54 @@ const Home: FC<HomeProps> = ({
       gestureHandling: isMobile ? 'cooperative' : 'auto',
     };
 
+    // Fallback when no API key
     if (!googleMapsApiKey || googleMapsApiKey.length <= 10) {
       return (
         <Box
-          sx={{
+          sx={(theme) => ({
             height: mapHeight,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px dashed rgba(51, 153, 255, 0.2)',
+            border: `1px dashed ${alpha(theme.palette.primary.main, 0.2)}`,
             borderRadius: 2,
-            backgroundColor: 'rgba(51, 153, 255, 0.03)',
+            background: alpha(theme.palette.primary.main, 0.03),
             padding: { xs: 2, sm: 3 },
-          }}
+          })}
         >
-          <Typography
-            variant="h6"
+          <CardTitle
             sx={{
               color: 'secondary.main',
               mb: 2,
               textAlign: 'center',
-              fontFamily: '"Roboto Mono", monospace',
               fontSize: { xs: '0.95rem', sm: '1.1rem' },
             }}
           >
             {t('staticLocation')}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              color: 'text.secondary',
-              textAlign: 'center',
-              mb: 3,
-              fontSize: { xs: '0.78rem', sm: '0.85rem' },
-            }}
-          >
-            {t('googleMapsUnavailable')}
-          </Typography>
+          </CardTitle>
           <Box
-            sx={(t) => ({
+            sx={(theme) => ({
               p: { xs: 2, sm: 3 },
               textAlign: 'center',
-              border: `1px solid ${alpha(t.palette.primary.main, 0.15)}`,
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
               borderRadius: 2,
-              backgroundColor: alpha(t.palette.primary.main, 0.05),
+              background: alpha(theme.palette.primary.main, 0.04),
               width: '100%',
               maxWidth: 380,
             })}
           >
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'secondary.dark',
-                mb: 2,
-                fontFamily: '"Roboto Mono", monospace',
-                fontSize: { xs: '0.95rem', sm: '1.1rem' },
-              }}
+            <CardTitle
+              sx={{ color: 'secondary.dark', mb: 2, fontSize: { xs: '0.95rem', sm: '1.1rem' } }}
             >
               {t('curitibaLocation')}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'text.secondary', mb: 1, fontSize: { xs: '0.75rem', sm: '0.85rem' } }}
-            >
+            </CardTitle>
+            <BodyMono sx={{ mb: 1, fontSize: { xs: '0.75rem', sm: '0.85rem' } }}>
               {t('coordinates')}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'text.secondary', mb: 2, fontSize: { xs: '0.75rem', sm: '0.85rem' } }}
-            >
+            </BodyMono>
+            <BodyMono sx={{ mb: 2, fontSize: { xs: '0.75rem', sm: '0.85rem' } }}>
               {t('timezone')}
-            </Typography>
+            </BodyMono>
             <ContactButton onClick={scrollToContact} startIcon={<EmailIcon />} fullWidth={isMobile}>
               {t('contactButton')}
             </ContactButton>
@@ -588,16 +592,16 @@ const Home: FC<HomeProps> = ({
 
     return (
       <Box
-        sx={{
+        sx={(theme) => ({
           width: '100%',
           height: mapHeight,
           borderRadius: 2,
           overflow: 'hidden',
-          border: '1px solid rgba(51, 153, 255, 0.18)',
-          boxShadow: '0 4px 24px rgba(0, 0, 0, 0.4)',
+          // flat border matching the card's own border — no extra shadow
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
           position: 'relative',
           zIndex: 1,
-        }}
+        })}
       >
         <LoadScript googleMapsApiKey={googleMapsApiKey}>
           <GoogleMap mapContainerStyle={{ width: '100%', height: '100%' }} options={mapOptions}>
@@ -611,25 +615,25 @@ const Home: FC<HomeProps> = ({
                 url:
                   'data:image/svg+xml;charset=UTF-8,' +
                   encodeURIComponent(`
-                  <svg width="${isMobile ? 35 : 40}" height="${isMobile ? 35 : 40}" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <radialGradient id="grad" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" style="stop-color:#4dabff;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#2979ff;stop-opacity:1" />
-                      </radialGradient>
-                      <filter id="glow">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                        <feMerge>
-                          <feMergeNode in="coloredBlur"/>
-                          <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    <circle cx="20" cy="20" r="15" fill="url(#grad)" filter="url(#glow)" stroke="#ffffff" stroke-width="2.5"/>
-                    <circle cx="20" cy="20" r="6" fill="#ffffff"/>
-                    <circle cx="20" cy="20" r="3" fill="#4dabff"/>
-                  </svg>
-                `),
+                    <svg width="${isMobile ? 35 : 40}" height="${isMobile ? 35 : 40}" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+                          <stop offset="0%" style="stop-color:#4dabff;stop-opacity:1" />
+                          <stop offset="100%" style="stop-color:#2979ff;stop-opacity:1" />
+                        </radialGradient>
+                        <filter id="glow">
+                          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                          <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <circle cx="20" cy="20" r="15" fill="url(#grad)" filter="url(#glow)" stroke="#ffffff" stroke-width="2.5"/>
+                      <circle cx="20" cy="20" r="6" fill="#ffffff"/>
+                      <circle cx="20" cy="20" r="3" fill="#4dabff"/>
+                    </svg>
+                  `),
                 scaledSize:
                   typeof window !== 'undefined' && window.google
                     ? new window.google.maps.Size(isMobile ? 35 : 40, isMobile ? 35 : 40)
@@ -657,19 +661,19 @@ const Home: FC<HomeProps> = ({
                 }}
               >
                 <Box
-                  sx={{
-                    background: 'linear-gradient(135deg, rgba(6,14,28,0.97), rgba(4,10,22,0.95))',
-                    border: '1px solid rgba(51,153,255,0.3)',
+                  sx={(theme) => ({
+                    background: isDark
+                      ? 'linear-gradient(135deg, rgba(6,14,28,0.97), rgba(4,10,22,0.95))'
+                      : 'linear-gradient(135deg, rgba(248,250,255,0.98), rgba(240,245,255,0.96))',
+                    border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
                     borderRadius: 1.5,
                     padding: { xs: 1.5, sm: 2 },
                     minWidth: { xs: 220, sm: 260 },
-                  }}
+                  })}
                 >
-                  <Typography
-                    variant="h6"
+                  <CardTitle
                     sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      color: 'primary.light',
+                      color: 'primary.main',
                       mb: 1,
                       display: 'flex',
                       alignItems: 'center',
@@ -679,19 +683,12 @@ const Home: FC<HomeProps> = ({
                   >
                     <HomeIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
                     {t('curitibaLocation')}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: 'rgba(255,255,255,0.65)',
-                      lineHeight: 1.6,
-                      fontSize: { xs: '0.73rem', sm: '0.82rem' },
-                    }}
-                  >
+                  </CardTitle>
+                  <BodyMono sx={{ lineHeight: 1.6, fontSize: { xs: '0.73rem', sm: '0.82rem' } }}>
                     {t('brazilSouthRegion')}
                     <br />
                     {t('timezone')}
-                  </Typography>
+                  </BodyMono>
                 </Box>
               </InfoWindow>
             )}
@@ -719,7 +716,7 @@ const Home: FC<HomeProps> = ({
         animate="visible"
         style={{ width: '100%' }}
       >
-        {/* ── Hero ──────────────────────────────────────────────────── */}
+        {/* ── Hero ── */}
         <Box
           sx={{
             display: 'flex',
@@ -735,28 +732,16 @@ const Home: FC<HomeProps> = ({
               <Avatar
                 src={foto}
                 alt="Edison Tezolin"
-                sx={{
-                  width: { xs: 118, sm: 138, md: 168 },
-                  height: { xs: 118, sm: 138, md: 168 },
-                }}
+                sx={{ width: { xs: 118, sm: 138, md: 168 }, height: { xs: 118, sm: 138, md: 168 } }}
               />
             </AvatarRingWrapper>
           </motion.div>
 
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <motion.div variants={itemVariants}>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  color: 'text.secondary',
-                  mb: 0.5,
-                  fontSize: { xs: '0.78rem', sm: '0.83rem' },
-                  opacity: 0.6,
-                }}
-              >
+              <MetaMono sx={{ mb: 0.5, fontSize: { xs: '0.78rem', sm: '0.83rem' }, opacity: 0.6 }}>
                 {t('helloEveryone')}
-              </Typography>
+              </MetaMono>
             </motion.div>
 
             <motion.div variants={itemVariants}>
@@ -806,174 +791,190 @@ const Home: FC<HomeProps> = ({
           </Box>
         </Box>
 
-        {/* ── Terminal Contact Card ─────────────────────────────────── */}
+        {/* ── Intro card: identity + impact + differentials ── */}
         <motion.div variants={itemVariants}>
-          <TerminalCard sx={{ mb: 5 }}>
-            <TerminalHeader>
-              <Box
-                sx={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: '50%',
-                  bgcolor: '#ff5f57',
-                  flexShrink: 0,
-                }}
-              />
-              <Box
-                sx={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: '50%',
-                  bgcolor: '#febc2e',
-                  flexShrink: 0,
-                }}
-              />
-              <Box
-                sx={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: '50%',
-                  bgcolor: '#28c840',
-                  flexShrink: 0,
-                }}
-              />
-              <Typography
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  fontSize: '0.73rem',
-                  color: 'text.secondary',
-                  ml: 0.5,
-                  flex: 1,
-                  textAlign: 'center',
-                  opacity: 0.6,
-                }}
-              >
-                contact.ts
-              </Typography>
-            </TerminalHeader>
-            <TerminalContent>
-              {contactItems.map((item) => (
-                <Box key={item.key} sx={{ wordBreak: { xs: 'break-word', sm: 'normal' } }}>
-                  <Box component="span" sx={{ color: 'secondary.dark', mr: 1, userSelect: 'none' }}>
-                    $
+          <SectionCard sx={{ mb: 5 }}>
+            {/* Identity row */}
+            <CardHeader>
+              <CardIcon>
+                <WorkIcon sx={{ fontSize: 20 }} />
+              </CardIcon>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <CardTitle>{t('introRole' as any)}</CardTitle>
+                <CardSubtitle>
+                  {t('introSubtitle' as any)} ·{' '}
+                  <Box component="span" sx={{ fontStyle: 'italic' }}>
+                    {t('introPhilosophy' as any)}
                   </Box>
-                  <Box component="span" sx={{ color: 'primary.main', fontWeight: 600 }}>
-                    const
-                  </Box>{' '}
-                  <Box component="span" sx={{ color: 'text.secondary', opacity: 0.8 }}>
-                    {item.label}
-                  </Box>
-                  {' = '}
-                  <Box
-                    component="span"
-                    onClick={item.onClick}
+                </CardSubtitle>
+              </Box>
+            </CardHeader>
+
+            {/* Impact numbers */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+                gap: 1.25,
+                mb: 2.5,
+              }}
+            >
+              {[
+                { value: '5+', label: t('statYears' as any) },
+                { value: '5B+', label: t('statRecords' as any) },
+                { value: '7k+', label: t('statSchools' as any) },
+                { value: '30k+', label: t('statUsers' as any) },
+              ].map((stat) => (
+                <StatCard key={stat.value}>
+                  <CardTitle
                     sx={{
+                      fontSize: { xs: '1rem', sm: '1.15rem' },
                       color: 'secondary.dark',
-                      cursor: 'pointer',
-                      whiteSpace: { xs: 'normal', sm: 'nowrap' },
-                      fontWeight: 500,
-                      '&:hover': {
-                        textDecoration: 'underline',
-                        textDecorationColor: (t) => `${t.palette.secondary.main}66`,
-                      },
+                      mb: 0.5,
+                      lineHeight: 1,
                     }}
                   >
-                    {item.value}
-                  </Box>
-                </Box>
+                    {stat.value}
+                  </CardTitle>
+                  <MetaMono sx={{ fontSize: '0.62rem', color: 'text.disabled', lineHeight: 1.3 }}>
+                    {stat.label}
+                  </MetaMono>
+                </StatCard>
               ))}
-            </TerminalContent>
-          </TerminalCard>
-        </motion.div>
+            </Box>
 
-        {/* ── Tech Stack ────────────────────────────────────────────── */}
-        <motion.div variants={itemVariants}>
-          <SectionTitle sx={{ mb: 0.5 }}>{t('myTechStack')}</SectionTitle>
-        </motion.div>
-
-        <motion.div variants={techStackVariants}>
-          {(
-            Object.entries(techCategories) as Array<
-              [
-                'backend' | 'frontend' | 'database' | 'cloud',
-                Array<{ name: string; color: string; icon: React.ComponentType }>,
-              ]
+            {/* Differentials 2×2 */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' },
+                gap: 1,
+                mb: 2.5,
+              }}
             >
-          ).map(([key, techs]) => renderTechSection(key, techs))}
+              {[
+                {
+                  icon: <ApartmentIcon />,
+                  color: (t: any) => alpha(t.palette.primary.main, 0.12),
+                  iconColor: 'primary.main',
+                  title: t('diffEnterpriseTitle' as any),
+                  desc: t('diffEnterpriseDesc' as any),
+                },
+                {
+                  icon: <HubIcon />,
+                  color: () => alpha('#1D9E75', 0.1),
+                  iconColor: '#1D9E75',
+                  title: t('diffOwnershipTitle' as any),
+                  desc: t('diffOwnershipDesc' as any),
+                },
+                {
+                  icon: <PsychologyIcon />,
+                  color: () => alpha('#9c27b0', 0.1),
+                  iconColor: (t: any) => (t.palette.mode === 'dark' ? '#ce93d8' : '#7b1fa2'),
+                  title: t('diffPhilosophyTitle' as any),
+                  desc: t('diffPhilosophyDesc' as any),
+                },
+                {
+                  icon: <TrendingUpIcon />,
+                  color: () => alpha('#ff9800', 0.1),
+                  iconColor: (t: any) => (t.palette.mode === 'dark' ? '#ffd54f' : '#e65100'),
+                  title: t('diffImpactTitle' as any),
+                  desc: t('diffImpactDesc' as any),
+                },
+              ].map((item) => (
+                <DiffCard key={item.title}>
+                  <DiffIcon sx={{ background: item.color, color: item.iconColor }}>
+                    {item.icon}
+                  </DiffIcon>
+                  <Box>
+                    <CardTitle sx={{ fontSize: '0.8rem', mb: 0.3 }}>{item.title}</CardTitle>
+                    <CardSubtitle sx={{ fontSize: '0.72rem', lineHeight: 1.5 }}>
+                      {item.desc}
+                    </CardSubtitle>
+                  </Box>
+                </DiffCard>
+              ))}
+            </Box>
+
+            {/* Quote + CTA */}
+            <Box
+              sx={(theme) => ({
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 2,
+                flexWrap: 'wrap',
+                pt: 2,
+                borderTop: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
+              })}
+            >
+              <BodyMono
+                sx={{
+                  fontStyle: 'italic',
+                  fontSize: '0.75rem',
+                  color: 'text.disabled',
+                  flex: 1,
+                  minWidth: 200,
+                }}
+              >
+                {t('recruiterMessagePt1')}
+                <Box
+                  component="span"
+                  sx={{ color: 'secondary.main', fontStyle: 'normal', fontWeight: 600 }}
+                >
+                  {t('technicalExcellence')}
+                </Box>
+                {t('recruiterMessagePt2')}
+                <Box
+                  component="span"
+                  sx={{ color: 'secondary.main', fontStyle: 'normal', fontWeight: 600 }}
+                >
+                  {t('valueDelivery')}
+                </Box>
+                {t('recruiterMessagePt3')}
+              </BodyMono>
+            </Box>
+          </SectionCard>
         </motion.div>
 
-        {/* ── Recruiter Message ─────────────────────────────────────── */}
-        <Box sx={{ mt: { xs: 4, sm: 5 }, mb: { xs: 2, sm: 3 } }}>
-          <motion.div variants={itemVariants}>
-            <SectionTitle>{t('messageToRecruiters')}</SectionTitle>
-          </motion.div>
-          <Typography
-            sx={{
-              fontFamily: '"Roboto Mono", monospace',
-              color: 'text.secondary',
-              lineHeight: 1.8,
-              fontSize: { xs: '0.82rem', sm: '0.87rem', md: '0.92rem' },
-            }}
-          >
-            {t('recruiterMessagePt1')}
-            <Box component="span" sx={{ color: 'secondary.main', fontWeight: 600 }}>
-              {t('technicalExcellence')}
-            </Box>
-            {t('recruiterMessagePt2')}
-            <Box component="span" sx={{ color: 'secondary.main', fontWeight: 600 }}>
-              {t('valueDelivery')}
-            </Box>
-            {t('recruiterMessagePt3')}
-          </Typography>
-        </Box>
+        <motion.div variants={itemVariants}>
+          <SectionCard sx={{ mb: 5 }}>
+            <CardHeader>
+              <CardIcon>
+                <Box sx={{ fontSize: 20, display: 'flex', alignItems: 'center' }}>⚡</Box>
+              </CardIcon>
+              <Box>
+                <CardTitle>{t('myTechStack')}</CardTitle>
+                <CardSubtitle>{t('techStackSubtitle' as any)}</CardSubtitle>
+              </Box>
+            </CardHeader>
 
-        {/* ── Location & Map ────────────────────────────────────────── */}
+            {renderTechGrid()}
+          </SectionCard>
+        </motion.div>
+
+        {/* ── Location & Map ── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
           viewport={{ once: true, margin: '-60px' }}
         >
-          <MapContainer>
-            <Typography
-              variant="h5"
-              sx={{
-                fontFamily: '"Roboto Mono", monospace',
-                color: 'primary.light',
-                textAlign: 'center',
-                mb: 0.5,
-                fontWeight: 600,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 1,
-                fontSize: { xs: '1.05rem', sm: '1.25rem', md: '1.45rem' },
-                position: 'relative',
-                zIndex: 1,
-              }}
-            >
-              <LocationOnIcon sx={{ fontSize: { xs: '1.1rem', md: '1.3rem' } }} />
-              {t('title')}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                fontFamily: '"Roboto Mono", monospace',
-                color: 'text.secondary',
-                textAlign: 'center',
-                mb: 3,
-                fontSize: { xs: '0.75rem', sm: '0.8rem' },
-                position: 'relative',
-                zIndex: 1,
-              }}
-            >
-              {t('description')}
-            </Typography>
+          <MapCard>
+            <CardHeader>
+              <CardIcon>
+                <LocationOnIcon sx={{ fontSize: 20 }} />
+              </CardIcon>
+              <Box>
+                <CardTitle>{t('title')}</CardTitle>
+                <CardSubtitle>{t('description')}</CardSubtitle>
+              </Box>
+            </CardHeader>
 
             {renderMap()}
 
-            <Box sx={{ mt: 3, textAlign: 'center', position: 'relative', zIndex: 1 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', mb: 2 }}>
+            <Box sx={{ mt: 2.5, textAlign: 'center' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', mb: 1.5 }}>
                 <LocationChip>
                   <WorkIcon sx={{ fontSize: { xs: 11, sm: 12 } }} />
                   {t('remoteNational')}
@@ -991,19 +992,17 @@ const Home: FC<HomeProps> = ({
                   {t('hybrid')}
                 </LocationChip>
               </Box>
-              <Typography
-                variant="body2"
+              <MetaMono
                 sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  color: 'text.secondary',
-                  fontSize: { xs: '0.7rem', sm: '0.75rem' },
                   fontStyle: 'italic',
+                  color: 'text.disabled',
+                  fontSize: { xs: '0.7rem', sm: '0.75rem' },
                 }}
               >
                 {t('slogan')}
-              </Typography>
+              </MetaMono>
             </Box>
-          </MapContainer>
+          </MapCard>
         </motion.div>
       </motion.div>
     </Container>

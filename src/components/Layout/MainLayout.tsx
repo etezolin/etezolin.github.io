@@ -155,9 +155,10 @@ const CodeLine = styled(Box)(({ theme }) => ({
 const MenuSection = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(2),
-  backgroundColor: theme.palette.mode === 'dark'
-    ? 'rgba(30, 45, 70, 0.25)'
-    : alpha(theme.palette.primary.main, 0.04),
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(30, 45, 70, 0.25)'
+      : alpha(theme.palette.primary.main, 0.04),
   borderRadius: theme.spacing(1.5),
   border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
 }));
@@ -263,9 +264,8 @@ const SocialSection = styled(Box)(({ theme }) => ({
     fontFamily: '"Roboto Mono", monospace',
     fontSize: '0.7rem',
     color: theme.palette.primary.main,
-    backgroundColor: theme.palette.mode === 'dark'
-      ? 'rgba(4, 10, 22, 0.97)'
-      : 'rgba(248, 250, 252, 0.97)',
+    backgroundColor:
+      theme.palette.mode === 'dark' ? 'rgba(4, 10, 22, 0.97)' : 'rgba(248, 250, 252, 0.97)',
     padding: '0 8px',
     whiteSpace: 'nowrap',
   },
@@ -386,7 +386,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         },
         {
           id: 'competence',
-          label: `_${t('skills').toLowerCase()}`,
+          label: `_${t('skills').toLowerCase()} & _${t('competence').toLowerCase()}`,
           icon: <TipsAndUpdatesIcon fontSize="small" />,
         },
       ],

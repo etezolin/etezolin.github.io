@@ -1,4 +1,3 @@
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DownloadIcon from '@mui/icons-material/Download';
 import EmailIcon from '@mui/icons-material/Email';
@@ -7,36 +6,25 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MessageIcon from '@mui/icons-material/Message';
 import PhoneIcon from '@mui/icons-material/Phone';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import WorkIcon from '@mui/icons-material/Work';
-import {
-  Box,
-  Button,
-  Card,
-  Chip,
-  Container,
-  Divider,
-  IconButton,
-  Link,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import { alpha, keyframes, styled } from '@mui/material/styles';
+import { Box, Card, Chip, Container, Divider, IconButton, Link, Tooltip } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
+import {
+  BodyMono,
+  CardSubtitle,
+  CardTitle,
+  MetaMono,
+  SectionLabel,
+  SectionTitle,
+} from '../../components/shared/TypographyTokens';
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 
-// ─── Animation ────────────────────────────────────────────────────────────────
-
-const pulseGlow = keyframes`
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(0,230,118,0.3)); }
-  50%       { filter: drop-shadow(0 0 18px rgba(0,230,118,0.55)); }
-`;
-
-// ─── Shared card base (identical to Competence / ProjectsSection) ─────────────
+// ─── Shared card base ─────────────────────────────────────────────────────────
 
 const SectionCard = styled(Card)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -72,26 +60,6 @@ const SectionCard = styled(Card)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
 }));
 
-// Hero card — stronger top gradient, no hover lift (it's a banner)
-const HeroCard = styled(SectionCard)(({ theme }) => ({
-  padding: theme.spacing(4),
-  cursor: 'default',
-  '&::before': {
-    opacity: 0.7,
-    height: '2px',
-  },
-  '&:hover': {
-    transform: 'none',
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 4px 32px rgba(0,0,0,0.45)'
-        : '0 4px 24px rgba(15,23,42,0.08)',
-  },
-  [theme.breakpoints.down('sm')]: { padding: theme.spacing(3) },
-}));
-
-// ─── Category header (same as Competence) ────────────────────────────────────
-
 const CardHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -113,8 +81,6 @@ const CardIcon = styled(Box)(({ theme }) => ({
   boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
   flexShrink: 0,
 }));
-
-// ─── Contact row (mirrors SkillRow / ResultRow) ───────────────────────────────
 
 const ContactRow = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -148,8 +114,6 @@ const ContactRowIcon = styled(Box)(() => ({
   '& svg': { fontSize: 17 },
 }));
 
-// ─── Status / opportunity chips ───────────────────────────────────────────────
-
 const StatusChip = styled(Chip)(({ theme }) => ({
   fontFamily: '"Roboto Mono", monospace',
   height: 28,
@@ -174,69 +138,25 @@ const StatusChip = styled(Chip)(({ theme }) => ({
   },
 }));
 
-// ─── CTA action buttons ───────────────────────────────────────────────────────
-
-const ActionButton = styled(Button)(({ theme }) => ({
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: '0.85rem',
-  textTransform: 'none',
-  borderRadius: 10,
-  padding: theme.spacing(1.25, 2.5),
-  minWidth: 140,
-  height: 42,
-  transition: 'all 0.3s ease',
-  '&.primary': {
-    background: 'linear-gradient(135deg, #e53935 0%, #c62828 100%)',
-    color: '#ffffff',
-    border: 'none',
-    boxShadow: '0 4px 16px rgba(229,57,53,0.28)',
-    '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 8px 28px rgba(229,57,53,0.38)',
-      background: 'linear-gradient(135deg, #ef5350 0%, #e53935 100%)',
-    },
-  },
-  '&.whatsapp': {
-    background: 'linear-gradient(135deg, #25d366 0%, #128c7e 100%)',
-    color: '#ffffff',
-    border: 'none',
-    boxShadow: '0 4px 16px rgba(37,211,102,0.28)',
-    '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 8px 28px rgba(37,211,102,0.38)',
-      background: 'linear-gradient(135deg, #4caf50 0%, #25d366 100%)',
-    },
-  },
-  '&.linkedin': {
-    background: 'linear-gradient(135deg, #0288d1 0%, #01579b 100%)',
-    color: '#ffffff',
-    border: 'none',
-    boxShadow: '0 4px 16px rgba(2,136,209,0.28)',
-    '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 8px 28px rgba(2,136,209,0.38)',
-      background: 'linear-gradient(135deg, #29b6f6 0%, #0288d1 100%)',
-    },
-  },
-  [theme.breakpoints.down('sm')]: {
-    fontSize: '0.78rem',
-    minWidth: 120,
-    padding: theme.spacing(1, 1.75),
-  },
-}));
-
 const SocialBtn = styled(IconButton)(({ theme }) => ({
   width: 40,
   height: 40,
   border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
   borderRadius: '10px',
   transition: 'all 0.22s ease',
-  color: 'text.secondary',
   '&:hover': {
     background: alpha(theme.palette.primary.main, 0.07),
     borderColor: alpha(theme.palette.primary.main, 0.4),
     transform: 'translateY(-2px)',
   },
+}));
+
+const RowDot = styled(Box)(({ theme }) => ({
+  width: 5,
+  height: 5,
+  borderRadius: '50%',
+  flexShrink: 0,
+  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
 }));
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -297,98 +217,29 @@ const Contact: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* ── Section title ── */}
-        <Typography
-          variant="h2"
-          sx={{
-            mb: 4,
-            backgroundImage: (t) =>
-              `linear-gradient(135deg, ${t.palette.primary.light} 0%, ${t.palette.primary.main} 40%, ${t.palette.secondary.main} 100%)`,
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            fontWeight: 700,
-            fontSize: { xs: '1.75rem', md: '2rem' },
-          }}
-        >
-          {t('contactTitle')}
-        </Typography>
+        {/* SectionTitle — token */}
+        <SectionTitle>{t('contactTitle')}</SectionTitle>
 
-        {/* ── Hero banner ── */}
+        {/* ── Hero — status card ── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <HeroCard sx={{ mb: 3 }}>
-            <Box sx={{ textAlign: 'center', mb: 3.5 }}>
-              <RocketLaunchIcon
-                sx={{
-                  fontSize: 52,
-                  color: 'secondary.main',
-                  mb: 2,
-                  cursor: 'pointer',
-                  animation: `${pulseGlow} 3s ease-in-out infinite`,
-                }}
-                onClick={() => trackProfileTabInteraction('contact', 'hero_icon_click', 'rocket')}
-              />
-              <Typography
-                variant="h4"
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  color: 'secondary.dark',
-                  mb: 1.5,
-                  fontWeight: 700,
-                  fontSize: { xs: '1.2rem', md: '1.5rem' },
-                }}
-              >
-                {t('readyForChallenges')}
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'text.secondary',
-                  lineHeight: 1.75,
-                  maxWidth: 560,
-                  mx: 'auto',
-                  fontFamily: '"Roboto Mono", monospace',
-                  fontSize: { xs: '0.83rem', md: '0.9rem' },
-                }}
-              >
-                {t('heroDescription')}
-              </Typography>
-            </Box>
+          <SectionCard sx={{ mb: 3, cursor: 'default', '&:hover': { transform: 'none' } }}>
+            <CardHeader>
+              <CardIcon>
+                <EmailIcon />
+              </CardIcon>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                {/* CardTitle + CardSubtitle — tokens */}
+                <CardTitle>{t('readyForChallenges')}</CardTitle>
+                <CardSubtitle>{t('heroDescription')}</CardSubtitle>
+              </Box>
+            </CardHeader>
 
-            {/* CTA buttons */}
-            <Box
-              sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1.5, mb: 3 }}
-            >
-              <ActionButton
-                className="primary"
-                startIcon={<EmailIcon />}
-                onClick={handleEmailClick}
-              >
-                {t('sendEmail')}
-              </ActionButton>
-              <ActionButton
-                className="whatsapp"
-                startIcon={<MessageIcon />}
-                onClick={handleWhatsAppClick}
-              >
-                WhatsApp
-              </ActionButton>
-              <ActionButton
-                className="linkedin"
-                startIcon={<CalendarTodayIcon />}
-                onClick={handleLinkedInClick}
-              >
-                LinkedIn
-              </ActionButton>
-            </Box>
-
-            {/* Status chips */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 0.75 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
               <StatusChip
                 className="available"
                 icon={<CheckCircleIcon />}
@@ -408,16 +259,12 @@ const Contact: FC = () => {
                 onClick={() => handleStatusChipClick('interview', 'online')}
               />
             </Box>
-          </HeroCard>
+          </SectionCard>
         </motion.div>
 
         {/* ── Two-column grid ── */}
         <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-            gap: 3,
-          }}
+          sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}
         >
           {/* ── Contact information ── */}
           <motion.div
@@ -432,27 +279,10 @@ const Contact: FC = () => {
                   <EmailIcon />
                 </CardIcon>
                 <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontWeight: 600,
-                      fontSize: '0.97rem',
-                      color: 'text.primary',
-                    }}
-                  >
-                    {t('contactInformation')}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontSize: '0.72rem',
-                      color: 'text.secondary',
-                    }}
-                  >
+                  <CardTitle>{t('contactInformation')}</CardTitle>
+                  <CardSubtitle>
                     {t('primaryEmail')} · {t('whatsappPhone')}
-                  </Typography>
+                  </CardSubtitle>
                 </Box>
               </CardHeader>
 
@@ -468,16 +298,8 @@ const Contact: FC = () => {
                   <EmailIcon />
                 </ContactRowIcon>
                 <Box sx={{ minWidth: 0 }}>
-                  <Typography
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontSize: '0.75rem',
-                      color: 'text.secondary',
-                      mb: 0.25,
-                    }}
-                  >
-                    {t('primaryEmail')}
-                  </Typography>
+                  {/* MetaMono for row label — token */}
+                  <MetaMono sx={{ fontSize: '0.75rem', mb: 0.25 }}>{t('primaryEmail')}</MetaMono>
                   <Link
                     href="mailto:tezolin.edison@gmail.com"
                     sx={{
@@ -506,16 +328,7 @@ const Contact: FC = () => {
                   <PhoneIcon />
                 </ContactRowIcon>
                 <Box sx={{ minWidth: 0 }}>
-                  <Typography
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontSize: '0.75rem',
-                      color: 'text.secondary',
-                      mb: 0.25,
-                    }}
-                  >
-                    {t('whatsappPhone')}
-                  </Typography>
+                  <MetaMono sx={{ fontSize: '0.75rem', mb: 0.25 }}>{t('whatsappPhone')}</MetaMono>
                   <Link
                     href="https://wa.me/5541998335860"
                     target="_blank"
@@ -534,28 +347,40 @@ const Contact: FC = () => {
               </ContactRow>
 
               <Divider sx={{ my: 2.5, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
-              <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontSize: '0.72rem',
-                    color: 'text.secondary',
-                    display: 'block',
-                    mb: 1.5,
-                    letterSpacing: '0.4px',
-                    textTransform: 'uppercase',
-                  }}
+
+              {/* CTA rows — SectionLabel token */}
+              <SectionLabel>{t('sendEmail')} · WhatsApp · LinkedIn</SectionLabel>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2.5 }}>
+                <ContactRow
+                  onClick={handleEmailClick}
+                  sx={{ mb: 0, flex: 1, minWidth: 140, justifyContent: 'center' }}
                 >
-                  {t('professionalLinks')}
-                </Typography>
+                  <EmailIcon sx={{ fontSize: 15, color: '#e53935', flexShrink: 0 }} />
+                  <BodyMono sx={{ fontSize: '0.75rem', color: 'text.primary' }}>
+                    {t('sendEmail')}
+                  </BodyMono>
+                </ContactRow>
+                <ContactRow
+                  onClick={handleWhatsAppClick}
+                  sx={{ mb: 0, flex: 1, minWidth: 120, justifyContent: 'center' }}
+                >
+                  <MessageIcon sx={{ fontSize: 15, color: '#25d366', flexShrink: 0 }} />
+                  <BodyMono sx={{ fontSize: '0.75rem', color: 'text.primary' }}>WhatsApp</BodyMono>
+                </ContactRow>
+                <ContactRow
+                  onClick={handleLinkedInClick}
+                  sx={{ mb: 0, flex: 1, minWidth: 100, justifyContent: 'center' }}
+                >
+                  <LinkedInIcon sx={{ fontSize: 15, color: '#0288d1', flexShrink: 0 }} />
+                  <BodyMono sx={{ fontSize: '0.75rem', color: 'text.primary' }}>LinkedIn</BodyMono>
+                </ContactRow>
               </Box>
-              <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                <Tooltip title={t('linkedinTooltip')} arrow>
-                  <SocialBtn onClick={handleLinkedInClick} aria-label="LinkedIn">
-                    <LinkedInIcon sx={{ fontSize: 19, color: '#0288d1' }} />
-                  </SocialBtn>
-                </Tooltip>
+
+              <Divider sx={{ my: 2, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
+
+              {/* Social links — SectionLabel token */}
+              <SectionLabel sx={{ mb: 1.5 }}>{t('professionalLinks')}</SectionLabel>
+              <Box sx={{ display: 'flex', gap: 1 }}>
                 <Tooltip title={t('githubTooltip')} arrow>
                   <SocialBtn onClick={handleGitHubClick} aria-label="GitHub">
                     <GitHubIcon sx={{ fontSize: 19 }} />
@@ -589,97 +414,35 @@ const Contact: FC = () => {
                   <ScheduleIcon />
                 </CardIcon>
                 <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontWeight: 600,
-                      fontSize: '0.97rem',
-                      color: 'text.primary',
-                    }}
-                  >
-                    {t('availability')}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      fontFamily: '"Roboto Mono", monospace',
-                      fontSize: '0.72rem',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    {t('preferredSchedule')}
-                  </Typography>
+                  <CardTitle>{t('availability')}</CardTitle>
+                  <CardSubtitle>{t('preferredSchedule')}</CardSubtitle>
                 </Box>
               </CardHeader>
 
-              {/* Schedule rows — mirrors SkillRow */}
+              {/* Schedule rows — BodyMono token */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 2.5 }}>
                 {[
-                  {
-                    icon: <ScheduleIcon />,
-                    label: t('weekdaysSchedule'),
-                    cls: 'info',
-                    key: 'weekdays_8_18',
-                  },
-                  {
-                    icon: <VideocamIcon />,
-                    label: t('onlineInterviewsPreferred'),
-                    cls: 'info',
-                    key: 'online',
-                  },
-                  {
-                    icon: <CheckCircleIcon />,
-                    label: t('responseTime24h'),
-                    cls: 'available',
-                    key: '24h',
-                  },
+                  { icon: <ScheduleIcon />, label: t('weekdaysSchedule'), key: 'weekdays_8_18' },
+                  { icon: <VideocamIcon />, label: t('onlineInterviewsPreferred'), key: 'online' },
+                  { icon: <CheckCircleIcon />, label: t('responseTime24h'), key: '24h' },
                 ].map((item) => (
                   <ContactRow
                     key={item.key}
                     onClick={() => handleStatusChipClick('schedule', item.key)}
                     sx={{ mb: 0 }}
                   >
-                    <Box
-                      sx={{
-                        width: 5,
-                        height: 5,
-                        borderRadius: '50%',
-                        flexShrink: 0,
-                        background: (t) =>
-                          `linear-gradient(135deg, ${t.palette.primary.main}, ${t.palette.secondary.main})`,
-                      }}
-                    />
-                    <Typography
-                      sx={{
-                        fontFamily: '"Roboto Mono", monospace',
-                        fontSize: '0.82rem',
-                        color: 'text.primary',
-                      }}
-                    >
+                    <RowDot />
+                    <BodyMono sx={{ color: 'text.primary', fontSize: '0.82rem' }}>
                       {item.label}
-                    </Typography>
+                    </BodyMono>
                   </ContactRow>
                 ))}
               </Box>
 
               <Divider sx={{ my: 2, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
 
-              {/* Opportunities */}
-              <Typography
-                variant="caption"
-                sx={{
-                  fontFamily: '"Roboto Mono", monospace',
-                  fontSize: '0.72rem',
-                  color: 'text.secondary',
-                  display: 'block',
-                  mb: 1.25,
-                  letterSpacing: '0.4px',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {t('opportunitiesOfInterest')}
-              </Typography>
+              {/* Opportunities — SectionLabel token */}
+              <SectionLabel sx={{ mb: 1.25 }}>{t('opportunitiesOfInterest')}</SectionLabel>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mb: 2.5 }}>
                 {[
                   { label: t('fullStackDeveloper'), key: 'full_stack_developer' },
@@ -697,7 +460,7 @@ const Contact: FC = () => {
                 ))}
               </Box>
 
-              {/* Quote */}
+              {/* Quote — BodyMono italic token */}
               <Box
                 sx={(theme) => ({
                   p: 2,
@@ -710,19 +473,9 @@ const Contact: FC = () => {
                 })}
                 onClick={handleQuoteClick}
               >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: '"Roboto Mono", monospace',
-                    fontSize: '0.82rem',
-                    color: 'text.secondary',
-                    lineHeight: 1.75,
-                    textAlign: 'center',
-                    fontStyle: 'italic',
-                  }}
-                >
+                <BodyMono sx={{ textAlign: 'center', fontStyle: 'italic', fontSize: '0.82rem' }}>
                   {t('professionalQuote')}
-                </Typography>
+                </BodyMono>
               </Box>
             </SectionCard>
           </motion.div>

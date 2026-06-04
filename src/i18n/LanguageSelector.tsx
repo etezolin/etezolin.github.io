@@ -1,4 +1,5 @@
 import { Language as LanguageIcon } from '@mui/icons-material';
+import type { SelectChangeEvent } from '@mui/material';
 import { Box, FormControl, MenuItem, Select, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
@@ -26,7 +27,7 @@ const CompactFormControl = styled(FormControl)(() => ({
 const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
 
-  // Definir inglês como padrão se não houver idioma salvo
+  // Definir português como padrão se não houver idioma salvo
   useEffect(() => {
     const savedLanguage = localStorage.getItem('selectedLanguage');
     if (!savedLanguage) {
@@ -35,7 +36,7 @@ const LanguageSelector: React.FC = () => {
     }
   }, [i18n]);
 
-  const handleLanguageChange = (event: any) => {
+  const handleLanguageChange = (event: SelectChangeEvent<string>) => {
     const newLanguage = event.target.value;
 
     // Salvar no localStorage
@@ -66,7 +67,7 @@ const LanguageSelector: React.FC = () => {
       <CompactFormControl size="small">
         <Select
           labelId="language-select-label"
-          value={i18n.language || 'en'}
+          value={i18n.language || 'pt'}
           onChange={handleLanguageChange}
           displayEmpty={false}
           MenuProps={{

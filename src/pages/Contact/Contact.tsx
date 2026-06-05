@@ -207,7 +207,13 @@ const Contact: FC = () => {
 
         {/* ── Two-column grid ── */}
         <Box
-          sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+            gap: 3,
+            overflow: 'hidden',
+            width: '100%',
+          }}
         >
           {/* ── Contact information ── */}
           <motion.div
@@ -215,6 +221,7 @@ const Contact: FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
+            style={{ overflow: 'hidden' }}
           >
             <SectionCard sx={{ height: '100%' }}>
               <CardHeader>
@@ -345,6 +352,7 @@ const Contact: FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
+            style={{ overflow: 'hidden' }}
           >
             <SectionCard sx={{ height: '100%' }}>
               <CardHeader>

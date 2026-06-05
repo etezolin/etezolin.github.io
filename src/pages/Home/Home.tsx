@@ -6,21 +6,13 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WorkIcon from '@mui/icons-material/Work';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { Avatar, Box, Button, Container, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { alpha, keyframes, styled } from '@mui/material/styles';
 import { GoogleMap, InfoWindow, LoadScript, MarkerF } from '@react-google-maps/api';
 import { motion } from 'framer-motion';
 import { type FC, useState } from 'react';
 import foto from '../../assets/foto.png';
+import { CardHeader, CardIcon, SectionCard } from '../../components/shared/Sharedcards';
 import {
   BodyMono,
   CardSubtitle,
@@ -38,74 +30,10 @@ const rotateGradient = keyframes`
   100% { background-position: 0%   50%; }
 `;
 
-// const pulseDot = keyframes`
-//   0%, 100% { box-shadow: 0 0 0 0   rgba(0, 230, 118, 0.5); }
-//   50%       { box-shadow: 0 0 0 5px rgba(0, 230, 118, 0);   }
-// `;
-
 const blinkCursor = keyframes`
   0%, 49%   { opacity: 1; }
   50%, 100% { opacity: 0; }
 `;
-
-// ─── Shared card base (identical to all pages) ───────────────────────────────
-
-const SectionCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.45)'
-      : '0 4px 24px rgba(15,23,42,0.08)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
-    opacity: 0.45,
-  },
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-  },
-  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
-}));
-
-// ─── Category header (identical to all pages) ────────────────────────────────
-
-const CardHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(2.5),
-  paddingBottom: theme.spacing(1.5),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-}));
-
-const CardIcon = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
-  borderRadius: '10px',
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#ffffff',
-  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-  flexShrink: 0,
-}));
 
 // ─── Avatar ring ──────────────────────────────────────────────────────────────
 
@@ -122,33 +50,6 @@ const AvatarRingWrapper = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   flexShrink: 0,
 }));
-
-// ─── Status badge ─────────────────────────────────────────────────────────────
-
-// const StatusBadge = styled(Box)(({ theme }) => ({
-//   display: 'inline-flex',
-//   alignItems: 'center',
-//   gap: theme.spacing(0.75),
-//   backgroundColor: 'rgba(0, 230, 118, 0.07)',
-//   border: '1px solid rgba(0, 230, 118, 0.22)',
-//   borderRadius: 20,
-//   padding: '5px 14px',
-//   fontFamily: '"Roboto Mono", monospace',
-//   fontSize: '0.7rem',
-//   color: theme.palette.secondary.main,
-//   fontWeight: 600,
-//   letterSpacing: '1px',
-//   textTransform: 'uppercase',
-// }));
-
-// const PulseDot = styled(Box)(({ theme }) => ({
-//   width: 7,
-//   height: 7,
-//   borderRadius: '50%',
-//   backgroundColor: theme.palette.secondary.main,
-//   flexShrink: 0,
-//   animation: `${pulseDot} 2s ease-in-out infinite`,
-// }));
 
 // ─── Gradient name ────────────────────────────────────────────────────────────
 
@@ -255,10 +156,9 @@ const DiffIcon = styled(Box)(() => ({
   '& svg': { fontSize: 16 },
 }));
 
-// ─── Map card — FLAT, no elevation, theme-aware ───────────────────────────────
+// ─── Map card — extends shared SectionCard ────────────────────────────────────
 
 const MapCard = styled(SectionCard)(({ theme }) => ({
-  // override: no hover lift, no extra shadow — keep it flat like the rest
   cursor: 'default',
   marginTop: theme.spacing(5),
   marginBottom: theme.spacing(5),
@@ -331,7 +231,6 @@ const techStackVariants = {
 
 // ─── Google Maps style sets ───────────────────────────────────────────────────
 
-// Dark: deep navy matching the site's dark palette
 const darkMapStyles: google.maps.MapTypeStyle[] = [
   { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#060e1c' }] },
   { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#4dabff' }] },
@@ -353,7 +252,6 @@ const darkMapStyles: google.maps.MapTypeStyle[] = [
   },
 ];
 
-// Light: soft slate-blue tones matching the site's light palette — no black, no harsh contrast
 const lightMapStyles: google.maps.MapTypeStyle[] = [
   { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#e8eef7' }] },
   { featureType: 'all', elementType: 'labels.text.fill', stylers: [{ color: '#2563eb' }] },
@@ -455,7 +353,6 @@ const Home: FC<HomeProps> = ({
     ],
   };
 
-  // Pairs of categories rendered side-by-side
   const techPairs: Array<[keyof typeof techCategories, keyof typeof techCategories]> = [
     ['backend', 'frontend'],
     ['database', 'cloud'],
@@ -534,7 +431,6 @@ const Home: FC<HomeProps> = ({
       gestureHandling: isMobile ? 'cooperative' : 'auto',
     };
 
-    // Fallback when no API key
     if (!googleMapsApiKey || googleMapsApiKey.length <= 10) {
       return (
         <Box
@@ -597,7 +493,6 @@ const Home: FC<HomeProps> = ({
           height: mapHeight,
           borderRadius: 2,
           overflow: 'hidden',
-          // flat border matching the card's own border — no extra shadow
           border: `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
           position: 'relative',
           zIndex: 1,
@@ -781,20 +676,12 @@ const Home: FC<HomeProps> = ({
                 <CursorBlink />
               </Typography>
             </motion.div>
-
-            {/* <motion.div variants={itemVariants}>
-              <StatusBadge>
-                <PulseDot />
-                {t('availableImmediately')}
-              </StatusBadge>
-            </motion.div> */}
           </Box>
         </Box>
 
-        {/* ── Intro card: identity + impact + differentials ── */}
+        {/* ── Intro card ── */}
         <motion.div variants={itemVariants}>
           <SectionCard sx={{ mb: 5 }}>
-            {/* Identity row */}
             <CardHeader>
               <CardIcon>
                 <WorkIcon sx={{ fontSize: 20 }} />
@@ -810,7 +697,6 @@ const Home: FC<HomeProps> = ({
               </Box>
             </CardHeader>
 
-            {/* Impact numbers */}
             <Box
               sx={{
                 display: 'grid',
@@ -843,7 +729,6 @@ const Home: FC<HomeProps> = ({
               ))}
             </Box>
 
-            {/* Differentials 2×2 */}
             <Box
               sx={{
                 display: 'grid',
@@ -896,7 +781,6 @@ const Home: FC<HomeProps> = ({
               ))}
             </Box>
 
-            {/* Quote + CTA */}
             <Box
               sx={(theme) => ({
                 display: 'flex',
@@ -937,6 +821,7 @@ const Home: FC<HomeProps> = ({
           </SectionCard>
         </motion.div>
 
+        {/* ── Tech stack ── */}
         <motion.div variants={itemVariants}>
           <SectionCard sx={{ mb: 5 }}>
             <CardHeader>

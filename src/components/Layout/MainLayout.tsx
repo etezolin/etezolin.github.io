@@ -289,27 +289,27 @@ const SocialLink = styled('a')(({ theme }) => ({
   },
 }));
 
-interface StatusBadgeProps {
-  online?: boolean;
-}
+// interface StatusBadgeProps {
+//   online?: boolean;
+// }
 
-const StatusBadge = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'online',
-})<StatusBadgeProps>(({ theme, online = true }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: '0.75rem',
-  color: online ? '#4caf50' : theme.palette.text.secondary,
-  fontFamily: '"Roboto Mono", monospace',
-  '& .dot': {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    backgroundColor: online ? '#4caf50' : '#f44336',
-    marginRight: theme.spacing(0.75),
-    boxShadow: online ? '0 0 10px rgba(76, 175, 80, 0.5)' : 'none',
-  },
-}));
+// const StatusBadge = styled(Box, {
+//   shouldForwardProp: (prop) => prop !== 'online',
+// })<StatusBadgeProps>(({ theme, online = true }) => ({
+//   display: 'flex',
+//   alignItems: 'center',
+//   fontSize: '0.75rem',
+//   color: online ? '#4caf50' : theme.palette.text.secondary,
+//   fontFamily: '"Roboto Mono", monospace',
+//   '& .dot': {
+//     width: 8,
+//     height: 8,
+//     borderRadius: '50%',
+//     backgroundColor: online ? '#4caf50' : '#f44336',
+//     marginRight: theme.spacing(0.75),
+//     boxShadow: online ? '0 0 10px rgba(76, 175, 80, 0.5)' : 'none',
+//   },
+// }));
 
 // Definição do componente principal
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
@@ -439,7 +439,32 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
           {isMobile ? (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              {/* <LanguageSelector /> */}
+              <LanguageSelector />
+              <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'} placement="bottom">
+                <IconButton
+                  onClick={toggleMode}
+                  size="small"
+                  sx={(t) => ({
+                    color: 'text.secondary',
+                    border: `1px solid ${alpha(t.palette.primary.main, 0.2)}`,
+                    borderRadius: 1,
+                    width: 34,
+                    height: 34,
+                    transition: 'all 0.22s ease',
+                    '&:hover': {
+                      color: 'primary.main',
+                      borderColor: alpha(t.palette.primary.main, 0.45),
+                      background: alpha(t.palette.primary.main, 0.07),
+                    },
+                  })}
+                >
+                  {mode === 'dark' ? (
+                    <LightModeIcon sx={{ fontSize: 17 }} />
+                  ) : (
+                    <DarkModeIcon sx={{ fontSize: 17 }} />
+                  )}
+                </IconButton>
+              </Tooltip>
               <IconButton
                 aria-label="menu"
                 onClick={() => setDrawerOpen(true)}
@@ -648,10 +673,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             etezolin
           </LogoText>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <StatusBadge sx={{ mr: 2 }}>
+            {/* <StatusBadge sx={{ mr: 2 }}>
               <span className="dot" />
               {t('online')}
-            </StatusBadge>
+            </StatusBadge> */}
             <IconButton
               onClick={() => setDrawerOpen(false)}
               sx={(t) => ({
@@ -666,7 +691,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </Box>
         </Box>
 
-        <Box sx={{ mb: 2, px: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
+        {/* <Box sx={{ mb: 2, px: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
           <LanguageSelector />
           <Tooltip title={mode === 'dark' ? 'Light mode' : 'Dark mode'}>
             <IconButton
@@ -688,7 +713,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               )}
             </IconButton>
           </Tooltip>
-        </Box>
+        </Box> */}
 
         <MenuSection>
           {/* Group labels + items */}

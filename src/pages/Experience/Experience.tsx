@@ -4,10 +4,12 @@ import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import SpeedIcon from '@mui/icons-material/Speed';
 import WorkIcon from '@mui/icons-material/Work';
-import { Box, Card, Chip, Container, Divider } from '@mui/material';
+import { Box, Chip, Container, Divider } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
+import { GitHubImageWithSkeleton } from '../../components/shared/GitHubImageWithSkeleton';
+import { CardHeader, CardIcon, SectionCard } from '../../components/shared/Sharedcards';
 import {
   BodyMono,
   CardSubtitle,
@@ -19,64 +21,7 @@ import {
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 
-// ─── Shared card base ─────────────────────────────────────────────────────────
-
-const SectionCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.45)'
-      : '0 4px 24px rgba(15,23,42,0.08)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  cursor: 'pointer',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
-    opacity: 0.45,
-  },
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-    transform: 'translateY(-3px)',
-  },
-  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
-}));
-
-const CardHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(2.5),
-  paddingBottom: theme.spacing(1.5),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-}));
-
-const CardIcon = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
-  borderRadius: '10px',
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#ffffff',
-  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-  flexShrink: 0,
-}));
+// ─── Local styled components ──────────────────────────────────────────────────
 
 const AchievementRow = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -139,6 +84,8 @@ const Hi = styled('span')(({ theme }) => ({
   fontWeight: 700,
 }));
 
+// ─── Terminal card — extends SectionCard ──────────────────────────────────────
+
 const TerminalCard = styled(SectionCard)(() => ({
   padding: 0,
   cursor: 'pointer',
@@ -190,13 +137,13 @@ const GitHubMetric = styled(Box)(({ theme }) => ({
   },
 }));
 
-const GitHubImage = styled('img')({
-  width: '100%',
-  height: 'auto',
-  borderRadius: 8,
-  transition: 'transform 0.3s ease',
-  '&:hover': { transform: 'scale(1.02)' },
-});
+// const GitHubImage = styled('img')({
+//   width: '100%',
+//   height: 'auto',
+//   borderRadius: 8,
+//   transition: 'transform 0.3s ease',
+//   '&:hover': { transform: 'scale(1.02)' },
+// });
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -257,7 +204,6 @@ const Experience: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* SectionTitle — token */}
         <SectionTitle>{t('experienceTitle')}</SectionTitle>
 
         {/* ── Executive summary ── */}
@@ -273,7 +219,6 @@ const Experience: FC = () => {
                 <SpeedIcon />
               </CardIcon>
               <Box>
-                {/* CardTitle + CardSubtitle — tokens */}
                 <CardTitle>{t('executiveSummary')}</CardTitle>
                 <CardSubtitle>
                   <Hi>{t('specialistIn')}</Hi> {t('specialistIn001')} · <Hi>{t('focus')}</Hi>{' '}
@@ -305,7 +250,6 @@ const Experience: FC = () => {
 
             <AchievementRow onClick={(e) => e.stopPropagation()}>
               <RowDot />
-              {/* BodyMono — token */}
               <BodyMono sx={{ color: 'text.primary', fontSize: '0.83rem', lineHeight: 1.7 }}>
                 <Hi>{t('available')}</Hi> {t('availableLocation')}
               </BodyMono>
@@ -339,7 +283,6 @@ const Experience: FC = () => {
                   }}
                 >
                   <CardTitle>{t('currentJobTitle')}</CardTitle>
-                  {/* MetaMono for period — token */}
                   <MetaMono sx={{ flexShrink: 0 }}>{t('currentJobPeriod')}</MetaMono>
                 </Box>
                 <CardSubtitle>{t('currentJobDescription')}</CardSubtitle>
@@ -361,7 +304,6 @@ const Experience: FC = () => {
               )}
             </Box>
 
-            {/* SectionLabel — token */}
             <SectionLabel>{t('results')}</SectionLabel>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
               {[
@@ -505,7 +447,6 @@ const Experience: FC = () => {
               <TerminalDot color="#ff5f57" />
               <TerminalDot color="#febc2e" />
               <TerminalDot color="#28c840" />
-              {/* MetaMono for terminal label — token */}
               <MetaMono
                 sx={{ opacity: 0.6, ml: 0.5, flex: 1, textAlign: 'center', fontSize: '0.72rem' }}
               >
@@ -542,14 +483,13 @@ const Experience: FC = () => {
                       handleGitHubMetricClick('streak_stats');
                     }}
                   >
-                    {/* CardTitle reused for metric heading — token */}
                     <CardTitle sx={{ color: 'secondary.dark', mb: 1, fontSize: '0.82rem' }}>
                       {t('commitStreak')}
                     </CardTitle>
-                    <GitHubImage
+                    <GitHubImageWithSkeleton
                       src="https://streak-stats.demolab.com/?user=etezolin&theme=dark"
                       alt="GitHub Streak Stats"
-                      loading="lazy"
+                      height={160}
                     />
                   </GitHubMetric>
                 </motion.div>
@@ -563,10 +503,10 @@ const Experience: FC = () => {
                     <CardTitle sx={{ color: 'secondary.dark', mb: 1, fontSize: '0.82rem' }}>
                       {t('languagesActivity')}
                     </CardTitle>
-                    <GitHubImage
+                    <GitHubImageWithSkeleton
                       src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=etezolin&theme=github_dark"
                       alt="GitHub Profile Summary"
-                      loading="lazy"
+                      height={160}
                     />
                   </GitHubMetric>
                 </motion.div>
@@ -637,7 +577,6 @@ const Experience: FC = () => {
                     >
                       {icon}
                     </Box>
-                    {/* CardTitle for sub-category — token */}
                     <CardTitle sx={{ fontSize: '0.82rem' }}>{t(key as any)}</CardTitle>
                   </Box>
 

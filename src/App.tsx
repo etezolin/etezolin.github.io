@@ -1,14 +1,14 @@
 import { Box, CircularProgress } from '@mui/material';
 import { logEvent } from 'firebase/analytics';
 import { Suspense, useEffect } from 'react';
-import Competence from './components/Competence/Competence';
-import Contact from './components/Contact/Contact';
-import Experience from './components/Experience/Experience';
-import Formation from './components/Formation/Formation';
-import Home from './components/Home/Home';
 import { MainLayout } from './components/Layout/MainLayout';
-import Project from './components/Projects/Projects';
 import { analytics } from './firebase';
+import Competence from './pages/Competence/Competence';
+import Contact from './pages/Contact/Contact';
+import Experience from './pages/Experience/Experience';
+import Formation from './pages/Formation/Formation';
+import Home from './pages/Home/Home';
+import Project from './pages/Projects/Projects';
 
 // ✅ Importações do i18n
 import './i18n';

@@ -1,8 +1,3 @@
-import { Box, Card, Chip, Container, IconButton, Tooltip, Typography } from '@mui/material';
-import { alpha, styled } from '@mui/material/styles';
-import { motion } from 'framer-motion';
-import type { FC } from 'react';
-
 import ArchitectureIcon from '@mui/icons-material/Architecture';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BuildIcon from '@mui/icons-material/Build';
@@ -15,7 +10,11 @@ import StorageIcon from '@mui/icons-material/Storage';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WebIcon from '@mui/icons-material/Web';
-
+import { Box, Chip, Container, IconButton, Tooltip, Typography } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import type { FC } from 'react';
+import { CardHeader, CardIcon, SectionCard } from '../../components/shared/Sharedcards';
 import {
   CardSubtitle,
   CardTitle,
@@ -25,65 +24,7 @@ import {
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 
-// ─── Shared card base ────────────────────────────────────────────────────────
-
-const SkillCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  marginBottom: 0,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.45)'
-      : '0 4px 24px rgba(15,23,42,0.08)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  cursor: 'default',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
-    opacity: 0.45,
-  },
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-    transform: 'translateY(-3px)',
-  },
-  [theme.breakpoints.down('sm')]: { padding: theme.spacing(2), borderRadius: 10 },
-}));
-
-const CategoryHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(2.5),
-  paddingBottom: theme.spacing(1.5),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-}));
-
-const CategoryIcon = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
-  borderRadius: '10px',
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#ffffff',
-  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-  flexShrink: 0,
-}));
+// ─── Local styled components ──────────────────────────────────────────────────
 
 const SkillRow = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -196,6 +137,13 @@ const LegendDot = styled(Box, {
   }),
 }));
 
+// ─── Competence uses SkillCard (cursor:default variant of SectionCard) ────────
+
+const SkillCard = styled(SectionCard)(() => ({
+  cursor: 'default',
+  marginBottom: 0,
+}));
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 const Competence: FC = () => {
@@ -289,9 +237,6 @@ const Competence: FC = () => {
     { icon: <TrendingUpIcon />, titleKey: 'eightyFiveReduction', subtitleKey: 'processingTime' },
   ];
 
-  // const currentlyLearningKeys = ['machineLearning', 'kubernetes', 'serverlessArch', 'terraformIaC'];
-  // const nextGoalsKeys = ['azureArchitect', 'kafkaStreaming', 'graphqlAdvanced', 'webAssembly'];
-
   const legendItems: { label: string; type: BadgeLevel }[] = [
     { label: 'Expert', type: 'expert' },
     { label: 'Advanced', type: 'advanced' },
@@ -306,15 +251,13 @@ const Competence: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* ── Section title — token ── */}
         <SectionTitle sx={{ mb: 1 }}>{t('competenceTitle')}</SectionTitle>
 
-        {/* ── Badge legend — token ── */}
+        {/* ── Badge legend ── */}
         <Box sx={{ display: 'flex', gap: 3, mb: 5, alignItems: 'center' }}>
           {legendItems.map((item) => (
             <Box key={item.type} sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
               <LegendDot badgetype={item.type} />
-              {/* CardSubtitle reused for legend labels — same size/colour */}
               <CardSubtitle>{item.label}</CardSubtitle>
             </Box>
           ))}
@@ -338,16 +281,15 @@ const Competence: FC = () => {
               viewport={{ once: true }}
             >
               <SkillCard>
-                <CategoryHeader>
-                  <CategoryIcon>{category.icon}</CategoryIcon>
+                <CardHeader>
+                  <CardIcon>{category.icon}</CardIcon>
                   <Box>
-                    {/* CardTitle + CardSubtitle — tokens */}
                     <CardTitle>{t(category.categoryKey as any)}</CardTitle>
                     <CardSubtitle>
                       {category.skills.length} {t('technologies')}
                     </CardSubtitle>
                   </Box>
-                </CategoryHeader>
+                </CardHeader>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
                   {category.skills.map((skill, skillIndex) => {
@@ -367,7 +309,6 @@ const Competence: FC = () => {
                           {skill.name}
                         </Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-                          {/* MetaMono for experience tag — token */}
                           <MetaMono sx={{ fontSize: '0.68rem', color: 'text.disabled' }}>
                             {t(skill.experienceKey as any)}
                           </MetaMono>
@@ -390,15 +331,15 @@ const Competence: FC = () => {
           viewport={{ once: true }}
         >
           <SkillCard sx={{ mb: 3 }}>
-            <CategoryHeader>
-              <CategoryIcon>
+            <CardHeader>
+              <CardIcon>
                 <ArchitectureIcon />
-              </CategoryIcon>
+              </CardIcon>
               <Box>
                 <CardTitle>{t('methodologiesPractices')}</CardTitle>
                 <CardSubtitle>{t('patternsBestPractices')}</CardSubtitle>
               </Box>
-            </CategoryHeader>
+            </CardHeader>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {methodologiesKeys.map((key, index) => (
                 <SkillChip
@@ -420,15 +361,15 @@ const Competence: FC = () => {
           viewport={{ once: true }}
         >
           <SkillCard sx={{ mb: 3 }}>
-            <CategoryHeader>
-              <CategoryIcon>
+            <CardHeader>
+              <CardIcon>
                 <TimelineIcon />
-              </CategoryIcon>
+              </CardIcon>
               <Box>
                 <CardTitle>{t('techEvolutionJourney')}</CardTitle>
                 <CardSubtitle>{t('growthOverYears')}</CardSubtitle>
               </Box>
-            </CategoryHeader>
+            </CardHeader>
             <Box sx={{ display: 'grid', gap: 1 }}>
               {learningPath.map((item, index) => (
                 <TimelineItem
@@ -454,7 +395,6 @@ const Competence: FC = () => {
                     {item.icon}
                   </Box>
                   <Box>
-                    {/* MetaMono for year — token */}
                     <MetaMono
                       sx={{ color: 'secondary.dark', fontWeight: 600, fontSize: '0.78rem' }}
                     >
@@ -476,7 +416,7 @@ const Competence: FC = () => {
           </SkillCard>
         </motion.div>
 
-        {/* ── Impact numbers — horizontal strip ── */}
+        {/* ── Impact numbers ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -565,7 +505,6 @@ const Competence: FC = () => {
                   >
                     {t(achievement.titleKey as any)}
                   </Typography>
-                  {/* CardSubtitle reused for stat label — token */}
                   <CardSubtitle sx={{ textAlign: 'center' }}>
                     {t(achievement.subtitleKey as any)}
                   </CardSubtitle>
@@ -574,77 +513,6 @@ const Competence: FC = () => {
             ))}
           </Box>
         </motion.div>
-
-        {/* ── Currently learning + Next goals ── */}
-        {/* <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
-            gap: 3,
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <SkillCard>
-              <CategoryHeader>
-                <CategoryIcon>
-                  <SchoolIcon />
-                </CategoryIcon>
-                <Box>
-                  <CardTitle>{t('currentlyLearning')}</CardTitle>
-                  <CardSubtitle>{t('continuousGrowth')}</CardSubtitle>
-                </Box>
-              </CategoryHeader>
-              <SectionLabel>{t('currentlyLearning')}</SectionLabel>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {currentlyLearningKeys.map((key, index) => (
-                  <SkillChip
-                    key={index}
-                    label={t(key as any)}
-                    skilltype="learning"
-                    icon={<AutoAwesomeIcon />}
-                    onClick={() => handleGenericClick('current_learning_interest', key)}
-                  />
-                ))}
-              </Box>
-            </SkillCard>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <SkillCard>
-              <CategoryHeader>
-                <CategoryIcon>
-                  <RocketLaunchIcon />
-                </CategoryIcon>
-                <Box>
-                  <CardTitle>{t('nextGoals')}</CardTitle>
-                  <CardSubtitle>{t('evolutionRoadmap')}</CardSubtitle>
-                </Box>
-              </CategoryHeader>
-              <SectionLabel>{t('nextGoals')}</SectionLabel>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {nextGoalsKeys.map((key, index) => (
-                  <SkillChip
-                    key={index}
-                    label={t(key as any)}
-                    skilltype="goal"
-                    icon={<TrendingUpIcon />}
-                    onClick={() => handleGenericClick('next_goal_interest', key)}
-                  />
-                ))}
-              </Box>
-            </SkillCard>
-          </motion.div>
-        </Box> */}
 
         {/* ── CTA ── */}
         <motion.div
@@ -675,7 +543,6 @@ const Competence: FC = () => {
               },
             })}
           >
-            {/* CardTitle reused for CTA heading — slightly larger via sx override */}
             <CardTitle
               sx={{ color: 'secondary.dark', fontSize: { xs: '1rem', md: '1.15rem' }, mb: 2 }}
             >

@@ -9,10 +9,11 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import WorkIcon from '@mui/icons-material/Work';
-import { Box, Card, Chip, Container, Divider, IconButton, Link, Tooltip } from '@mui/material';
+import { Box, Chip, Container, Divider, IconButton, Link, Tooltip } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
+import { CardHeader, CardIcon, SectionCard } from '../../components/shared/Sharedcards';
 import {
   BodyMono,
   CardSubtitle,
@@ -24,63 +25,7 @@ import {
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
 import { useTypedTranslation } from '../../hooks/useTranslation';
 
-// ─── Shared card base ─────────────────────────────────────────────────────────
-
-const SectionCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.45)'
-      : '0 4px 24px rgba(15,23,42,0.08)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
-    opacity: 0.45,
-  },
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-    transform: 'translateY(-3px)',
-  },
-  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
-}));
-
-const CardHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(2.5),
-  paddingBottom: theme.spacing(1.5),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-}));
-
-const CardIcon = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
-  borderRadius: '10px',
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#ffffff',
-  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-  flexShrink: 0,
-}));
+// ─── Local styled components ──────────────────────────────────────────────────
 
 const ContactRow = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -217,7 +162,6 @@ const Contact: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* SectionTitle — token */}
         <SectionTitle>{t('contactTitle')}</SectionTitle>
 
         {/* ── Hero — status card ── */}
@@ -233,7 +177,6 @@ const Contact: FC = () => {
                 <EmailIcon />
               </CardIcon>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                {/* CardTitle + CardSubtitle — tokens */}
                 <CardTitle>{t('readyForChallenges')}</CardTitle>
                 <CardSubtitle>{t('heroDescription')}</CardSubtitle>
               </Box>
@@ -286,7 +229,6 @@ const Contact: FC = () => {
                 </Box>
               </CardHeader>
 
-              {/* Email row */}
               <ContactRow onClick={handleDirectEmailClick}>
                 <ContactRowIcon
                   sx={{
@@ -298,7 +240,6 @@ const Contact: FC = () => {
                   <EmailIcon />
                 </ContactRowIcon>
                 <Box sx={{ minWidth: 0 }}>
-                  {/* MetaMono for row label — token */}
                   <MetaMono sx={{ fontSize: '0.75rem', mb: 0.25 }}>{t('primaryEmail')}</MetaMono>
                   <Link
                     href="mailto:tezolin.edison@gmail.com"
@@ -316,7 +257,6 @@ const Contact: FC = () => {
                 </Box>
               </ContactRow>
 
-              {/* Phone row */}
               <ContactRow onClick={handleDirectPhoneClick}>
                 <ContactRowIcon
                   sx={{
@@ -348,7 +288,6 @@ const Contact: FC = () => {
 
               <Divider sx={{ my: 2.5, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
 
-              {/* CTA rows — SectionLabel token */}
               <SectionLabel>{t('sendEmail')} · WhatsApp · LinkedIn</SectionLabel>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2.5 }}>
                 <ContactRow
@@ -378,7 +317,6 @@ const Contact: FC = () => {
 
               <Divider sx={{ my: 2, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
 
-              {/* Social links — SectionLabel token */}
               <SectionLabel sx={{ mb: 1.5 }}>{t('professionalLinks')}</SectionLabel>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <Tooltip title={t('githubTooltip')} arrow>
@@ -419,7 +357,6 @@ const Contact: FC = () => {
                 </Box>
               </CardHeader>
 
-              {/* Schedule rows — BodyMono token */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 2.5 }}>
                 {[
                   { icon: <ScheduleIcon />, label: t('weekdaysSchedule'), key: 'weekdays_8_18' },
@@ -441,13 +378,11 @@ const Contact: FC = () => {
 
               <Divider sx={{ my: 2, borderColor: (t) => alpha(t.palette.divider, 0.5) }} />
 
-              {/* Opportunities — SectionLabel token */}
               <SectionLabel sx={{ mb: 1.25 }}>{t('opportunitiesOfInterest')}</SectionLabel>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mb: 2.5 }}>
                 {[
                   { label: t('fullStackDeveloper'), key: 'full_stack_developer' },
                   { label: t('solutionsArchitect'), key: 'solutions_architect' },
-                  // { label: t('techLead'), key: 'tech_lead' },
                   { label: t('dotnetReactProjects'), key: 'dotnet_react_projects' },
                 ].map((opp) => (
                   <StatusChip
@@ -460,7 +395,6 @@ const Contact: FC = () => {
                 ))}
               </Box>
 
-              {/* Quote — BodyMono italic token */}
               <Box
                 sx={(theme) => ({
                   p: 2,

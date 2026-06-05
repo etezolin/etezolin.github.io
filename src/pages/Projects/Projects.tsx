@@ -8,10 +8,11 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import LockIcon from '@mui/icons-material/Lock';
 import SpeedIcon from '@mui/icons-material/Speed';
 import StorageIcon from '@mui/icons-material/Storage';
-import { Box, Button, Card, Chip, Container, Divider } from '@mui/material';
+import { Box, Button, Chip, Container, Divider } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import type { FC, MouseEvent, ReactElement } from 'react';
+import { CardHeader, CardIcon, SectionCard } from '../../components/shared/Sharedcards';
 import {
   BodyMono,
   CardSubtitle,
@@ -36,64 +37,7 @@ interface ProjectData {
   type: string;
 }
 
-// ─── Shared card base ─────────────────────────────────────────────────────────
-
-const SectionCard = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: alpha(theme.palette.background.paper, 0.9),
-  backdropFilter: 'blur(20px)',
-  border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
-  borderRadius: 14,
-  boxShadow:
-    theme.palette.mode === 'dark'
-      ? '0 4px 32px rgba(0,0,0,0.45)'
-      : '0 4px 24px rgba(15,23,42,0.08)',
-  transition: 'border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
-  position: 'relative',
-  overflow: 'hidden',
-  cursor: 'pointer',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '2px',
-    background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 40%, ${theme.palette.secondary.main} 100%)`,
-    opacity: 0.45,
-  },
-  '&:hover': {
-    borderColor: alpha(theme.palette.primary.main, 0.28),
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? '0 8px 48px rgba(0,0,0,0.55)'
-        : '0 8px 32px rgba(15,23,42,0.12)',
-    transform: 'translateY(-3px)',
-  },
-  [theme.breakpoints.down('sm')]: { borderRadius: 10, padding: theme.spacing(2) },
-}));
-
-const CardHeader = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2),
-  marginBottom: theme.spacing(2.5),
-  paddingBottom: theme.spacing(1.5),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
-}));
-
-const CardIcon = styled(Box)(({ theme }) => ({
-  width: 40,
-  height: 40,
-  borderRadius: '10px',
-  background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#ffffff',
-  boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.3)}`,
-  flexShrink: 0,
-}));
+// ─── Local styled components ──────────────────────────────────────────────────
 
 const ResultRow = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -301,7 +245,6 @@ const ProjectsSection: FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        {/* SectionTitle — token */}
         <SectionTitle>{t('projectsTitle')}</SectionTitle>
 
         {/* ── Confidentiality notice ── */}
@@ -321,11 +264,9 @@ const ProjectsSection: FC = () => {
         >
           <InfoOutlinedIcon sx={{ color: '#d97706', mt: 0.2, flexShrink: 0, fontSize: 18 }} />
           <Box>
-            {/* CardTitle for notice heading — token */}
             <CardTitle sx={{ color: '#b45309', mb: 0.5, fontSize: '0.83rem' }}>
               {t('confidentialProjects')}
             </CardTitle>
-            {/* BodyMono for notice body — token */}
             <BodyMono sx={{ fontSize: '0.8rem', lineHeight: 1.6 }}>
               {t('confidentialDescription')}
             </BodyMono>
@@ -343,7 +284,6 @@ const ProjectsSection: FC = () => {
               viewport={{ once: true }}
             >
               <SectionCard onClick={() => handleProjectClick(project.titleKey, project.type)}>
-                {/* Header — CardTitle + confidential badge */}
                 <CardHeader>
                   <CardIcon>{project.icon}</CardIcon>
                   <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -372,7 +312,6 @@ const ProjectsSection: FC = () => {
                         }}
                       >
                         <LockIcon sx={{ fontSize: 11, color: '#b45309' }} />
-                        {/* MetaMono for badge label — token */}
                         <MetaMono sx={{ fontSize: '0.67rem', color: '#b45309', fontWeight: 600 }}>
                           {t('confidential')}
                         </MetaMono>
@@ -381,7 +320,6 @@ const ProjectsSection: FC = () => {
                   </Box>
                 </CardHeader>
 
-                {/* Description — BodyMono token */}
                 <BodyMono sx={{ mb: 2.5, fontSize: '0.85rem', lineHeight: 1.7 }}>
                   {
                     projectsData[currentLang][
@@ -390,7 +328,6 @@ const ProjectsSection: FC = () => {
                   }
                 </BodyMono>
 
-                {/* Metrics — SectionLabel token */}
                 <Box sx={{ mb: 2.5 }}>
                   <SectionLabel>{t('mainMetrics')}</SectionLabel>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
@@ -408,7 +345,6 @@ const ProjectsSection: FC = () => {
                   </Box>
                 </Box>
 
-                {/* Results — SectionLabel with icon + BodyMono tokens */}
                 <Box sx={{ mb: 2.5 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
                     <SpeedIcon sx={{ fontSize: 13, color: 'text.disabled' }} />
@@ -434,7 +370,6 @@ const ProjectsSection: FC = () => {
                   </Box>
                 </Box>
 
-                {/* Tech stack — SectionLabel token */}
                 <Box>
                   <SectionLabel>{t('stack')}</SectionLabel>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
@@ -510,7 +445,6 @@ const ProjectsSection: FC = () => {
               ))}
             </Box>
 
-            {/* MetaMono for note — token */}
             <MetaMono sx={{ fontStyle: 'italic', color: 'text.disabled', fontSize: '0.75rem' }}>
               {t('openSourceNote')}
             </MetaMono>

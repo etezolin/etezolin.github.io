@@ -11,8 +11,6 @@ import CodeIcon from '@mui/icons-material/Code';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import GroupIcon from '@mui/icons-material/Group';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import SchoolIcon from '@mui/icons-material/School';
 import StorageIcon from '@mui/icons-material/Storage';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -22,7 +20,6 @@ import {
   CardSubtitle,
   CardTitle,
   MetaMono,
-  SectionLabel,
   SectionTitle,
 } from '../../components/shared/TypographyTokens';
 import { trackProfileConversion, trackProfileTabInteraction } from '../../firebase';
@@ -292,8 +289,8 @@ const Competence: FC = () => {
     { icon: <TrendingUpIcon />, titleKey: 'eightyFiveReduction', subtitleKey: 'processingTime' },
   ];
 
-  const currentlyLearningKeys = ['machineLearning', 'kubernetes', 'serverlessArch', 'terraformIaC'];
-  const nextGoalsKeys = ['azureArchitect', 'kafkaStreaming', 'graphqlAdvanced', 'webAssembly'];
+  // const currentlyLearningKeys = ['machineLearning', 'kubernetes', 'serverlessArch', 'terraformIaC'];
+  // const nextGoalsKeys = ['azureArchitect', 'kafkaStreaming', 'graphqlAdvanced', 'webAssembly'];
 
   const legendItems: { label: string; type: BadgeLevel }[] = [
     { label: 'Expert', type: 'expert' },
@@ -579,7 +576,7 @@ const Competence: FC = () => {
         </motion.div>
 
         {/* ── Currently learning + Next goals ── */}
-        <Box
+        {/* <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
@@ -602,7 +599,6 @@ const Competence: FC = () => {
                   <CardSubtitle>{t('continuousGrowth')}</CardSubtitle>
                 </Box>
               </CategoryHeader>
-              {/* SectionLabel above chips — token */}
               <SectionLabel>{t('currentlyLearning')}</SectionLabel>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                 {currentlyLearningKeys.map((key, index) => (
@@ -648,7 +644,7 @@ const Competence: FC = () => {
               </Box>
             </SkillCard>
           </motion.div>
-        </Box>
+        </Box> */}
 
         {/* ── CTA ── */}
         <motion.div

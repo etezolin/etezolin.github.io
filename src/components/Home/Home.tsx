@@ -38,10 +38,10 @@ const rotateGradient = keyframes`
   100% { background-position: 0%   50%; }
 `;
 
-const pulseDot = keyframes`
-  0%, 100% { box-shadow: 0 0 0 0   rgba(0, 230, 118, 0.5); }
-  50%       { box-shadow: 0 0 0 5px rgba(0, 230, 118, 0);   }
-`;
+// const pulseDot = keyframes`
+//   0%, 100% { box-shadow: 0 0 0 0   rgba(0, 230, 118, 0.5); }
+//   50%       { box-shadow: 0 0 0 5px rgba(0, 230, 118, 0);   }
+// `;
 
 const blinkCursor = keyframes`
   0%, 49%   { opacity: 1; }
@@ -125,30 +125,30 @@ const AvatarRingWrapper = styled(Box)(({ theme }) => ({
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
-const StatusBadge = styled(Box)(({ theme }) => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: theme.spacing(0.75),
-  backgroundColor: 'rgba(0, 230, 118, 0.07)',
-  border: '1px solid rgba(0, 230, 118, 0.22)',
-  borderRadius: 20,
-  padding: '5px 14px',
-  fontFamily: '"Roboto Mono", monospace',
-  fontSize: '0.7rem',
-  color: theme.palette.secondary.main,
-  fontWeight: 600,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
-}));
+// const StatusBadge = styled(Box)(({ theme }) => ({
+//   display: 'inline-flex',
+//   alignItems: 'center',
+//   gap: theme.spacing(0.75),
+//   backgroundColor: 'rgba(0, 230, 118, 0.07)',
+//   border: '1px solid rgba(0, 230, 118, 0.22)',
+//   borderRadius: 20,
+//   padding: '5px 14px',
+//   fontFamily: '"Roboto Mono", monospace',
+//   fontSize: '0.7rem',
+//   color: theme.palette.secondary.main,
+//   fontWeight: 600,
+//   letterSpacing: '1px',
+//   textTransform: 'uppercase',
+// }));
 
-const PulseDot = styled(Box)(({ theme }) => ({
-  width: 7,
-  height: 7,
-  borderRadius: '50%',
-  backgroundColor: theme.palette.secondary.main,
-  flexShrink: 0,
-  animation: `${pulseDot} 2s ease-in-out infinite`,
-}));
+// const PulseDot = styled(Box)(({ theme }) => ({
+//   width: 7,
+//   height: 7,
+//   borderRadius: '50%',
+//   backgroundColor: theme.palette.secondary.main,
+//   flexShrink: 0,
+//   animation: `${pulseDot} 2s ease-in-out infinite`,
+// }));
 
 // ─── Gradient name ────────────────────────────────────────────────────────────
 
@@ -782,12 +782,12 @@ const Home: FC<HomeProps> = ({
               </Typography>
             </motion.div>
 
-            <motion.div variants={itemVariants}>
+            {/* <motion.div variants={itemVariants}>
               <StatusBadge>
                 <PulseDot />
                 {t('availableImmediately')}
               </StatusBadge>
-            </motion.div>
+            </motion.div> */}
           </Box>
         </Box>
 

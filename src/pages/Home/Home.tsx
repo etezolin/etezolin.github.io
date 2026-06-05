@@ -601,7 +601,7 @@ const Home: FC<HomeProps> = ({
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <CardTitle>{t('introRole' as any)}</CardTitle>
                 <CardSubtitle>
-                  {t('introSubtitle' as any)} ·{' '}
+                  {/* {t('introSubtitle' as any)} ·{' '} */}
                   <Box component="span" sx={{ fontStyle: 'italic' }}>
                     {t('introPhilosophy' as any)}
                   </Box>

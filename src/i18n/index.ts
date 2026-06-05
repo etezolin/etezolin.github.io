@@ -7,33 +7,30 @@ import enTranslations from './locales/en.json';
 import ptTranslations from './locales/pt.json';
 
 const resources = {
-    pt: {
-        translation: ptTranslations
-    },
-    en: {
-        translation: enTranslations
-    }
+  pt: {
+    translation: ptTranslations,
+  },
+  en: {
+    translation: enTranslations,
+  },
 };
 
 i18n
-    .use(LanguageDetector)
-    .use(initReactI18next)
-    .init({
-        resources,
-        fallbackLng: 'en', // Inglês como padrão
-        debug: process.env.NODE_ENV === 'development',
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: 'pt', // ✅ fallback pt quando não encontrar nada
 
-        interpolation: {
-            escapeValue: false, // React já faz escape
-        },
+    interpolation: {
+      escapeValue: false,
+    },
 
-        detection: {
-            order: ['localStorage', 'cookie', 'sessionStorage'],
-            lookupLocalStorage: 'selectedLanguage',
-            lookupCookie: 'selectedLanguage',
-            lookupSessionStorage: 'selectedLanguage',
-            caches: ['localStorage', 'cookie']
-        }
-    });
+    detection: {
+      order: ['localStorage', 'navigator'],
+      lookupLocalStorage: 'selectedLanguage',
+      caches: ['localStorage'],
+    },
+  });
 
 export default i18n;

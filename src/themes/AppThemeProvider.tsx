@@ -1,19 +1,8 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { createAppTheme, type ThemeMode } from './theme';
-
-interface ThemeContextType {
-  mode: ThemeMode;
-  toggleMode: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType>({
-  mode: 'dark',
-  toggleMode: () => {},
-});
-
-export const useThemeMode = () => useContext(ThemeContext);
+import { ThemeContext } from './ThemeContext';
 
 export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [mode, setMode] = useState<ThemeMode>(() => {

@@ -30,28 +30,28 @@ const langs: Record<string, { flag: string; code: string; label: string }> = {
 const LanguageSelector: React.FC = () => {
   const { i18n } = useTranslation();
 
-  // useEffect(() => {
-  //   const saved = localStorage.getItem('selectedLanguage');
-  //   if (!saved) {
-  //     localStorage.setItem('selectedLanguage', 'pt');
-  //     i18n.changeLanguage('pt');
-  //   }
-  // }, [i18n]);
-
-  // const current = (i18n.language || 'pt').substring(0, 2) as 'pt' | 'en';
-  // const lang = langs[current] ?? langs['pt'];
-
   useEffect(() => {
     const saved = localStorage.getItem('selectedLanguage');
-
     if (!saved) {
-      localStorage.setItem('selectedLanguage', 'en');
-      i18n.changeLanguage('en');
+      localStorage.setItem('selectedLanguage', 'pt');
+      i18n.changeLanguage('pt');
     }
   }, [i18n]);
 
-  const current = (i18n.language || 'en').substring(0, 2) as 'pt' | 'en';
-  const lang = langs[current] ?? langs['en'];
+  const current = (i18n.language || 'pt').substring(0, 2) as 'pt' | 'en';
+  const lang = langs[current] ?? langs['pt'];
+
+  // useEffect(() => {
+  //   const saved = localStorage.getItem('selectedLanguage');
+
+  //   if (!saved) {
+  //     localStorage.setItem('selectedLanguage', 'en');
+  //     i18n.changeLanguage('en');
+  //   }
+  // }, [i18n]);
+
+  // const current = (i18n.language || 'en').substring(0, 2) as 'pt' | 'en';
+  // const lang = langs[current] ?? langs['en'];
 
   const toggle = () => {
     const next = current === 'pt' ? 'en' : 'pt';

@@ -210,7 +210,7 @@ const Competence: FC = () => {
     },
     // ── Linha 3 — categorias vindas do Home ───────────────────────────────────
     {
-      categoryKey: 'tools',
+      categoryKey: 'Tools',
       icon: <BuildIcon />,
       skills: [
         { name: 'Postman', level: 90, experienceKey: 'fourPlusYears' },
@@ -220,7 +220,7 @@ const Competence: FC = () => {
       ],
     },
     {
-      categoryKey: 'architecture',
+      categoryKey: 'Architecture',
       icon: <ArchitectureIcon />,
       skills: [
         { name: 'Clean Architecture', level: 90, experienceKey: 'fourPlusYears' },

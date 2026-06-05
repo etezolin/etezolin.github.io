@@ -18,7 +18,15 @@ export const GitHubImageWithSkeleton = ({
   const [error, setError] = useState(false);
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height }}>
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: '100%',
+        height: loaded ? 'auto' : height,
+        overflow: 'hidden', // ← impede vazamento horizontal em mobile
+      }}
+    >
       {/* Skeleton visível enquanto a imagem carrega */}
       {!loaded && !error && (
         <Skeleton
@@ -65,6 +73,7 @@ export const GitHubImageWithSkeleton = ({
         onError={() => setError(true)}
         sx={{
           width: '100%',
+          maxWidth: '100%', // ← nunca ultrapassa o container
           height: 'auto',
           borderRadius: 2,
           display: loaded && !error ? 'block' : 'none',

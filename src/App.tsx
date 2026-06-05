@@ -59,14 +59,16 @@ function App() {
   return (
     <AppThemeProvider>
       <Suspense fallback={<LoadingFallback />}>
-        <MainLayout>
-          <Home />
-          <Formation />
-          <Experience />
-          <Project />
-          <Competence />
-          <Contact />
-        </MainLayout>
+        <Box sx={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}>
+          <MainLayout>
+            <Home />
+            <Formation />
+            <Experience />
+            <Project />
+            <Competence />
+            <Contact />
+          </MainLayout>
+        </Box>
       </Suspense>
     </AppThemeProvider>
   );

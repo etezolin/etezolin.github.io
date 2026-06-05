@@ -433,7 +433,17 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           }}
         >
           <LogoText variant="h6" onClick={() => scrollToSection('home')}>
-            <CodeIcon sx={{ fontSize: 24 }} />
+            <Box sx={{ display: 'inline-flex', lineHeight: 0 }}>
+              <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                  <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#00e676" />
+                    <stop offset="100%" stopColor="#ccff00" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <CodeIcon sx={{ fontSize: 24, '& path': { fill: 'url(#logo-gradient)' } }} />
+            </Box>
             etezolin
           </LogoText>
 

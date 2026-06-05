@@ -137,8 +137,6 @@ const LegendDot = styled(Box, {
   }),
 }));
 
-// ─── Competence uses SkillCard (cursor:default variant of SectionCard) ────────
-
 const SkillCard = styled(SectionCard)(() => ({
   cursor: 'default',
   marginBottom: 0,
@@ -160,6 +158,7 @@ const Competence: FC = () => {
   };
 
   const technicalSkills = [
+    // ── Linha 1 ──────────────────────────────────────────────────────────────
     {
       categoryKey: 'backendDev',
       icon: <CodeIcon />,
@@ -180,10 +179,11 @@ const Competence: FC = () => {
         { name: 'TypeScript', level: 90, experienceKey: 'threePlusYears' },
         { name: 'JavaScript ES6+', level: 90, experienceKey: 'fourPlusYears' },
         { name: 'Material-UI', level: 90, experienceKey: 'threePlusYears' },
-        { name: 'HTML5 & CSS3', level: 85, experienceKey: 'fourPlusYears' },
-        { name: 'Responsive Design', level: 85, experienceKey: 'threePlusYears' },
+        { name: 'HTML5 & CSS3', level: 95, experienceKey: 'fourPlusYears' },
+        { name: 'Responsive Design', level: 95, experienceKey: 'threePlusYears' },
       ],
     },
+    // ── Linha 2 ──────────────────────────────────────────────────────────────
     {
       categoryKey: 'databaseStorage',
       icon: <StorageIcon />,
@@ -191,7 +191,7 @@ const Competence: FC = () => {
         { name: 'SQL Server', level: 95, experienceKey: 'fourPlusYears' },
         { name: 'T-SQL Advanced', level: 90, experienceKey: 'fourPlusYears' },
         { name: 'Database Design', level: 95, experienceKey: 'fourPlusYears' },
-        { name: 'PostgreSQL', level: 85, experienceKey: 'threePlusYears' },
+        { name: 'PostgreSQL', level: 95, experienceKey: 'threePlusYears' },
         { name: 'MongoDB', level: 70, experienceKey: 'onePlusYear' },
         { name: 'Redis Cache', level: 65, experienceKey: 'onePlusYear' },
       ],
@@ -200,12 +200,34 @@ const Competence: FC = () => {
       categoryKey: 'cloudInfrastructure',
       icon: <CloudIcon />,
       skills: [
+        { name: 'GitHub Actions', level: 90, experienceKey: 'threePlusYears' },
         { name: 'Docker', level: 80, experienceKey: 'threePlusYears' },
         { name: 'Google Cloud Platform', level: 75, experienceKey: 'twoPlusYears' },
         { name: 'CI/CD Pipelines', level: 75, experienceKey: 'twoPlusYears' },
-        { name: 'Observability & Monitoring', level: 75, experienceKey: 'onePlusYear' },
-        { name: 'GitHub Actions', level: 70, experienceKey: 'onePlusYear' },
-        { name: 'Google Firebase', level: 60, experienceKey: 'onePlusYear' },
+        { name: 'Observability & Monitoring', level: 75, experienceKey: 'twoPlusYears' },
+        { name: 'Google Firebase', level: 60, experienceKey: 'twoPlusYears' },
+      ],
+    },
+    // ── Linha 3 — categorias vindas do Home ───────────────────────────────────
+    {
+      categoryKey: 'tools',
+      icon: <BuildIcon />,
+      skills: [
+        { name: 'Postman', level: 90, experienceKey: 'fourPlusYears' },
+        { name: 'Swagger', level: 90, experienceKey: 'fourPlusYears' },
+        { name: 'Figma', level: 75, experienceKey: 'twoPlusYears' },
+        { name: 'Jira', level: 60, experienceKey: 'onePlusYear' },
+      ],
+    },
+    {
+      categoryKey: 'architecture',
+      icon: <ArchitectureIcon />,
+      skills: [
+        { name: 'Clean Architecture', level: 90, experienceKey: 'fourPlusYears' },
+        { name: 'DDD', level: 90, experienceKey: 'fourPlusYears' },
+        { name: 'REST API', level: 95, experienceKey: 'fourPlusYears' },
+        { name: 'CQRS', level: 90, experienceKey: 'fourPlusYears' },
+        // { name: 'RabbitMQ', level: 70, experienceKey: 'twoPlusYears' },
       ],
     },
   ];
@@ -263,7 +285,7 @@ const Competence: FC = () => {
           ))}
         </Box>
 
-        {/* ── Technical skills grid ── */}
+        {/* ── Technical skills grid — 2 colunas, 3 linhas ── */}
         <Box
           sx={{
             display: 'grid',
@@ -277,7 +299,7 @@ const Competence: FC = () => {
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
+              transition={{ duration: 0.5, delay: index * 0.07 }}
               viewport={{ once: true }}
             >
               <SkillCard>

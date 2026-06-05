@@ -16,15 +16,15 @@ const ThemeContext = createContext<ThemeContextType>({
 export const useThemeMode = () => useContext(ThemeContext);
 
 export const AppThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // const [mode, setMode] = useState<ThemeMode>(() => {
-  //   const saved = localStorage.getItem('portfolio-theme-mode');
-  //   return saved === 'light' ? 'light' : 'dark';
-  // });
-
   const [mode, setMode] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem('portfolio-theme-mode');
-    return saved === 'dark' ? 'dark' : 'light';
+    return saved === 'light' ? 'light' : 'dark';
   });
+
+  // const [mode, setMode] = useState<ThemeMode>(() => {
+  //   const saved = localStorage.getItem('portfolio-theme-mode');
+  //   return saved === 'dark' ? 'dark' : 'light';
+  // });
 
   const toggleMode = useCallback(() => {
     setMode((prev) => {
